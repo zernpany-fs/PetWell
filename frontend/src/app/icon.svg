@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="PetWell">
+  <rect width="64" height="64" rx="14" fill="#5E86AD" />
+  <ellipse cx="32.00" cy="42.19" rx="14.56" ry="11.20" fill="#FFFFFF" />
+  <ellipse cx="14.08" cy="28.75" rx="5.82" ry="7.84" fill="#FFFFFF" />
+  <ellipse cx="24.16" cy="18.67" rx="5.60" ry="8.06" fill="#FFFFFF" />
+  <ellipse cx="39.84" cy="18.67" rx="5.60" ry="8.06" fill="#FFFFFF" />
+  <ellipse cx="49.92" cy="28.75" rx="5.82" ry="7.84" fill="#FFFFFF" />
+</svg>

@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PetWell — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+<style>
+  /* ============================================================
+     PetWell design tokens — extracted verbatim from the codebase
+     (frontend/src/app/globals.css + inline styles across pages).
+     This page reproduces them so previews are faithful, NOT a redesign.
+     ============================================================ */
+  :root{
+    /* Surfaces */
+    --pw-bg:#FAF8F4;          /* app canvas (ivory) */
+    --pw-surface:#FFFFFF;     /* cards / inputs */
+    --pw-tint-blue:#E4EBF2;   /* primary tint / active nav / info fill */
+    --pw-tint-lavender:#EFEBF8;
+    --pw-tint-peach:#FBEDE7;
+    --pw-hover:#F1ECE3;       /* hover surface / placeholder blocks */
+    --pw-border:#E6DFD3;      /* hairline border */
+    /* Brand */
+    --pw-primary:#5E86AD;     /* dusty blue */
+    --pw-primary-ink:#40638A; /* text-on-tint / darker blue */
+    --pw-primary-g1:#5E86AD;  /* gradient start */
+    --pw-primary-g2:#46709A;  /* gradient end */
+    --pw-primary-g1h:#4A7196; /* hover gradient start */
+    --pw-primary-g2h:#3A5F86; /* hover gradient end */
+    /* Ink */
+    --pw-ink:#2D2A26;         /* charcoal (primary text) */
+    --pw-muted:#6E675C;       /* secondary text */
+    --pw-faint:#A39B8D;       /* placeholder / disabled icon */
+    --pw-faint2:#9A9284;      /* datepicker placeholder */
+    /* Feedback */
+    --pw-danger:#C4534E;
+    --pw-danger-bg:#FEF2F2;
+    --pw-danger-border:#FECACA;
+    --pw-danger-hover:#FEE2E2;
+    /* Radius */
+    --pw-r-lg:0.5rem;    /* 8px  — nav items, small controls (Tailwind rounded-lg) */
+    --pw-r-xl:0.75rem;   /* 12px — inputs, error banners (rounded-xl) */
+    --pw-r-2xl:1rem;     /* 16px — cards, panels (rounded-2xl) */
+    --pw-r-card:20px;    /* auth card (rounded-[20px]) */
+    --pw-r-full:9999px;  /* buttons, badges, avatar */
+    /* Shadow */
+    --pw-shadow-card:0 2px 8px rgba(45,42,38,0.06);
+    --pw-shadow-pop:0 8px 24px rgba(45,42,38,0.12);
+    --pw-shadow-lift:0 12px 26px rgba(45,42,38,0.12);
+  }
+
+  /* ---- doc chrome (not part of the product; neutral styling) ---- */
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--pw-ink);background:var(--pw-bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .font-display{font-family:'Playfair Display',serif;font-weight:600}
+  a{color:var(--pw-primary)}
+  code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:0.85em}
+  .layout{display:flex;min-height:100vh}
+  /* Sidebar nav for the doc */
+  .doc-nav{position:sticky;top:0;align-self:flex-start;width:250px;height:100vh;overflow-y:auto;background:#fff;border-right:1px solid var(--pw-border);padding:20px 14px;flex-shrink:0}
+  .doc-nav .brand{display:flex;align-items:center;gap:8px;padding:4px 8px 14px;border-bottom:1px solid var(--pw-border);margin-bottom:10px}
+  .doc-nav .brand svg{width:22px;height:22px;color:var(--pw-primary)}
+  .doc-nav .brand span{font-size:19px}
+  .doc-nav a{display:block;padding:6px 10px;border-radius:8px;color:var(--pw-muted);text-decoration:none;font-size:13.5px;font-weight:500}
+  .doc-nav a:hover{background:var(--pw-hover);color:var(--pw-ink)}
+  .doc-nav .grouplabel{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--pw-faint);padding:14px 10px 4px;font-weight:600}
+  .content{flex:1;max-width:960px;margin:0 auto;padding:48px 40px 120px}
+  @media(max-width:820px){.doc-nav{display:none}.content{padding:28px 18px 80px}}
+  h1.title{font-size:40px;margin:0 0 6px}
+  .subtitle{color:var(--pw-muted);font-size:16px;margin:0 0 10px}
+  .sot{display:inline-block;background:var(--pw-tint-blue);color:var(--pw-primary-ink);font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;margin-bottom:26px}
+  section{margin:0 0 60px;scroll-margin-top:20px}
+  section > h2{font-size:26px;margin:0 0 4px;padding-top:14px;border-top:2px solid var(--pw-border)}
+  section > h2 .num{color:var(--pw-primary);font-family:'Playfair Display',serif}
+  h3{font-size:19px;margin:32px 0 10px}
+  h4{font-size:15px;margin:20px 0 8px;color:var(--pw-ink)}
+  p.note{color:var(--pw-muted);font-size:14px;margin:6px 0 14px}
+  .lede{color:var(--pw-muted);font-size:15px;margin:10px 0 20px}
+  /* preview canvas */
+  .preview{background:var(--pw-bg);border:1px solid var(--pw-border);border-radius:14px;padding:24px;margin:14px 0}
+  .preview.white{background:#fff}
+  .row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .stack{display:flex;flex-direction:column;gap:12px}
+  /* spec tables */
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px;background:#fff;border:1px solid var(--pw-border);border-radius:12px;overflow:hidden}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--pw-border);vertical-align:top}
+  th{background:#faf7f2;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:var(--pw-muted)}
+  tr:last-child td{border-bottom:0}
+  td .mono{background:var(--pw-hover);padding:1px 6px;border-radius:5px;white-space:nowrap}
+  /* swatches */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin:14px 0}
+  .swatch{border:1px solid var(--pw-border);border-radius:10px;overflow:hidden;background:#fff}
+  .swatch .chip{height:58px}
+  .swatch .meta{padding:8px 10px;font-size:12px}
+  .swatch .meta b{display:block;font-size:12.5px;font-weight:600;margin-bottom:1px}
+  .swatch .meta .hex{color:var(--pw-muted);font-family:ui-monospace,monospace;text-transform:uppercase}
+  /* callouts */
+  .callout{border-radius:12px;padding:12px 16px;margin:14px 0;font-size:14px;border:1px solid}
+  .callout.do{background:#E7F2EA;border-color:#CBE6D3;color:#3f6b50}
+  .callout.dont{background:var(--pw-danger-bg);border-color:var(--pw-danger-border);color:#9a3f3b}
+  .callout.warn{background:#F8EEDB;border-color:#EAD9B0;color:#8a6714}
+  .callout.info{background:var(--pw-tint-blue);border-color:#cddaea;color:var(--pw-primary-ink)}
+  .callout b{font-weight:600}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+  ul.tight{margin:8px 0;padding-left:20px}
+  ul.tight li{margin:4px 0;font-size:14px}
+  .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;vertical-align:middle}
+  .tag.exists{background:#E7F2EA;color:#58996F}
+  .tag.absent{background:var(--pw-hover);color:var(--pw-muted)}
+  .anatomy{font-size:13px;color:var(--pw-muted);border-left:3px solid var(--pw-primary);padding:2px 0 2px 12px;margin:10px 0}
+
+  /* ============================================================
+     FAITHFUL PRODUCT CLASSES — copied from globals.css so previews
+     render exactly like the app.
+     ============================================================ */
+  .pw-btn-primary{background:linear-gradient(135deg,#5E86AD,#46709A);color:#fff;border:none;cursor:pointer;transition:transform .12s ease,box-shadow .15s ease,background .15s ease;font-family:inherit;font-size:14px;font-weight:500}
+  .pw-btn-primary:hover{background:linear-gradient(135deg,#4A7196,#3A5F86);transform:translateY(-1px);box-shadow:0 6px 16px rgba(64,99,138,.32)}
+  .pw-btn-primary:disabled{background:#F1ECE3;color:#A39B8D;transform:none;box-shadow:none;cursor:not-allowed}
+  .pw-lift{transition:transform .18s ease,box-shadow .18s ease}
+  .pw-lift:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(45,42,38,.12)}
+  @keyframes pwFadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .pw-fade{animation:pwFadeUp .3s ease}
+
+  /* helper reproductions for previews */
+  .btn-outline{background:#fff;border:1.5px solid var(--pw-primary);color:var(--pw-primary);border-radius:999px;min-height:44px;padding:0 22px;cursor:pointer;font:500 14px/1 'Inter',sans-serif;display:inline-flex;align-items:center;gap:8px;transition:background .15s}
+  .btn-outline:hover{background:var(--pw-tint-blue)}
+  .btn-danger-sm{background:var(--pw-danger-bg);border:1px solid var(--pw-danger-border);color:var(--pw-danger);border-radius:999px;min-height:36px;padding:0 14px;font:500 12px/1 'Inter';cursor:pointer;transition:background .15s}
+  .btn-danger-sm:hover{background:var(--pw-danger-hover)}
+  .field-label{display:block;font-size:13px;color:var(--pw-ink);margin-bottom:6px}
+  .field-input{width:100%;height:48px;padding:0 16px;background:#fff;border:1px solid var(--pw-border);border-radius:12px;font:400 15px 'Inter';color:var(--pw-ink);outline:none;transition:box-shadow .15s,border-color .15s}
+  .field-input::placeholder{color:var(--pw-faint)}
+  .field-input:focus{border-color:var(--pw-primary);box-shadow:0 0 0 2px rgba(94,134,173,.45)}
+  .field-error{color:var(--pw-danger);font-size:12px;margin-top:4px}
+  .pw-card{background:#fff;border:1px solid var(--pw-border);border-radius:16px;box-shadow:var(--pw-shadow-card)}
+  .status-badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
+  .err-banner{display:flex;align-items:flex-start;gap:8px;border-radius:12px;padding:10px 12px;background:var(--pw-danger-bg);border:1px solid var(--pw-danger-border);color:var(--pw-danger);font-size:13px}
+  .swatch.small .chip{height:40px}
+</style>
+</head>
+<body>
+<div class="layout">
+  <!-- ====================== DOC NAV ====================== -->
+  <nav class="doc-nav">
+    <div class="brand">
+      <svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"><ellipse cx="32" cy="42" rx="13" ry="10"/><ellipse cx="16" cy="30" rx="5.2" ry="7"/><ellipse cx="25" cy="21" rx="5" ry="7.2"/><ellipse cx="39" cy="21" rx="5" ry="7.2"/><ellipse cx="48" cy="30" rx="5.2" ry="7"/></svg>
+      <span class="font-display">PetWell</span>
+    </div>
+    <div class="grouplabel">Reference</div>
+    <a href="#foundations">1 · Foundations</a>
+    <a href="#components">2 · Components</a>
+    <a href="#layouts">3 · Layout patterns</a>
+    <a href="#forms">4 · Form standards</a>
+    <a href="#feedback">5 · Feedback patterns</a>
+    <a href="#a11y">6 · Accessibility</a>
+    <a href="#tokens">7 · Design tokens</a>
+    <a href="#rules">8 · Usage rules</a>
+    <div class="grouplabel">Notes</div>
+    <a href="#inconsistencies">Inconsistencies</a>
+    <a href="#not-present">Not in the codebase</a>
+  </nav>
+
+  <!-- ====================== CONTENT ====================== -->
+  <main class="content">
+    <h1 class="title font-display">PetWell Design System</h1>
+    <p class="subtitle">The single source of truth for PetWell's UI — derived entirely from the existing frontend, not a redesign.</p>
+    <span class="sot">Source of truth: <code>frontend/src</code> · dusty-blue &amp; ivory "quiet luxury"</span>
+
+    <p class="lede">Everything below is extracted from the actual code — <code>globals.css</code>, the <code>.pw-*</code> utility layer, the <code>components/ui</code> primitives, and the inline styles used across owner/staff pages. Tokens, colours and class names are reproduced verbatim so this page renders like the product. Where the same pattern is built two different ways in the code, the inconsistency is flagged and a single canonical version is recommended without changing the visual language.</p>
+
+    <!-- ================================================================
+         SECTION 1 — FOUNDATIONS
+    ================================================================= -->
+    <section id="foundations">
+      <h2><span class="num">1.</span> Foundations</h2>
+
+      <h3>Brand colours</h3>
+      <p class="note">PetWell is built on a warm ivory canvas with a single dusty-blue brand colour. Accents are muted, pastel, and used sparingly — the "quiet luxury" register of the app.</p>
+      <div class="swatches">
+        <div class="swatch"><div class="chip" style="background:#5E86AD"></div><div class="meta"><b>Primary / Dusty Blue</b><span class="hex">#5E86AD</span></div></div>
+        <div class="swatch"><div class="chip" style="background:#40638A"></div><div class="meta"><b>Primary Ink</b><span class="hex">#40638A</span></div></div>
+        <div class="swatch"><div class="chip" style="background:linear-gradient(135deg,#5E86AD,#46709A)"></div><div class="meta"><b>Primary Gradient</b><span class="hex">#5E86AD→#46709A</span></div></div>
+        <div class="swatch"><div class="chip" style="background:#FAF8F4"></div><div class="meta"><b>Canvas / Ivory</b><span class="hex">#FAF8F4</span></div></div>
+        <div class="swatch"><div class="chip" style="background:#2D2A26"></div><div class="meta"><b>Ink / Charcoal</b><span class="hex">#2D2A26</span></div></div>
+      </div>
+
+      <h3>Colour tokens</h3>
+      <p class="note">Semantic roles as used across the app. Note: these are applied through Tailwind arbitrary values and inline styles — <b>not</b> through the shadcn <code>--primary</code> token, which is left at its greyscale default (see <a href="#inconsistencies">Inconsistencies</a>).</p>
+      <div class="swatches">
+        <div class="swatch small"><div class="chip" style="background:#FFFFFF;border-bottom:1px solid #E6DFD3"></div><div class="meta"><b>Surface</b><span class="hex">#FFFFFF</span></div></div>
+        <div class="swatch small"><div class="chip" style="background:#E4EBF2"></div><div class="meta"><b>Tint / Info</b><span class="hex">#E4EBF2</span></div></div>
+        <div class="swatch small"><div class="chip" style="background:#EFEBF8"></div><div class="meta"><b>Tint Lavender</b><span class="hex">#EFEBF8</span></div></div>
+        <div class="swatch small"><div class="chip" style="background:#FBEDE7"></div><div class="meta"><b>Tint Peach</b><span class="hex">#FBEDE7</span></div></div>
+        <div class="swatch small"><div class="chip" style="background:#F1ECE3"></div><div class="meta"><b>Hover / Placeholder</b><span class="hex">#F1ECE3</span></div></div>
+        <div class="swatch small"><div class="chip" style="background:#E6DFD3"></div><div class="meta"><b>Border</b><span class="hex">#E6DFD3</span></div></div>
+        <div class="swatch small"><div class="chip" style="background:#6E675C"></div><div class="meta"><b>Muted text</b><span class="hex">#6E675C</span></div></div>
+        <div class="swatch small"><div class="chip" style="background:#A39B8D"></div><div class="meta"><b>Faint / Disabled</b><span class="hex">#A39B8D</span></div></div>
+        <div class="swatch small"><div class="chip" style="background:#C4534E"></div><div class="meta"><b>Danger</b><span class="hex">#C4534E</span></div></div>
+        <div class="swatch small"><div class="chip" style="background:#FEF2F2;border-bottom:1px solid #FECACA"></div><div class="meta"><b>Danger fill</b><span class="hex">#FEF2F2</span></div></div>
+      </div>
+
+      <h4>Status colours (from <code>StatusBadge.tsx</code>) <span class="tag exists">canonical</span></h4>
+      <p class="note">The appointment-status palette is the definitive status set for the app. Each status is a fill + text pair. Cancelled is deliberately neutral (owner withdrew) vs. Rejected red (clinic decision).</p>
+      <div class="preview white"><div class="row">
+        <span class="status-badge" style="background:#F8EEDB;color:#C08A2D">Pending</span>
+        <span class="status-badge" style="background:#E4EBF2;color:#40638A">Confirmed</span>
+        <span class="status-badge" style="background:#EFEBF8;color:#8B7FD1">Rescheduled</span>
+        <span class="status-badge" style="background:#E7F2EA;color:#58996F">Completed</span>
+        <span class="status-badge" style="background:#F8E6E4;color:#C4534E">Rejected</span>
+        <span class="status-badge" style="background:#EFECE4;color:#8B8474">Cancelled</span>
+      </div></div>
+      <table>
+        <tr><th>Status</th><th>Fill</th><th>Text</th></tr>
+        <tr><td>Pending</td><td><span class="mono">#F8EEDB</span></td><td><span class="mono">#C08A2D</span></td></tr>
+        <tr><td>Confirmed</td><td><span class="mono">#E4EBF2</span></td><td><span class="mono">#40638A</span></td></tr>
+        <tr><td>Rescheduled</td><td><span class="mono">#EFEBF8</span></td><td><span class="mono">#8B7FD1</span></td></tr>
+        <tr><td>Completed</td><td><span class="mono">#E7F2EA</span></td><td><span class="mono">#58996F</span></td></tr>
+        <tr><td>Rejected</td><td><span class="mono">#F8E6E4</span></td><td><span class="mono">#C4534E</span></td></tr>
+        <tr><td>Cancelled</td><td><span class="mono">#EFECE4</span></td><td><span class="mono">#8B8474</span></td></tr>
+      </table>
+
+      <h3>Typography</h3>
+      <p class="note">Two families only: <b>Playfair Display</b> (600) for display headings &amp; big stat numbers via the <code>.font-display</code> class; <b>Inter</b> (400/500/600) for everything else. Body colour is charcoal <span class="mono">#2D2A26</span>, secondary text <span class="mono">#6E675C</span>.</p>
+      <div class="preview white">
+        <p class="font-display" style="font-size:28px;margin:0 0 10px">Welcome back — Playfair 28px</p>
+        <p class="font-display" style="font-size:26px;margin:0 0 10px">Page heading — Playfair 26px</p>
+        <p class="font-display" style="font-size:20px;margin:0 0 10px">Section heading — Playfair 20px</p>
+        <p style="font-size:15px;margin:0 0 6px">Body — Inter Regular 15px. The quick brown fox jumps over the lazy dog.</p>
+        <p style="font-size:14px;color:#6E675C;margin:0 0 6px">Secondary — Inter 14px, muted.</p>
+        <p style="font-size:13px;color:#6E675C;margin:0">Small / labels — Inter 13px.</p>
+      </div>
+      <h4>Type scale (as used)</h4>
+      <table>
+        <tr><th>Token</th><th>Size</th><th>Family / weight</th><th>Used for</th></tr>
+        <tr><td>Display XL</td><td><span class="mono">28px</span></td><td>Playfair 600</td><td>Auth card title, dashboard welcome, stat numbers</td></tr>
+        <tr><td>Display L</td><td><span class="mono">26px</span></td><td>Playfair 600</td><td>Page titles (list / detail)</td></tr>
+        <tr><td>Display M</td><td><span class="mono">20px</span></td><td>Playfair 600</td><td>In-page section headings</td></tr>
+        <tr><td>Display S</td><td><span class="mono">18–19px</span></td><td>Playfair 600</td><td>Card titles (pet name), brand wordmark</td></tr>
+        <tr><td>Body</td><td><span class="mono">14–15px</span> (<code>text-sm</code>)</td><td>Inter 400</td><td>Default body &amp; UI text</td></tr>
+        <tr><td>Small</td><td><span class="mono">13px</span></td><td>Inter 400/500</td><td>Field labels, meta, helper text</td></tr>
+        <tr><td>XS</td><td><span class="mono">12px</span></td><td>Inter 500</td><td>Badges, validation, captions</td></tr>
+        <tr><td>Micro</td><td><span class="mono">10px</span></td><td>Inter 400</td><td>Mobile bottom-tab labels</td></tr>
+      </table>
+      <p class="note"><b>Weights:</b> 400 (regular), 500 (medium — labels, buttons, badges), 600 (Playfair display only). No 700+ in the app. <b>Line-height:</b> body ≈ 1.55; headings tight (<code>leading-none</code>/<code>leading-snug</code>) on stat numbers &amp; titles. <b>Letter-spacing:</b> default everywhere; only <code>tracking-tight</code> on the wordmark.</p>
+
+      <h3>Border radius scale</h3>
+      <div class="preview white"><div class="row">
+        <div style="text-align:center"><div style="width:70px;height:52px;background:#E4EBF2;border:1px solid #cddaea;border-radius:8px"></div><small>lg · 8px</small></div>
+        <div style="text-align:center"><div style="width:70px;height:52px;background:#E4EBF2;border:1px solid #cddaea;border-radius:12px"></div><small>xl · 12px</small></div>
+        <div style="text-align:center"><div style="width:70px;height:52px;background:#E4EBF2;border:1px solid #cddaea;border-radius:16px"></div><small>2xl · 16px</small></div>
+        <div style="text-align:center"><div style="width:70px;height:52px;background:#E4EBF2;border:1px solid #cddaea;border-radius:20px"></div><small>card · 20px</small></div>
+        <div style="text-align:center"><div style="width:70px;height:52px;background:#E4EBF2;border:1px solid #cddaea;border-radius:999px"></div><small>full</small></div>
+      </div></div>
+      <table>
+        <tr><th>Token</th><th>Value</th><th>Applied to</th></tr>
+        <tr><td><span class="mono">rounded-lg</span></td><td>8px</td><td>Sidebar nav items, dropdown items, small controls</td></tr>
+        <tr><td><span class="mono">rounded-xl</span></td><td>12px</td><td>Inputs, selects, error banners, dropdown menus</td></tr>
+        <tr><td><span class="mono">rounded-2xl</span></td><td>16px</td><td>Cards, stat cards, panels, empty states</td></tr>
+        <tr><td><span class="mono">rounded-[20px]</span></td><td>20px</td><td>Auth (login/register) card only</td></tr>
+        <tr><td><span class="mono">rounded-full</span></td><td>9999px</td><td>All buttons, badges, avatars, pills</td></tr>
+      </table>
+
+      <h3>Shadow scale</h3>
+      <div class="preview white"><div class="row" style="gap:28px">
+        <div style="text-align:center"><div style="width:96px;height:64px;background:#fff;border:1px solid #E6DFD3;border-radius:12px;box-shadow:0 2px 8px rgba(45,42,38,.06)"></div><small>card</small></div>
+        <div style="text-align:center"><div style="width:96px;height:64px;background:#fff;border:1px solid #E6DFD3;border-radius:12px;box-shadow:0 8px 24px rgba(45,42,38,.12)"></div><small>popover</small></div>
+        <div style="text-align:center"><div style="width:96px;height:64px;background:#fff;border:1px solid #E6DFD3;border-radius:12px;box-shadow:0 12px 26px rgba(45,42,38,.12)"></div><small>lift (hover)</small></div>
+      </div></div>
+      <table>
+        <tr><th>Token</th><th>Value</th><th>Used for</th></tr>
+        <tr><td>Card</td><td><span class="mono">0 2px 8px rgba(45,42,38,.06)</span></td><td>Resting cards, stat cards, auth card</td></tr>
+        <tr><td>Popover</td><td><span class="mono">0 8px 24px rgba(45,42,38,.12)</span></td><td>Profile menu, date-picker dropdown</td></tr>
+        <tr><td>Lift (hover)</td><td><span class="mono">0 12px 26px rgba(45,42,38,.12)</span></td><td><code>.pw-lift</code> hover on interactive cards</td></tr>
+        <tr><td>Button hover</td><td><span class="mono">0 6px 16px rgba(64,99,138,.32)</span></td><td>Primary button hover glow</td></tr>
+      </table>
+      <p class="note">Base-UI/shadcn primitives (Card, Dialog, Popover, Select) instead use a hairline <span class="mono">ring-1 ring-foreground/10</span> + <span class="mono">shadow-md</span>. Prefer the PetWell card shadow above for product surfaces.</p>
+
+      <h3>Spacing scale</h3>
+      <p class="note">Standard Tailwind 4px scale. The values that actually recur in the app:</p>
+      <table>
+        <tr><th>Step</th><th>px</th><th>Typical use</th></tr>
+        <tr><td><span class="mono">gap/space-1.5</span></td><td>6px</td><td>Label→input gap</td></tr>
+        <tr><td><span class="mono">gap-2 / gap-3</span></td><td>8 / 12px</td><td>Inline elements; grid columns in forms</td></tr>
+        <tr><td><span class="mono">space-y-4</span></td><td>16px</td><td>Vertical rhythm between form fields</td></tr>
+        <tr><td><span class="mono">p-5 / p-6</span></td><td>20 / 24px</td><td>Card padding</td></tr>
+        <tr><td><span class="mono">gap-4 / gap-6</span></td><td>16 / 24px</td><td>Card grids; two-panel layouts</td></tr>
+        <tr><td><span class="mono">py-8</span></td><td>32px</td><td>Page top/bottom padding</td></tr>
+        <tr><td><span class="mono">space-y-8</span></td><td>32px</td><td>Between major page sections</td></tr>
+        <tr><td><span class="mono">p-8 / p-10</span></td><td>32 / 40px</td><td>Auth card; empty-state card</td></tr>
+      </table>
+
+      <h3>Grid &amp; breakpoints</h3>
+      <p class="note">Page content is centred with a max width and responsive horizontal padding. Content widths seen: <span class="mono">max-w-5xl</span> (dashboard, lists), <span class="mono">max-w-3xl</span> (detail pages), <span class="mono">420px</span> (auth card). Horizontal padding <span class="mono">px-4 sm:px-6</span>.</p>
+      <table>
+        <tr><th>Breakpoint</th><th>Min width</th><th>What changes</th></tr>
+        <tr><td><span class="mono">base</span></td><td>0</td><td>Single column; sidebar becomes bottom tab bar</td></tr>
+        <tr><td><span class="mono">sm</span></td><td>640px</td><td>Stat cards go 1→3 up; form 2-col grids; larger padding</td></tr>
+        <tr><td><span class="mono">md</span></td><td>768px</td><td>Desktop sidebar (230px) appears; bottom tabs hidden</td></tr>
+        <tr><td><span class="mono">lg</span></td><td>1024px</td><td>Two-panel dashboard; 3-col pet grid</td></tr>
+      </table>
+
+      <h3>Iconography</h3>
+      <p class="note"><b>Library:</b> <a href="https://lucide.dev">lucide-react</a>, used everywhere. <b>Sizes:</b> 13–14px inline with text/labels, 16px in buttons &amp; nav, 18–20px in stat/feature tiles, 32px in empty-state placeholders. Icons inherit the adjacent text colour (muted <span class="mono">#6E675C</span> or brand <span class="mono">#5E86AD</span>). The brand mark is a custom 5-ellipse paw (<code>PawMark</code> / lucide <code>PawPrint</code>). Stroke weight is lucide default (2px).</p>
+      <div class="preview white"><div class="row" style="color:#5E86AD">
+        <svg width="20" height="20" viewBox="0 0 64 64" fill="currentColor"><ellipse cx="32" cy="42" rx="13" ry="10"/><ellipse cx="16" cy="30" rx="5.2" ry="7"/><ellipse cx="25" cy="21" rx="5" ry="7.2"/><ellipse cx="39" cy="21" rx="5" ry="7.2"/><ellipse cx="48" cy="30" rx="5.2" ry="7"/></svg>
+        <span style="font-size:13px;color:#6E675C">Custom PawMark · lucide PawPrint, Building2, Calendar, Syringe, Stethoscope, Bell, Plus, Pencil, Camera, User, LogOut…</span>
+      </div></div>
+
+      <h3>Animation &amp; transitions</h3>
+      <table>
+        <tr><th>Name</th><th>Definition</th><th>Applied to</th></tr>
+        <tr><td><span class="mono">.pw-fade</span></td><td>fade + 10px rise, 0.3s ease</td><td>Page content mount</td></tr>
+        <tr><td><span class="mono">.pw-lift</span> hover</td><td>translateY(-3px) + lift shadow, 0.18s</td><td>Clickable cards</td></tr>
+        <tr><td><span class="mono">.pw-btn-primary</span> hover</td><td>translateY(-1px) + glow, darker gradient, 0.12–0.15s</td><td>Primary buttons</td></tr>
+        <tr><td>Colour transitions</td><td><span class="mono">transition-colors</span> ~0.15s</td><td>Links, nav items, outline/ghost buttons, inputs</td></tr>
+        <tr><td><span class="mono">animate-spin</span></td><td>continuous rotate</td><td>Inline loading spinner</td></tr>
+        <tr><td><span class="mono">pwFloat</span></td><td>4.5s float + rotate loop</td><td>Decorative hero stickers (<code>.pw-stick</code>)</td></tr>
+      </table>
+      <div class="preview white"><div class="row">
+        <span class="pw-fade" style="font-size:13px;color:#6E675C">↑ this canvas content uses .pw-fade on load</span>
+      </div></div>
+    </section>
+
+    <!-- ================================================================
+         SECTION 2 — COMPONENTS
+    ================================================================= -->
+    <section id="components">
+      <h2><span class="num">2.</span> Components</h2>
+      <p class="lede">Only components that actually exist in the codebase are documented. PetWell has <b>two layers</b>: a set of Base-UI/shadcn primitives in <code>components/ui/*</code> (greyscale tokens), and the <b>product visual language</b> applied directly in pages via <code>.pw-*</code> classes + inline styles. The product layer is canonical for user-facing UI; primitives are used in a few utility spots.</p>
+
+      <!-- BUTTON -->
+      <h3>Button</h3>
+      <div class="anatomy"><b>Anatomy:</b> pill container (<code>rounded-full</code>) · optional leading lucide icon (14–16px) · label (Inter 500) · min touch height.</div>
+      <h4>Variants &amp; sizes</h4>
+      <div class="preview"><div class="stack">
+        <div class="row">
+          <button class="pw-btn-primary" style="min-height:44px;border-radius:999px;padding:0 24px">Primary</button>
+          <button class="btn-outline">Secondary / outline</button>
+          <button class="pw-btn-primary" style="min-height:44px;border-radius:999px;padding:0 24px;display:inline-flex;align-items:center;gap:8px"><span style="font-size:16px;line-height:0">＋</span> With icon</button>
+        </div>
+        <div class="row">
+          <button class="btn-danger-sm">Small danger (36px)</button>
+          <button class="pw-btn-primary" style="min-height:36px;border-radius:999px;padding:0 14px;font-size:12px">Small primary (36px)</button>
+          <button style="background:none;border:none;color:#6E675C;font:500 13px 'Inter';cursor:pointer;display:inline-flex;align-items:center;gap:6px">⎋ Ghost (Base-UI)</button>
+        </div>
+      </div></div>
+      <h4>States</h4>
+      <div class="preview"><div class="row">
+        <button class="pw-btn-primary" style="min-height:44px;border-radius:999px;padding:0 24px">Default</button>
+        <button class="pw-btn-primary" style="min-height:44px;border-radius:999px;padding:0 24px;transform:translateY(-1px);box-shadow:0 6px 16px rgba(64,99,138,.32);background:linear-gradient(135deg,#4A7196,#3A5F86)">Hover</button>
+        <button class="pw-btn-primary" style="min-height:44px;border-radius:999px;padding:0 24px" disabled>Disabled</button>
+        <button class="pw-btn-primary" style="min-height:44px;border-radius:999px;padding:0 24px;display:inline-flex;align-items:center;gap:8px" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" opacity=".25"/><path fill="currentColor" opacity=".75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>Loading…</button>
+      </div></div>
+      <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+      <table>
+        <tr><th>Variant</th><th>Source</th><th>Style</th><th>Use for</th></tr>
+        <tr><td>Primary</td><td><code>.pw-btn-primary</code></td><td>Blue gradient, white text, pill, 44px</td><td>The one main action per view (submit, book, add)</td></tr>
+        <tr><td>Secondary / outline</td><td>inline</td><td>1.5px <span class="mono">#5E86AD</span> border, blue text, transparent, hover <span class="mono">#E4EBF2</span></td><td>Cancel, secondary actions beside a primary</td></tr>
+        <tr><td>Small danger</td><td>inline (Cancel/StatusActions)</td><td><span class="mono">#FEF2F2</span> fill, <span class="mono">#FECACA</span> border, <span class="mono">#C4534E</span> text, 36px, 12px</td><td>Destructive row actions (cancel, reject)</td></tr>
+        <tr><td>Ghost / icon</td><td><code>ui/button.tsx</code> (Base-UI)</td><td>Greyscale, <code>rounded-lg</code>, hover muted</td><td>Logout button, dialog close only</td></tr>
+      </table>
+      <div class="grid2">
+        <div class="callout do"><b>Do</b> — one primary button per screen/section; pair a primary with an outline for "confirm + cancel".</div>
+        <div class="callout dont"><b>Don't</b> — stack two gradient primaries together, or use the greyscale Base-UI <code>Button</code> for a main action.</div>
+      </div>
+      <p class="note"><b>A11y:</b> min height 44px (primary/secondary), 36px small; disabled uses <code>disabled</code> + reduced opacity/greyed fill; focus shows a ring (see §6). <b>Props (Base-UI Button):</b> <code>variant</code> = default·outline·secondary·ghost·destructive·link; <code>size</code> = default·xs·sm·lg·icon·icon-sm·icon-lg.</p>
+
+      <!-- INPUT -->
+      <h3>Input <span class="tag exists">FormInput</span></h3>
+      <div class="anatomy"><b>Anatomy:</b> label (13px) · field (48px tall, white, <code>#E6DFD3</code> border, <code>rounded-xl</code>) · optional right adornment (e.g. show/hide eye) · error text (12px, danger).</div>
+      <div class="preview"><div class="stack" style="max-width:380px">
+        <div><label class="field-label">Email</label><input class="field-input" placeholder="you@example.com"></div>
+        <div><label class="field-label">Password</label>
+          <div style="position:relative"><input class="field-input" type="password" value="••••••••" style="padding-right:44px"><span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#6E675C;font-size:13px">👁</span></div>
+        </div>
+        <div><label class="field-label">With error</label><input class="field-input" value="bad" style="border-color:#C4534E;box-shadow:0 0 0 2px rgba(196,83,78,.25)"><p class="field-error">Please enter a valid email.</p></div>
+        <div><label class="field-label">Disabled</label><input class="field-input" value="Read only" disabled style="background:#F1ECE3;color:#A39B8D"></div>
+      </div></div>
+      <table>
+        <tr><th>State</th><th>Treatment</th></tr>
+        <tr><td>Default</td><td>White bg, 1px <span class="mono">#E6DFD3</span> border, ink text, faint placeholder <span class="mono">#A39B8D</span></td></tr>
+        <tr><td>Focus</td><td>Border <span class="mono">#5E86AD</span> + 2px ring <span class="mono">ring-[#5E86AD]</span></td></tr>
+        <tr><td>Error</td><td>Message below in <span class="mono">#C4534E</span> at 12px (border stays default unless set)</td></tr>
+        <tr><td>Disabled</td><td>Muted fill / reduced opacity, no pointer events</td></tr>
+      </table>
+      <p class="note"><b>Props:</b> <code>label</code>, <code>error?</code>, <code>right?</code> (adornment node), plus all native input attributes. Used with <code>react-hook-form</code> + zod (<code>standardSchemaResolver</code>). A second greyscale <code>ui/input.tsx</code> (h-8) exists but the product uses <code>FormInput</code> — treat <code>FormInput</code> as canonical.</p>
+
+      <!-- TEXTAREA -->
+      <h3>Textarea</h3>
+      <div class="preview"><div style="max-width:380px"><label class="field-label">Notes (optional)</label><textarea class="field-input" style="height:auto;min-height:72px;padding:12px 16px;resize:vertical" placeholder="Add any details for the clinic…"></textarea></div></div>
+      <p class="note">In forms, multi-line inputs reuse the <code>FormInput</code> field styling. The primitive <code>ui/textarea.tsx</code> (Base-UI, auto-sizing, greyscale tokens) exists for shadcn-style usage. Match the 12px radius, <span class="mono">#E6DFD3</span> border and focus ring for consistency.</p>
+
+      <!-- SELECT -->
+      <h3>Select</h3>
+      <div class="anatomy"><b>Two implementations:</b> (1) a native <code>&lt;select&gt;</code> styled like <code>FormInput</code> (used in Register → choose clinic); (2) the Base-UI <code>ui/select.tsx</code> primitive (trigger + portal popup, greyscale tokens).</div>
+      <div class="preview"><div style="max-width:380px"><label class="field-label">Clinic</label>
+        <div style="position:relative"><select class="field-input" style="appearance:none"><option>Select your clinic</option><option>โรงพยาบาลสัตว์รักษ์เพื่อน</option></select><span style="position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#6E675C;pointer-events:none">▾</span></div>
+      </div></div>
+      <p class="note">Prefer the native styled select for simple form choices (it inherits the exact field look). Reserve the Base-UI primitive for cases needing custom item rendering. Trigger heights: <code>default</code> 32px, <code>sm</code> 28px (primitive) — bump to the 48px field height when used inline in product forms.</p>
+
+      <!-- BADGE -->
+      <h3>Badge</h3>
+      <div class="anatomy"><b>Anatomy:</b> pill (<code>rounded-full</code>) · 12px medium text · fill + text colour pair · no border.</div>
+      <h4>Status badges <span class="tag exists">canonical</span></h4>
+      <div class="preview white"><div class="row">
+        <span class="status-badge" style="background:#F8EEDB;color:#C08A2D">Pending</span>
+        <span class="status-badge" style="background:#E4EBF2;color:#40638A">Confirmed</span>
+        <span class="status-badge" style="background:#EFEBF8;color:#8B7FD1">Rescheduled</span>
+        <span class="status-badge" style="background:#E7F2EA;color:#58996F">Completed</span>
+        <span class="status-badge" style="background:#F8E6E4;color:#C4534E">Rejected</span>
+        <span class="status-badge" style="background:#EFECE4;color:#8B8474">Cancelled</span>
+      </div></div>
+      <h4>Base-UI Badge variants (greyscale primitive)</h4>
+      <div class="preview white"><div class="row">
+        <span class="status-badge" style="background:#2D2A26;color:#fff">default</span>
+        <span class="status-badge" style="background:#eee;color:#2D2A26">secondary</span>
+        <span class="status-badge" style="background:#FBE7E7;color:#C4534E">destructive</span>
+        <span class="status-badge" style="background:#fff;border:1px solid #E6DFD3;color:#2D2A26">outline</span>
+      </div></div>
+      <p class="note"><b>Use the status set</b> for any appointment / account status. The generic Base-UI variants exist but should map to the status palette where the meaning is a status. Props (primitive): <code>variant</code> = default·secondary·destructive·outline·ghost·link.</p>
+
+      <!-- AVATAR -->
+      <h3>Avatar</h3>
+      <div class="anatomy"><b>Product usage:</b> a circular initials button (32px, <code>#5E86AD</code> fill, white text) in the app header opening the profile menu. The Base-UI <code>ui/avatar.tsx</code> supports image + fallback + sizes (sm 24 / default 32 / lg 40) + badge + group.</div>
+      <div class="preview white"><div class="row">
+        <span style="width:24px;height:24px;border-radius:50%;background:#5E86AD;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px">ZP</span>
+        <span style="width:32px;height:32px;border-radius:50%;background:#5E86AD;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px">ZP</span>
+        <span style="width:40px;height:40px;border-radius:50%;background:#5E86AD;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:14px">ZP</span>
+        <span style="width:40px;height:40px;border-radius:50%;background:#F1ECE3;color:#A39B8D;display:inline-flex;align-items:center;justify-content:center">🐾</span>
+      </div></div>
+      <p class="note">Initials = first letters of the user's name, upper-cased, max 2. Fallback fill for image avatars is <span class="mono">#F1ECE3</span> / muted text.</p>
+
+      <!-- CARD -->
+      <h3>Card</h3>
+      <div class="anatomy"><b>Anatomy:</b> white surface · 1px <code>#E6DFD3</code> border · <code>rounded-2xl</code> (16px) · card shadow · <code>p-5/p-6</code> padding. Interactive cards add <code>.pw-lift</code>.</div>
+      <div class="preview"><div class="row" style="align-items:stretch">
+        <div class="pw-card pw-lift" style="width:220px;overflow:hidden;cursor:pointer">
+          <div style="height:120px;background:#F1ECE3;display:flex;align-items:center;justify-content:center;color:#A39B8D;font-size:30px">🐾</div>
+          <div style="padding:16px"><p class="font-display" style="font-size:18px;margin:0">Mochi</p><p style="font-size:13px;color:#6E675C;margin:2px 0 0">Dog · Shiba Inu</p></div>
+        </div>
+        <div class="pw-card" style="width:240px;padding:20px">
+          <p class="font-display" style="margin:0 0 10px">Upcoming appointments</p>
+          <p style="font-size:14px;color:#6E675C;margin:0">No upcoming appointments yet.</p>
+        </div>
+        <div class="pw-lift" style="width:200px;padding:20px;border-radius:16px;border:1px solid #E6DFD3;box-shadow:var(--pw-shadow-card);background:#E4EBF2">
+          <div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;color:#5E86AD">🐾</span><div><p class="font-display" style="font-size:28px;line-height:1;margin:0">3</p><p style="font-size:13px;color:#6E675C;margin:2px 0 0">Pets</p></div></div>
+        </div>
+      </div></div>
+      <table>
+        <tr><th>Card type</th><th>Distinctive treatment</th><th>Use for</th></tr>
+        <tr><td>Content card / panel</td><td>White, border, 16px radius, card shadow, <code>p-5/6</code></td><td>Dashboard panels, detail sections, forms</td></tr>
+        <tr><td>Interactive card</td><td>Above + <code>.pw-lift</code> hover</td><td>Pet cards, clinic cards (whole card is a link)</td></tr>
+        <tr><td>Stat / tinted card</td><td>Pastel fill (<span class="mono">#E4EBF2</span>/<span class="mono">#EFEBF8</span>/<span class="mono">#FBEDE7</span>), white icon disc, Playfair number</td><td>Dashboard metrics</td></tr>
+      </table>
+      <div class="grid2">
+        <div class="callout do"><b>Do</b> — use <code>.pw-lift</code> only when the whole card is clickable; keep static panels flat.</div>
+        <div class="callout dont"><b>Don't</b> — mix the greyscale Base-UI <code>ui/card.tsx</code> (10px radius, ring border) with product cards on the same page.</div>
+      </div>
+
+      <!-- MODAL / DIALOG -->
+      <h3>Dialog / Modal <span class="tag exists">ui/dialog.tsx</span></h3>
+      <div class="anatomy"><b>Anatomy:</b> dim backdrop (black/10 + subtle blur) · centred popup, <code>max-w-sm</code>, <code>rounded-xl</code>, <code>p-4</code>, ring border · header (title + description) · optional footer with muted bar · ghost close "×" top-right.</div>
+      <div class="preview" style="position:relative;min-height:200px;background:#e9e4db;display:flex;align-items:center;justify-content:center">
+        <div style="background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.18);width:320px;padding:16px;position:relative;border:1px solid rgba(45,42,38,.1)">
+          <span style="position:absolute;top:10px;right:10px;color:#6E675C;cursor:pointer">×</span>
+          <p class="font-display" style="font-size:16px;margin:0 0 6px">Dialog title</p>
+          <p style="font-size:13px;color:#6E675C;margin:0 0 14px">A short description explaining the action.</p>
+          <div style="display:flex;justify-content:flex-end;gap:8px;margin:0 -16px -16px;padding:12px 16px;border-top:1px solid #E6DFD3;background:rgba(241,236,227,.5);border-radius:0 0 12px 12px">
+            <button class="btn-outline" style="min-height:36px">Cancel</button>
+            <button class="pw-btn-primary" style="min-height:36px;border-radius:999px;padding:0 16px">Confirm</button>
+          </div>
+        </div>
+      </div>
+      <p class="note"><b>Note:</b> the primitive exists and is styled, but destructive confirmations in the app currently use inline tinted buttons + a toast rather than a confirm dialog (see §5). When a modal is needed, use this primitive; put the primary action on the right of the footer, cancel to its left.</p>
+
+      <!-- POPOVER / DROPDOWN -->
+      <h3>Dropdown &amp; Popover</h3>
+      <div class="anatomy"><b>Product dropdown</b> (profile menu): 224px, white, <code>#E6DFD3</code> border, <code>rounded-xl</code>, popover shadow, 1.5 padding; header row (name + role) then menu items; destructive item in danger colour. <b>Popover primitive</b> (<code>ui/popover.tsx</code>) powers the date-picker.</div>
+      <div class="preview" style="min-height:220px">
+        <div style="width:224px;background:#fff;border:1px solid #E6DFD3;border-radius:12px;box-shadow:0 8px 24px rgba(45,42,38,.12);padding:6px">
+          <div style="padding:8px 10px;border-bottom:1px solid #F1ECE3;margin-bottom:4px"><p style="font-size:14px;margin:0">Zern P.</p><p style="font-size:12px;color:#6E675C;margin:0">Pet Owner</p></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px">👤 Profile</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:14px;color:#C4534E">⎋ Log out</div>
+        </div>
+      </div>
+      <p class="note"><b>A11y:</b> the profile menu trigger sets <code>aria-haspopup="menu"</code> + <code>aria-expanded</code>, items use <code>role="menuitem"</code>, and it closes on outside-click. Menu items: hover <span class="mono">#F1ECE3</span>; destructive hover <span class="mono">#FEF2F2</span>.</p>
+
+      <!-- DATE PICKER -->
+      <h3>Date Picker &amp; Calendar</h3>
+      <div class="anatomy"><b>Anatomy:</b> 48px field trigger (matches inputs) with calendar icon · popover containing a react-day-picker calendar · month/year as custom height-capped scrollable dropdowns · optional time row (datetime mode). Selected day uses brand blue <code>#5E86AD</code> (scoped locally via <code>--primary</code>).</div>
+      <div class="preview"><div style="max-width:300px"><label class="field-label">Birth date (optional)</label>
+        <button class="field-input" style="display:flex;align-items:center;justify-content:space-between;text-align:left;cursor:pointer"><span style="color:#9A9284">Select date</span><span style="color:#6E675C">📅</span></button>
+      </div></div>
+      <p class="note">Year range 1900 → current+5. Used in Book Appointment (datetime), Add/Edit Health Record dates, and pet birth date. Props: <code>value</code>, <code>onChange</code>, <code>mode</code> ('date'|'datetime'), <code>placeholder</code>.</p>
+
+      <!-- TOAST -->
+      <h3>Toast <span class="tag exists">sonner</span></h3>
+      <div class="anatomy"><b>Anatomy:</b> sonner toaster themed with popover bg/text/border tokens + <code>--radius</code>; lucide status icons (success, info, warning, error, loading-spinner).</div>
+      <div class="preview"><div class="stack" style="max-width:320px">
+        <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #E6DFD3;border-radius:10px;padding:10px 12px;font-size:13px;box-shadow:var(--pw-shadow-card)"><span style="color:#58996F">✔</span> Pet added.</div>
+        <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #E6DFD3;border-radius:10px;padding:10px 12px;font-size:13px;box-shadow:var(--pw-shadow-card)"><span style="color:#C4534E">⊗</span> Something went wrong.</div>
+      </div></div>
+      <p class="note">Primary channel for success/error feedback after server actions (create, update, cancel, upload). Call <code>toast.success(msg)</code> / <code>toast.error(msg)</code>. The <code>&lt;Toaster/&gt;</code> is mounted once at the app root.</p>
+
+      <!-- LOADING SPINNER -->
+      <h3>Loading Spinner</h3>
+      <div class="preview white"><div class="row">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="color:#5E86AD;animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" opacity=".25"/><path fill="currentColor" opacity=".75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+        <span style="font-size:13px;color:#6E675C">Inline SVG spinner (<code>animate-spin</code>) inside buttons; elsewhere buttons swap the label to "Saving…"/"Creating account…".</span>
+      </div></div>
+      <p class="note">There is no skeleton system — loading is communicated via in-button spinners / text and disabled state during <code>useTransition</code> pending.</p>
+
+      <!-- EMPTY STATE -->
+      <h3>Empty State</h3>
+      <div class="anatomy"><b>Anatomy:</b> centred card (<code>p-10</code>, 16px radius) · placeholder icon tile · short ink title · muted one-line explanation · single primary action.</div>
+      <div class="preview"><div class="pw-card" style="max-width:420px;margin:0 auto;padding:40px;text-align:center">
+        <div style="width:64px;height:64px;border-radius:16px;background:#F1ECE3;display:flex;align-items:center;justify-content:center;color:#A39B8D;font-size:28px;margin:0 auto 16px">🐾</div>
+        <p style="margin:0 0 4px">No pets yet</p>
+        <p style="font-size:14px;color:#6E675C;margin:0 0 20px">Add your first pet to start its health passport.</p>
+        <button class="pw-btn-primary" style="min-height:44px;border-radius:999px;padding:0 20px">Add a pet</button>
+      </div></div>
+      <p class="note">Lighter inline empty states (e.g. "No records yet…") are a bordered card with muted 14px text and no action.</p>
+
+      <!-- ALERT / ERROR BANNER -->
+      <h3>Alert / Error banner</h3>
+      <div class="preview"><div class="err-banner" style="max-width:380px"><span>⊗</span><span>Invalid email or password.</span></div></div>
+      <p class="note">Form-level errors render as a danger-tinted banner (<span class="mono">#FEF2F2</span> bg, <span class="mono">#FECACA</span> border, <span class="mono">#C4534E</span> text, 13px) with a leading <code>XCircle</code> icon, <code>rounded-xl</code>. Field-level errors are 12px danger text under the input. There is no dedicated success/info banner — success uses toasts.</p>
+
+      <!-- NAVBAR -->
+      <h3>Navbar (public)</h3>
+      <div class="anatomy"><b>PublicHeader:</b> sticky, translucent ivory + blur, bottom border; paw mark + Playfair wordmark left; "Log In" (outline pill) + "Sign Up" (primary pill) right, both 44px.</div>
+      <div class="preview" style="padding:0;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:rgba(250,248,244,.95);border-bottom:1px solid #E6DFD3">
+          <span style="display:inline-flex;align-items:center;gap:8px;color:#5E86AD"><svg width="22" height="22" viewBox="0 0 64 64" fill="currentColor"><ellipse cx="32" cy="42" rx="13" ry="10"/><ellipse cx="16" cy="30" rx="5.2" ry="7"/><ellipse cx="25" cy="21" rx="5" ry="7.2"/><ellipse cx="39" cy="21" rx="5" ry="7.2"/><ellipse cx="48" cy="30" rx="5.2" ry="7"/></svg><span class="font-display" style="font-size:20px;color:#2D2A26">PetWell</span></span>
+          <span style="display:flex;gap:10px"><button class="btn-outline" style="min-height:40px">Log In</button><button class="pw-btn-primary" style="min-height:40px;border-radius:999px;padding:0 18px">Sign Up</button></span>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <h3>Sidebar &amp; app shell</h3>
+      <div class="anatomy"><b>AppShell:</b> 230px white sidebar (desktop) with paw + wordmark, nav items, user block + logout; sticky 56px top header (Playfair page title + profile menu); on mobile the sidebar collapses to a fixed bottom tab bar. Active nav item = <code>#E4EBF2</code> fill + <code>#5E86AD</code> text.</div>
+      <div class="preview" style="padding:0;overflow:hidden"><div style="display:flex;height:220px;background:#FAF8F4">
+        <div style="width:170px;background:#fff;border-right:1px solid #E6DFD3;padding:14px 10px">
+          <div style="display:flex;align-items:center;gap:8px;color:#5E86AD;padding-bottom:12px;border-bottom:1px solid #E6DFD3;margin-bottom:10px"><span>🐾</span><span class="font-display" style="color:#2D2A26">PetWell</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:#E4EBF2;color:#5E86AD;font-size:13px">🏠 Home</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:#6E675C;font-size:13px">🐾 My Pets</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:#6E675C;font-size:13px">🏥 Clinics</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:#6E675C;font-size:13px">📅 Appointments</div>
+        </div>
+        <div style="flex:1">
+          <div style="height:44px;background:#fff;border-bottom:1px solid #E6DFD3;display:flex;align-items:center;justify-content:space-between;padding:0 16px"><span class="font-display">Dashboard</span><span style="width:28px;height:28px;border-radius:50%;background:#5E86AD;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px">ZP</span></div>
+        </div>
+      </div></div>
+      <p class="note"><b>Owner nav:</b> Home · My Pets · Clinics · Appointments. <b>Staff nav:</b> Home · Clinic Profile · Appointments.</p>
+
+      <!-- PHOTO PLACEHOLDER + LOGO -->
+      <h3>PhotoPlaceholder &amp; Logo</h3>
+      <div class="preview white"><div class="row">
+        <div style="width:80px;height:60px;border-radius:12px;background:#F1ECE3;display:flex;align-items:center;justify-content:center;color:#A39B8D;font-size:24px">🐾</div>
+        <div style="width:80px;height:60px;border-radius:12px;background:#F1ECE3;display:flex;align-items:center;justify-content:center;color:#A39B8D;font-size:24px">🏥</div>
+        <span style="display:inline-flex;align-items:center;gap:8px;color:#5E86AD"><svg width="22" height="22" viewBox="0 0 64 64" fill="currentColor"><ellipse cx="32" cy="42" rx="13" ry="10"/><ellipse cx="16" cy="30" rx="5.2" ry="7"/><ellipse cx="25" cy="21" rx="5" ry="7.2"/><ellipse cx="39" cy="21" rx="5" ry="7.2"/><ellipse cx="48" cy="30" rx="5.2" ry="7"/></svg><span class="font-display" style="font-size:18px;color:#2D2A26">PetWell</span></span>
+      </div></div>
+      <p class="note"><code>PhotoPlaceholder</code> fills missing pet/clinic images: <span class="mono">#F1ECE3</span> tile + <span class="mono">#A39B8D</span> paw/building icon. <b>Canonical wordmark</b> = paw mark in <span class="mono">#5E86AD</span> + Playfair "PetWell". (The standalone <code>Logo.tsx</code> renders in teal — off-palette; see <a href="#inconsistencies">Inconsistencies</a>.)</p>
+    </section>
+
+    <!-- ================================================================
+         SECTION 3 — LAYOUT PATTERNS
+    ================================================================= -->
+    <section id="layouts">
+      <h2><span class="num">3.</span> Layout patterns</h2>
+      <p class="lede">The recurring page skeletons in the app. All authenticated pages sit inside <code>AppShell</code>; public/auth pages use <code>PublicHeader</code>.</p>
+
+      <h3>Authentication layout</h3>
+      <p class="note">Ivory full-height page, <code>PublicHeader</code> on top, a single centred white card (max 420px, <code>rounded-[20px]</code>, <code>p-8</code>, card shadow). Playfair title, form, then a centred secondary link ("Register" / "Log in").</p>
+      <div class="preview" style="display:flex;justify-content:center"><div style="background:#fff;border:1px solid #E6DFD3;border-radius:20px;box-shadow:var(--pw-shadow-card);padding:24px;width:300px"><p class="font-display" style="font-size:24px;margin:0 0 14px">Welcome back</p><label class="field-label">Email</label><input class="field-input" placeholder="you@example.com" style="margin-bottom:12px"><button class="pw-btn-primary" style="width:100%;min-height:44px;border-radius:999px">Log In</button><p style="text-align:center;font-size:13px;color:#6E675C;margin:12px 0 0">Don't have an account? <a href="#">Register</a></p></div></div>
+
+      <h3>Dashboard layout</h3>
+      <p class="note">Inside <code>AppShell</code>: <code>max-w-5xl</code> container, <code>py-8</code>, <code>space-y-8</code>. Playfair welcome heading → a 1/3-up stat-card row → a two-panel grid (<code>lg:grid-cols-2</code>) → a primary CTA.</p>
+
+      <h3>List / CRUD page</h3>
+      <p class="note"><code>max-w-5xl</code>. Header row: Playfair title (26px) left, primary "Add…" pill right. Body: responsive card grid (<code>sm:grid-cols-2 lg:grid-cols-3</code>, <code>gap-4</code>) of interactive <code>.pw-lift</code> cards, or a centred empty state when there's nothing yet.</p>
+
+      <h3>Detail page</h3>
+      <p class="note"><code>max-w-3xl</code>, <code>space-y-6</code>. A hero card (cover image / placeholder + overlaid action, then title row with an inline "Edit" outline button and meta), followed by a titled section rendering a list of record cards (or an inline empty state).</p>
+
+      <h3>Form layout</h3>
+      <p class="note"><code>&lt;form class="space-y-4"&gt;</code>; related short fields paired in a <code>grid-cols-2 gap-3</code>; full-width fields otherwise. Actions sit in a <code>flex gap-3</code> row at the end: primary pill first, outline "Cancel" second. Optional fields are labelled "(optional)".</p>
+      <div class="preview"><div style="max-width:420px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px"><div><label class="field-label">Name</label><input class="field-input"></div><div><label class="field-label">Species</label><input class="field-input" placeholder="Dog, Cat…"></div></div><div style="display:flex;gap:12px"><button class="pw-btn-primary" style="min-height:44px;border-radius:999px;padding:0 22px">Add pet</button><button class="btn-outline">Cancel</button></div></div></div>
+
+      <h3>Modal &amp; card layouts</h3>
+      <p class="note">Modal: see the Dialog component (§2) — centred, <code>max-w-sm</code>, footer with right-aligned primary. Card: white surface, 16px radius, border + card shadow, header (Playfair) / content / optional footer bar.</p>
+    </section>
+
+    <!-- ================================================================
+         SECTION 4 — FORM STANDARDS
+    ================================================================= -->
+    <section id="forms">
+      <h2><span class="num">4.</span> Form standards</h2>
+      <table>
+        <tr><th>Concern</th><th>Standard</th></tr>
+        <tr><td>Label position</td><td>Above the field, 13px, ink <span class="mono">#2D2A26</span>, <code>mb-1.5</code> gap</td></tr>
+        <tr><td>Required indicator</td><td>None used — <b>optional</b> fields are marked "(optional)" in the label; everything else is assumed required. (See recommendation below.)</td></tr>
+        <tr><td>Helper text</td><td>Muted 13px below the field where needed</td></tr>
+        <tr><td>Validation message</td><td>12px danger <span class="mono">#C4534E</span> directly under the field (field-level); zod via react-hook-form</td></tr>
+        <tr><td>Form-level error</td><td>Danger-tinted banner at the bottom of the form above the submit (see Alert §2)</td></tr>
+        <tr><td>Field spacing</td><td><code>space-y-4</code> between fields; <code>grid-cols-2 gap-3</code> for paired fields</td></tr>
+        <tr><td>Grouping</td><td>Role/segmented choices as a pair of toggle buttons; conditional fields appear on selection (e.g. clinic select for staff)</td></tr>
+        <tr><td>Input height</td><td>48px (<code>h-12</code>) product fields; 12px radius; white bg; <span class="mono">#E6DFD3</span> border</td></tr>
+        <tr><td>Submit state</td><td>Button disables + label switches to "Saving…"/"Creating account…" during pending</td></tr>
+      </table>
+      <div class="callout warn"><b>Recommendation (not a redesign):</b> the app relies on a "(optional)" suffix rather than a required marker. Keep the convention, but standardise it everywhere so required-by-default reads consistently — don't introduce a red asterisk that isn't in the current language.</div>
+    </section>
+
+    <!-- ================================================================
+         SECTION 5 — FEEDBACK PATTERNS
+    ================================================================= -->
+    <section id="feedback">
+      <h2><span class="num">5.</span> Feedback patterns</h2>
+      <table>
+        <tr><th>Pattern</th><th>How the app does it</th></tr>
+        <tr><td>Loading</td><td>In-button SVG spinner (<code>animate-spin</code>) or label swap; controls disabled during <code>useTransition</code> pending</td></tr>
+        <tr><td>Skeletons</td><td><span class="tag absent">not used</span> — no skeleton system exists</td></tr>
+        <tr><td>Success</td><td><code>toast.success(msg)</code> (sonner) after successful server actions</td></tr>
+        <tr><td>Error</td><td><code>toast.error(msg)</code> for action failures; danger banner for form validation; 12px text for field errors</td></tr>
+        <tr><td>Empty states</td><td>Centred card with placeholder icon + title + muted line + primary action; or a light inline bordered card</td></tr>
+        <tr><td>Confirmation</td><td><span class="tag absent">no confirm dialog</span> — destructive actions use an inline danger-tinted button that fires immediately, then a toast</td></tr>
+        <tr><td>Toasts</td><td>sonner, themed to popover tokens; success/info/warning/error/loading icons</td></tr>
+      </table>
+      <div class="callout info"><b>Consistency note:</b> destructive actions (cancel appointment, reject) currently fire on a single click with no confirm step. If a confirm gate is added later, use the existing Dialog primitive (§2) with a danger primary — no new styling needed.</div>
+    </section>
+
+    <!-- ================================================================
+         SECTION 6 — ACCESSIBILITY
+    ================================================================= -->
+    <section id="a11y">
+      <h2><span class="num">6.</span> Accessibility</h2>
+      <table>
+        <tr><th>Area</th><th>Current behaviour</th></tr>
+        <tr><td>Focus rings</td><td>Product inputs/buttons: 2px ring <span class="mono">#5E86AD</span> (<code>focus:ring-2</code>). Base-UI primitives: 3px <span class="mono">ring-ring/50</span> + border. Keep a visible ring on every interactive element.</td></tr>
+        <tr><td>Keyboard</td><td>Native buttons/links/inputs are keyboard-operable; the profile menu closes on outside-click (add <kbd>Esc</kbd>-to-close as an enhancement).</td></tr>
+        <tr><td>Colour contrast</td><td>Ink <span class="mono">#2D2A26</span> on ivory/white passes AA. Verify muted <span class="mono">#6E675C</span> on tinted fills, and status text-on-fill pairs, for small text.</td></tr>
+        <tr><td>ARIA</td><td>Profile menu: <code>aria-haspopup="menu"</code>, <code>aria-expanded</code>, <code>role="menu"/"menuitem"</code>. Icon-only buttons use <code>aria-label</code> (e.g. show/hide password, account menu). Base-UI primitives ship correct roles.</td></tr>
+        <tr><td>Touch targets</td><td>Primary/secondary buttons 44px; small row actions 36px; inputs 48px; mobile tab items full-height. 44px is the baseline for primary actions.</td></tr>
+      </table>
+    </section>
+
+    <!-- ================================================================
+         SECTION 7 — DESIGN TOKENS
+    ================================================================= -->
+    <section id="tokens">
+      <h2><span class="num">7.</span> Design tokens</h2>
+      <p class="lede">Centralised, copy-paste reference. These mirror the values in <code>globals.css</code> and the inline styles; reuse them rather than inventing new values.</p>
+
+      <h4>Colour</h4>
+      <table>
+        <tr><th>Token</th><th>Value</th><th>Role</th></tr>
+        <tr><td>bg / canvas</td><td><span class="mono">#FAF8F4</span></td><td>App background</td></tr>
+        <tr><td>surface</td><td><span class="mono">#FFFFFF</span></td><td>Cards, inputs</td></tr>
+        <tr><td>primary</td><td><span class="mono">#5E86AD</span></td><td>Brand, links, active, focus</td></tr>
+        <tr><td>primary-ink</td><td><span class="mono">#40638A</span></td><td>Text on tint, hover link</td></tr>
+        <tr><td>gradient</td><td><span class="mono">#5E86AD → #46709A</span></td><td>Primary button</td></tr>
+        <tr><td>tint-blue</td><td><span class="mono">#E4EBF2</span></td><td>Active nav, info fill, stat card</td></tr>
+        <tr><td>tint-lavender</td><td><span class="mono">#EFEBF8</span></td><td>Stat card, rescheduled</td></tr>
+        <tr><td>tint-peach</td><td><span class="mono">#FBEDE7</span></td><td>Stat card</td></tr>
+        <tr><td>hover</td><td><span class="mono">#F1ECE3</span></td><td>Hover surface, placeholder tile</td></tr>
+        <tr><td>border</td><td><span class="mono">#E6DFD3</span></td><td>Hairline borders</td></tr>
+        <tr><td>ink</td><td><span class="mono">#2D2A26</span></td><td>Primary text</td></tr>
+        <tr><td>muted</td><td><span class="mono">#6E675C</span></td><td>Secondary text</td></tr>
+        <tr><td>faint</td><td><span class="mono">#A39B8D</span></td><td>Placeholder, disabled icon</td></tr>
+        <tr><td>danger</td><td><span class="mono">#C4534E</span></td><td>Errors, destructive</td></tr>
+        <tr><td>danger-fill / border</td><td><span class="mono">#FEF2F2</span> / <span class="mono">#FECACA</span></td><td>Error banners, danger buttons</td></tr>
+      </table>
+
+      <h4>Radius · Shadow · Spacing · Type · Motion</h4>
+      <table>
+        <tr><th>Group</th><th>Tokens</th></tr>
+        <tr><td>Radius</td><td>lg <span class="mono">8px</span> · xl <span class="mono">12px</span> · 2xl <span class="mono">16px</span> · card <span class="mono">20px</span> · full <span class="mono">9999px</span></td></tr>
+        <tr><td>Shadow</td><td>card <span class="mono">0 2px 8px /.06</span> · pop <span class="mono">0 8px 24px /.12</span> · lift <span class="mono">0 12px 26px /.12</span> · btn <span class="mono">0 6px 16px rgba(64,99,138,.32)</span></td></tr>
+        <tr><td>Spacing</td><td>4px base · fields <span class="mono">16</span> · card pad <span class="mono">20/24</span> · page pad <span class="mono">32</span> · section gap <span class="mono">32</span></td></tr>
+        <tr><td>Type</td><td>Playfair 600 (28/26/20/18) · Inter 400·500·600 (15/14/13/12/10)</td></tr>
+        <tr><td>Opacity</td><td>disabled <span class="mono">.5–.6</span> · backdrop <span class="mono">black/10</span> · ring <span class="mono">/.50</span> · white tile <span class="mono">/.70</span></td></tr>
+        <tr><td>Z-index</td><td>sticky public header <span class="mono">50</span> · app sidebar/mobile tabs <span class="mono">40</span> · app header <span class="mono">30</span> · popovers/menus <span class="mono">50</span> · public topnav <span class="mono">20</span></td></tr>
+        <tr><td>Transitions</td><td>colour ~<span class="mono">.15s</span> · lift <span class="mono">.18s</span> · button <span class="mono">.12–.15s</span> · fade-in <span class="mono">.3s</span></td></tr>
+      </table>
+    </section>
+
+    <!-- ================================================================
+         SECTION 8 — USAGE RULES
+    ================================================================= -->
+    <section id="rules">
+      <h2><span class="num">8.</span> Usage rules</h2>
+      <ul class="tight">
+        <li><b>One primary per view.</b> Use <code>.pw-btn-primary</code> for the single most important action; everything secondary is the outline pill. Never place two gradient primaries side by side.</li>
+        <li><b>Destructive = danger-tinted, not gradient.</b> Cancel/Reject use the small <span class="mono">#FEF2F2</span>/<span class="mono">#FECACA</span>/<span class="mono">#C4534E</span> pill at 36px.</li>
+        <li><b>Cards vs. panels.</b> Static information → flat bordered card. Whole card is a link → add <code>.pw-lift</code>. Metric → tinted stat card with a Playfair number.</li>
+        <li><b>Section spacing.</b> <code>space-y-8</code> between major page sections, <code>space-y-4</code> between form fields, <code>gap-4</code> in card grids.</li>
+        <li><b>Type hierarchy.</b> Playfair (<code>.font-display</code>) for page/section/card titles and big numbers only; Inter for everything else. Don't set body copy in Playfair.</li>
+        <li><b>Icons.</b> lucide only, inheriting adjacent text colour; 14–16px inline/in-buttons, 32px in empty states. The paw mark is the brand icon.</li>
+        <li><b>Radius.</b> Buttons/badges/avatars fully round; inputs &amp; banners 12px; cards 16px; the auth card 20px. Don't introduce new radii.</li>
+        <li><b>Colour discipline.</b> Blue is the only brand colour; pastels (lavender/peach) are accents on stat cards; reserve danger red for errors/destructive. Apply colour via the tokens in §7, not new hex values.</li>
+        <li><b>Animation.</b> <code>.pw-fade</code> on page mount, <code>.pw-lift</code> on clickable cards, the built-in hover on primary buttons. Keep motion subtle (≤0.3s).</li>
+        <li><b>Feedback.</b> Server-action results → sonner toast; validation → inline/banner; never a bare alert().</li>
+      </ul>
+    </section>
+
+    <!-- ================================================================
+         NOTES — INCONSISTENCIES
+    ================================================================= -->
+    <section id="inconsistencies">
+      <h2><span class="num">✳</span> Known inconsistencies &amp; canonical picks</h2>
+      <p class="lede">Places where the same thing is built two ways in the code. Recommendations preserve the existing visual language — they just pick one version to standardise on.</p>
+      <table>
+        <tr><th>#</th><th>Inconsistency</th><th>Canonical recommendation</th></tr>
+        <tr><td>1</td><td><code>shared/Logo.tsx</code> renders the wordmark in <b>teal</b> (<span class="mono">text-teal-600/700</span>), while <code>AppShell</code> &amp; <code>PublicHeader</code> use <b>dusty blue</b> <span class="mono">#5E86AD</span>.</td><td>Standardise the wordmark on paw mark in <span class="mono">#5E86AD</span> + Playfair. Restyle <code>Logo.tsx</code> to match (don't keep teal).</td></tr>
+        <tr><td>2</td><td>Two public headers: <code>PublicHeader</code> (on-brand, pill buttons) and <code>TopNav</code> (teal <code>Logo</code>, <span class="mono">neutral-*</span> greys, Base-UI Button).</td><td>Use <code>PublicHeader</code> everywhere public. Retire or restyle <code>TopNav</code> to the brand palette.</td></tr>
+        <tr><td>3</td><td>Two button systems: product <code>.pw-btn-primary</code> pills vs. greyscale Base-UI <code>ui/button.tsx</code> (used for logout &amp; dialog close).</td><td>Product actions = <code>.pw-*</code> pills. Limit Base-UI Button to utility/dialog chrome.</td></tr>
+        <tr><td>4</td><td>shadcn design tokens (<code>--primary</code>, etc. in <code>:root</code>) are left at greyscale defaults; brand colour is applied via arbitrary values &amp; inline styles.</td><td>Optional: map <code>--primary</code>/<code>--ring</code>/<code>--border</code> to the PetWell tokens so <code>bg-primary</code> etc. reflect the brand and primitives inherit it. (Behaviour-only; no visual change to existing screens if done carefully.)</td></tr>
+        <tr><td>5</td><td>Popover shadow defined twice: <span class="mono">…,.12</span> (profile menu) vs <span class="mono">…,.14</span> (date-picker dropdown).</td><td>Use one popover shadow token — <span class="mono">0 8px 24px rgba(45,42,38,.12)</span>.</td></tr>
+        <tr><td>6</td><td>Status colours exist in three places (this <code>StatusBadge</code>, the Figma "Bubble Blue" spec, the greyscale primitives).</td><td><code>StatusBadge.tsx</code> is the source of truth for status — the muted set in §1. Ignore the divergent Figma hex for the coded app.</td></tr>
+      </table>
+    </section>
+
+    <!-- ================================================================
+         NOTES — NOT PRESENT
+    ================================================================= -->
+    <section id="not-present">
+      <h2><span class="num">∅</span> Requested but not in the codebase</h2>
+      <p class="note">Per scope, only existing components are documented above. These common components from the original checklist do <b>not</b> currently exist in <code>frontend/src</code>, so they're intentionally omitted rather than invented:</p>
+      <p class="row" style="gap:8px">
+        <span class="tag absent">Checkbox</span><span class="tag absent">Radio</span><span class="tag absent">Switch</span><span class="tag absent">Tooltip</span><span class="tag absent">Table</span><span class="tag absent">Tabs</span><span class="tag absent">Pagination</span><span class="tag absent">Breadcrumb</span><span class="tag absent">Skeleton</span><span class="tag absent">Dedicated Alert banner component</span><span class="tag absent">Confirmation dialog usage</span>
+      </p>
+      <p class="note">If any of these are built later, derive them from the tokens in §7 and the closest existing pattern (e.g. a Table should use card borders + <code>#E6DFD3</code> dividers + 14px body; Tabs should reuse the role-toggle button treatment).</p>
+    </section>
+
+    <p class="note" style="border-top:2px solid var(--pw-border);padding-top:18px">Generated from <code>PetWell&nbsp;Codue/frontend/src</code> — <code>globals.css</code>, <code>components/ui/*</code>, <code>components/shared/*</code>, <code>components/layout/*</code>, and owner/staff pages. Keep this file updated as the UI evolves so it stays the single source of truth.</p>
+  </main>
+</div>
+</body>
+</html>

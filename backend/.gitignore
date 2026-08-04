@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+*.log
+.DS_Store
+
+# Prisma client is generated output — run `pnpm exec prisma generate` after clone.
+src/database/generated/
+
+# Keep the template, ignore real env files
+!.env.example

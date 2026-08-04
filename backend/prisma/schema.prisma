@@ -1,0 +1,159 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/database/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  OWNER
+  CLINIC_STAFF
+}
+
+enum RecordType {
+  VACCINE
+  TREATMENT
+}
+
+enum ClinicType {
+  GENERAL
+  EXOTIC
+  EMERGENCY_24HR
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
+  RESCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id          String   @id @default(uuid()) @db.Uuid
+  firstName   String   @map("first_name")
+  lastName    String   @map("last_name")
+  phone       String?
+  email       String   @unique
+  password    String
+  avatarUrl   String?  @map("avatar_url")
+  coverUrl    String?  @map("cover_url")
+  addressLine String?  @map("address_line")
+  subdistrict String?
+  district    String?
+  province    String?
+  postalCode  String?  @map("postal_code") @db.VarChar(5)
+  role        Role
+  clinicId    String?  @map("clinic_id") @db.Uuid
+  clinic      Clinic?  @relation("ClinicStaff", fields: [clinicId], references: [id])
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  pets           Pet[]
+  createdRecords HealthRecord[]         @relation("RecordAuthor")
+  statusChanges  AppointmentStatusLog[]
+
+  @@map("users")
+}
+
+model Pet {
+  id               String    @id @default(uuid()) @db.Uuid
+  ownerId          String    @map("owner_id") @db.Uuid
+  owner            User      @relation(fields: [ownerId], references: [id])
+  name             String
+  species          String
+  breed            String?
+  birthDate        DateTime? @map("birth_date") @db.Date
+  photoUrl         String?   @map("photo_url")
+  chronicCondition String?   @map("chronic_condition")
+  drugAllergy      String?   @map("drug_allergy")
+  microchipNo      String?   @map("microchip_no")
+  latestWeight     Float?    @map("latest_weight")
+  isActive         Boolean   @default(true) @map("is_active")
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz()
+
+  healthRecords HealthRecord[]
+  appointments  Appointment[]
+
+  @@map("pets")
+}
+
+model HealthRecord {
+  id            String       @id @default(uuid()) @db.Uuid
+  petId         String       @map("pet_id") @db.Uuid
+  pet           Pet          @relation(fields: [petId], references: [id])
+  clinicId      String       @map("clinic_id") @db.Uuid
+  clinic        Clinic       @relation(fields: [clinicId], references: [id])
+  createdById   String       @map("created_by") @db.Uuid
+  createdBy     User         @relation("RecordAuthor", fields: [createdById], references: [id])
+  appointmentId String?      @map("appointment_id") @db.Uuid
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  recordType    RecordType   @map("record_type")
+  description   String
+  recordDate    DateTime     @map("record_date") @db.Date
+  nextDueDate   DateTime?    @map("next_due_date") @db.Date
+  attachments   String[]     @default([])
+  isActive      Boolean      @default(true) @map("is_active")
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt     DateTime     @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("health_records")
+}
+
+model Clinic {
+  id             String     @id @default(uuid()) @db.Uuid
+  name           String
+  address        String?
+  phone          String?
+  description    String?
+  photoUrl       String?    @map("photo_url")
+  clinicType     ClinicType @map("clinic_type")
+  googleMapsLink String?    @map("google_maps_link")
+  isActive       Boolean    @default(true) @map("is_active")
+  createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz()
+
+  staff         User[]         @relation("ClinicStaff")
+  healthRecords HealthRecord[]
+  appointments  Appointment[]
+
+  @@map("clinics")
+}
+
+model Appointment {
+  id              String            @id @default(uuid()) @db.Uuid
+  petId           String            @map("pet_id") @db.Uuid
+  pet             Pet               @relation(fields: [petId], references: [id])
+  clinicId        String            @map("clinic_id") @db.Uuid
+  clinic          Clinic            @relation(fields: [clinicId], references: [id])
+  appointmentDate DateTime          @map("appointment_date") @db.Timestamptz()
+  status          AppointmentStatus @default(PENDING)
+  notes           String?
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt       DateTime          @updatedAt @map("updated_at") @db.Timestamptz()
+
+  statusLogs    AppointmentStatusLog[]
+  healthRecords HealthRecord[]
+
+  @@index([clinicId, appointmentDate])
+  @@map("appointments")
+}
+
+model AppointmentStatusLog {
+  id            String             @id @default(uuid()) @db.Uuid
+  appointmentId String             @map("appointment_id") @db.Uuid
+  appointment   Appointment        @relation(fields: [appointmentId], references: [id])
+  changedById   String             @map("changed_by") @db.Uuid
+  changedBy     User               @relation(fields: [changedById], references: [id])
+  oldStatus     AppointmentStatus? @map("old_status")
+  newStatus     AppointmentStatus  @map("new_status")
+  reason        String?
+  changedAt     DateTime           @default(now()) @map("changed_at") @db.Timestamptz()
+
+  @@map("appointment_status_logs")
+}
