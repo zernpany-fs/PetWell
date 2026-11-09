@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.2 |
+| **Status** | Draft v0.3 |
 | **Date** | 2026-11-09 |
-| **Related** | `PetWell_Decision_Log.md` (decision IDs D1–D17) |
+| **Related** | `PetWell_Decision_Log.md` (decision IDs D1–D22) |
 | **Roles** | `OWNER`, `CLINIC_STAFF` (as in the system) |
 
 ## Terms
@@ -21,10 +21,12 @@
 **As** clinic staff, **I want** to see a pet's full history once my clinic has confirmed its appointment, **so that** I can prepare the treatment without asking the owner for paperwork.
 
 - **AC1** *Given* a pet has an appointment at clinic X that has never been `CONFIRMED`, *when* X's staff set it to `CONFIRMED` for the first time, from any status (`PENDING` or `RESCHEDULED`), *then* an appointment-based access is created for X on that pet, and X's staff can open the pet's full history (records from all clinics) and the owner's contact info as entered. (D1, D5, D9)
-- **AC2** *Given* an appointment is `PENDING`, `REJECTED`, or `RESCHEDULED` and has never been `CONFIRMED`, *when* X's staff try to open the pet's profile or records, *then* the request is denied and no pet data is returned. The appointment list still shows only the pet's id, name, and species. (D1)
+- **AC2** *Given* an appointment is `PENDING`, `REJECTED`, or `RESCHEDULED` and has never been `CONFIRMED`, *when* X's staff try to open the pet's profile or records, *then* the API responds `404 Pet not found` and no pet data is returned (unless X authored records for this pet, in which case X gets only `id`, `name`, `species` and its own records). The appointment list still shows only the pet's id, name, and species. (D1, D20)
 - **AC3** *(edge case)* *Given* an appointment is `CONFIRMED` with active access, *when* its status changes to `RESCHEDULED`, *then* access stays active; and when it returns to `CONFIRMED`, no duplicate access is created.
 - **AC4** *Given* an appointment moves from `CONFIRMED` to `COMPLETED` on date D, *when* 30 days have passed since D, *then* the access expires and X sees only the records X authored. (D2, D6, D11)
 - **AC5** *Given* X has access (of either kind), *when* X's staff open the pet, *then* the system writes an audit log entry (who, which pet, when, which kind of access). (D10)
+- **AC6** *Given* X has no active access to a pet, *when* X's staff try to create a health record for it, *then* the request is denied and no record is created. Records X authored earlier stay editable. (D6, D19)
+- **AC7** *Given* X's staff search pets, *when* results are returned, *then* they include only pets X has active access to or has authored records for, and owner phone/email appear only for pets with active access. (D18)
 
 ---
 
@@ -62,5 +64,5 @@
 
 ## Backlog (stories still to write)
 
-- **US-05** Clinic creates a pet and records for an owner who has no account (D8)
+- **US-05** Clinic creates a pet and records for an owner who has no account (D8 — deferred by D21, not in V2)
 - **US-06** Owner views the audit log of who opened their pet (D10 follow-up)
