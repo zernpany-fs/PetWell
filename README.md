@@ -26,7 +26,7 @@ Nothing is hard-deleted. Pets and records are archived via `isActive`, and every
 ## Layout
 
 ```
-PetWell Codue/
+petwell-code/
 ├── docs/          # Specs, ERD, endpoint list, API + frontend documentation
 ├── backend/       # NestJS API — 30 endpoints, 7 modules
 └── frontend/      # Next.js App Router app — owner + staff areas
