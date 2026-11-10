@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.3 |
-| **Date** | 2026-11-09 |
+| **Status** | Draft v0.4 |
+| **Date** | 2026-11-10 |
 | **Author** | Nopparuth Panyanithiwat |
 | **Change** | Clinics can no longer read any pet's records by default. Access comes from a confirmed appointment or from the owner's explicit share. |
 
@@ -31,12 +31,13 @@ The original design let any clinic search and read the full history of every pet
 | D14 | Share-code lockout | 5 wrong codes per staff account → that account is blocked for 15 min. 10 wrong codes per clinic per hour → code entry for the whole clinic is blocked for 15 min. | A per-account limit alone lets a clinic with many accounts keep guessing. |
 | D15 | Ways to share | Owner-share access is granted **only via share code** (D7). | Keeps V2 within the timebox. Direct share to a chosen clinic goes to the backlog. |
 | D16 | Where V2 lives | Same repo. Tag the last v1 commit as `v1.0`, build V2 on branch `feat/consent-access`, merge to `main` when done. Uncommitted v1 files must be cleared before tagging. | Reviewers can follow the system from v1 to v2 in one history. No copied code. |
-| D17 | New entities | `PetAccessGrant` (both access types in one table: `type` = `APPOINTMENT` / `OWNER_SHARE`, `petId`, `clinicId`, `appointmentId?`, `expiresAt?` (null = unlimited), `revokedAt?`), `ShareCode` (`codeHash`, `petId`, `durationDays?`, `expiresAt`, `usedAt?`), `PetAccessLog` (audit log: `userId`, `clinicId`, `petId`, `grantId`, `viewedAt`), `ShareCodeAttempt` (lockout counting: `userId`, `clinicId`, `attemptedAt`, `success`). | One table for grants means one place for the access check, and D12 revokes both types with one update. Codes are stored hashed so a database leak does not expose them. |
+| D17 | New entities | `PetAccessGrant` (both access types in one table: `type` = `APPOINTMENT` / `OWNER_SHARE`, `petId`, `clinicId`, `appointmentId?` (**unique**: one appointment creates at most one grant), `expiresAt?`, `endedAt?`, `endReason?` = `REVOKED` / `CANCELLED` / `REJECTED`). `expiresAt = null` means no expiry date yet: unlimited for an owner share, not yet completed for an appointment grant. A grant is **active** when `endedAt` is null and `expiresAt` is null or in the future. `ShareCode` (`codeHash`, `petId`, `durationDays?`, `expiresAt`, `usedAt?`), `PetAccessLog` (audit log: `userId`, `clinicId`, `petId`, `grantId`, `viewedAt`), `ShareCodeAttempt` (lockout counting: `userId`, `clinicId`, `attemptedAt`, `success`). | One table for grants means one place for the access check, and D12 ends both types with one update. A unique `appointmentId` enforces US-01 AC3 and D13 in the database, not only in code. `endReason` shows why access ended; expiry needs no reason because it follows from `expiresAt`. Codes are stored hashed so a database leak does not expose them. |
 | D18 | Clinic pet search (`GET /pets/search`) | Results include only pets the clinic currently has access to, or pets with records the clinic authored. Owner contact (phone, email) is returned only for pets with active access. | Unrestricted search would bypass consent and expose owner contact (D9). |
 | D19 | Writing health records | A clinic can create a record only while it has active access to the pet. Records it already authored stay editable after access ends (D6). | Stops clinics writing into histories of pets they do not treat. Walk-ins use a share code first. If the owner does not grant access, the visit is not recorded in PetWell; this gap is the owner's choice. |
 | D20 | Response when a clinic has no access | No access and no authored records → `404 Pet not found` (does not reveal the pet exists). No access but has authored records → basic pet info (`id`, `name`, `species`) and only its own records. | Matches v1's 404 style and gives D6/D11 a concrete shape. |
 | D21 | Scope cut: D8 | Pets without an owner (D8, US-05) move to the backlog for V2. | Making `Pet.ownerId` optional touches almost every ownership check and does not fit the 7-day timebox. |
 | D22 | Test setup | Set up Vitest (minimal) on day 11 together with `.prettierrc`, and write access-check tests alongside the code. | Vitest is not installed yet; leaving setup to day 17 risks losing the test day. |
+| D23 | Appointment completed after its grant ended | `COMPLETED` sets `expiresAt` = completion + 30 days **only on a grant that has not ended**. A grant that already ended (e.g. revoked) stays ended; the appointment still completes normally. | Revocation must stick (D13). D12 leaves the appointment untouched, so the clinic must still be able to complete it. |
 
 ## 3. Findings from code review (2026-11-09)
 

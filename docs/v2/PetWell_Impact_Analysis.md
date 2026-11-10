@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.1 |
-| **Date** | 2026-11-09 |
+| **Status** | Draft v0.2 |
+| **Date** | 2026-11-10 |
 | **Author** | Nopparuth Panyanithiwat |
-| **Related** | `PetWell_Decision_Log.md` (D1–D22), `PetWell_User_Stories_Access_Control.md` |
+| **Related** | `PetWell_Decision_Log.md` (D1–D23), `PetWell_User_Stories_Access_Control.md` |
 | **Based on** | Backend code at tag `v1.0` (read-only review of `schema.prisma`, pet, health-record and appointment modules) |
 
 ## 1. Summary
@@ -21,6 +21,7 @@ In v1, any `CLINIC_STAFF` user can search, read and write to every pet in the sy
 | No defined response for a clinic without access | pet and record read endpoints | D20 |
 | Vitest is not installed and there are no tests (the context doc said Vitest was in the stack) | `backend/package.json`, `frontend/package.json` | D22 |
 | `GET /health-records/:recordId` does not check `isActive` (v1 bug) | `health-record.service.findOne` | Fix during V2 |
+| Completing an appointment could set a new expiry on a grant that was already revoked | `PATCH /appointments/:id/status` (V2 logic) | D23 |
 
 ## 3. Affected endpoints
 
@@ -32,7 +33,7 @@ In v1, any `CLINIC_STAFF` user can search, read and write to every pet in the sy
 | `GET /health-records/:recordId` | Any record | Allowed with access, or if the clinic authored it | D6, D11 |
 | `POST /pets/:petId/health-records` | Any pet | Requires active access | D19 |
 | `PATCH`, `DELETE`, `POST …/attachments` on `/health-records/:recordId` | Authoring clinic only | No change (authoring clinic, with or without access) | D6, D19 |
-| `PATCH /appointments/:id/status` | Changes status + writes status log | Same, plus: first `CONFIRMED` → create grant; `COMPLETED` → grant expires in 30 days; `REJECTED` / `CANCELLED` → end grant | D1, D2, D4, D13 |
+| `PATCH /appointments/:id/status` | Changes status + writes status log | Same, plus: first `CONFIRMED` → create grant; `COMPLETED` → grant expires in 30 days (only if the grant has not ended); `REJECTED` / `CANCELLED` → end grant | D1, D2, D4, D13, D23 |
 | `DELETE /appointments/:id` (owner cancel) | Cancels + writes status log | Same, plus end the appointment's grant | D4 |
 | `DELETE /pets/:petId` (owner archive) | Archives pet, cancels live appointments | Same, plus end grants from those appointments | US-02 AC4 |
 
@@ -47,7 +48,9 @@ Not affected: owner endpoints for pets and appointments, `GET /clinics/:clinicId
 ## 5. Technical notes for the ER design
 
 - `updateStatus` and owner `cancel` use Prisma's array form `$transaction([...])`. They need the callback form (`$transaction(async (tx) => …)`) so the grant change runs in the same transaction as the status change.
-- Proposed (to confirm when drawing the ER): make `PetAccessGrant.appointmentId` **unique**, so an appointment can never create a second grant (US-01 AC3, D13 enforced by the database). Consider `endedAt` + `endReason` (`REVOKED` / `CANCELLED` / `REJECTED`) instead of only `revokedAt`, so the audit trail shows why access ended.
+- Decided (D17): `PetAccessGrant.appointmentId` is **unique**, so an appointment can never create a second grant (US-01 AC3, D13 enforced by the database). A grant ends with `endedAt` + `endReason` (`REVOKED` / `CANCELLED` / `REJECTED`) instead of `revokedAt`. Expiry is read from `expiresAt`.
+- Active grant = `endedAt IS NULL AND (expiresAt IS NULL OR expiresAt > now)`.
+- Decided (D23): on `COMPLETED`, update `expiresAt` only where `endedAt IS NULL`.
 - The JWT payload already carries `clinicId`, so the access check needs no extra lookup for the clinic.
 
 ## 6. Frontend impact (not yet reviewed in detail)
