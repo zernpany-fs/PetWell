@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.2 |
+| **Status** | Draft v0.3 |
 | **Date** | 2026-11-10 |
 | **Author** | Nopparuth Panyanithiwat |
-| **Related** | `PetWell_Decision_Log.md` (D1–D23), `PetWell_User_Stories_Access_Control.md` |
+| **Related** | `PetWell_Decision_Log.md` (D1–D27), `PetWell_User_Stories_Access_Control.md` |
 | **Based on** | Backend code at tag `v1.0` (read-only review of `schema.prisma`, pet, health-record and appointment modules) |
 
 ## 1. Summary
@@ -42,7 +42,7 @@ Not affected: owner endpoints for pets and appointments, `GET /clinics/:clinicId
 ## 4. New pieces
 
 - **`AccessService` (shared)** — one place for: checking a clinic's access to a pet, writing the audit log entry (D10), creating a grant from an appointment, and ending grants. Used by the pet, health-record and appointment services.
-- **New endpoints** — owner generates a share code; clinic redeems a share code; owner lists and revokes a clinic's access (exact routes to be defined in the API doc).
+- **New endpoints** — owner generates a share code; clinic redeems a share code; owner lists, revokes and extends a clinic's access (D27) (exact routes to be defined in the API doc).
 - **New tables** (D17) — `PetAccessGrant`, `ShareCode`, `PetAccessLog`, `ShareCodeAttempt`.
 
 ## 5. Technical notes for the ER design
@@ -51,12 +51,15 @@ Not affected: owner endpoints for pets and appointments, `GET /clinics/:clinicId
 - Decided (D17): `PetAccessGrant.appointmentId` is **unique**, so an appointment can never create a second grant (US-01 AC3, D13 enforced by the database). A grant ends with `endedAt` + `endReason` (`REVOKED` / `CANCELLED` / `REJECTED`) instead of `revokedAt`. Expiry is read from `expiresAt`.
 - Active grant = `endedAt IS NULL AND (expiresAt IS NULL OR expiresAt > now)`.
 - Decided (D23): on `COMPLETED`, update `expiresAt` only where `endedAt IS NULL`.
+- Decided (D25): `PetAccessGrant.shareCodeId` is unique, so a code redeemed twice at the same moment still creates only one grant.
+- Decided (D26): `codeHash` uses HMAC-SHA256 with `SHARE_CODE_SECRET` (new `.env` entry); generate with `crypto.randomInt` and retry if a live code has the same hash. A plain unique index on `codeHash` does not work, because expired codes keep their hash.
+- Decided (D24): `PetAccessLog.grantId` is optional (null = viewed authored records only).
 - The JWT payload already carries `clinicId`, so the access check needs no extra lookup for the clinic.
 
 ## 6. Frontend impact (not yet reviewed in detail)
 
 - `app/staff/pets/page.tsx` (search) and `app/staff/pets/[petId]/page.tsx` (pet detail) call endpoints whose responses change. They need empty-state and "no access" handling.
-- New owner screens: generate share code, list and revoke clinic access. New staff screen: enter share code.
+- New owner screens: generate share code, list, revoke and extend clinic access (D27). New staff screen: enter share code.
 
 ## 7. Out of scope for V2
 
