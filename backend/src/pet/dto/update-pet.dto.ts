@@ -1,12 +1,6 @@
 import { Trim } from '@/common/decorators/trim.decorator';
 import { Type } from 'class-transformer';
-import {
-  IsDate,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Min,
-} from 'class-validator';
+import { IsDate, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
 export class UpdatePetDto {
   @IsOptional()

@@ -49,7 +49,10 @@ export class UserService {
         },
       });
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
         throw new ConflictException('Email already exists');
       }
       throw error;
@@ -69,7 +72,10 @@ export class UserService {
     });
   }
 
-  updateProfile(userId: string, dto: UpdateProfileDto): Promise<UserResponseDto> {
+  updateProfile(
+    userId: string,
+    dto: UpdateProfileDto,
+  ): Promise<UserResponseDto> {
     return this.prisma.user.update({
       where: { id: userId },
       data: dto,
@@ -77,7 +83,10 @@ export class UserService {
     });
   }
 
-  async uploadAvatar(userId: string, file: Express.Multer.File): Promise<string> {
+  async uploadAvatar(
+    userId: string,
+    file: Express.Multer.File,
+  ): Promise<string> {
     const avatarUrl = await this.cloudinaryService.upload(file);
     await this.prisma.user.update({
       where: { id: userId },
@@ -86,7 +95,10 @@ export class UserService {
     return avatarUrl;
   }
 
-  async uploadCover(userId: string, file: Express.Multer.File): Promise<string> {
+  async uploadCover(
+    userId: string,
+    file: Express.Multer.File,
+  ): Promise<string> {
     const coverUrl = await this.cloudinaryService.upload(file);
     await this.prisma.user.update({
       where: { id: userId },

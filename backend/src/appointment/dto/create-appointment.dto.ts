@@ -1,12 +1,6 @@
 import { Trim } from '@/common/decorators/trim.decorator';
 import { Type } from 'class-transformer';
-import {
-  IsDate,
-  IsOptional,
-  IsString,
-  IsUUID,
-  MinDate,
-} from 'class-validator';
+import { IsDate, IsOptional, IsString, IsUUID, MinDate } from 'class-validator';
 
 export class CreateAppointmentDto {
   @IsUUID()
@@ -15,7 +9,9 @@ export class CreateAppointmentDto {
   @IsUUID()
   clinicId: string;
 
-  @MinDate(() => new Date(), { message: 'appointmentDate must be in the future' })
+  @MinDate(() => new Date(), {
+    message: 'appointmentDate must be in the future',
+  })
   @Type(() => Date)
   @IsDate()
   appointmentDate: Date;

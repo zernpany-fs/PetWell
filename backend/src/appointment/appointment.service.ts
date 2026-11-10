@@ -7,10 +7,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '@/database/prisma.service';
 import { AccessTokenPayload } from '@/auth/types/jwt-payload';
-import {
-  AppointmentStatus,
-  Role,
-} from '@/database/generated/prisma/enums';
+import { AppointmentStatus, Role } from '@/database/generated/prisma/enums';
 import { PrismaClientKnownRequestError } from '@/database/generated/prisma/internal/prismaNamespace';
 import { MessageResponseDto } from '@/common/dto/message-response.dto';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
@@ -255,7 +252,9 @@ export class AppointmentService {
       throw new NotFoundException('Appointment not found');
     }
     if (appointment.clinicId !== user.clinicId) {
-      throw new ForbiddenException('You can only manage your clinic appointments');
+      throw new ForbiddenException(
+        'You can only manage your clinic appointments',
+      );
     }
     this.assertTransitionAllowed(appointment.status, dto.status);
 

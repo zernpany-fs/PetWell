@@ -78,7 +78,10 @@ export class PetService {
     });
   }
 
-  async findOne(petId: string, user: AccessTokenPayload): Promise<PetResponseDto> {
+  async findOne(
+    petId: string,
+    user: AccessTokenPayload,
+  ): Promise<PetResponseDto> {
     const pet = await this.prisma.pet.findUnique({ where: { id: petId } });
     if (!pet || !pet.isActive) {
       throw new NotFoundException('Pet not found');
