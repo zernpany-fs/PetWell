@@ -6,6 +6,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '@/database/prisma.service';
+import { Prisma } from '@/database/generated/prisma/client';
+import { AccessService } from '@/access/access.service';
 import { AccessTokenPayload } from '@/auth/types/jwt-payload';
 import { AppointmentStatus, Role } from '@/database/generated/prisma/enums';
 import { PrismaClientKnownRequestError } from '@/database/generated/prisma/internal/prismaNamespace';
@@ -30,6 +32,18 @@ import {
 } from './appointment.constants';
 
 const WRITE_CONFLICT_CODE = 'P2034';
+
+// D31: someone else changed the status between our check and our write.
+const STATUS_CHANGED_MESSAGE =
+  'This appointment was just changed by someone else. Please reload.';
+
+// What a status change needs to know about the appointment.
+export type AppointmentForStatusChange = {
+  id: string;
+  petId: string;
+  clinicId: string;
+  status: AppointmentStatus; // the status that was checked
+};
 
 const appointmentInclude = {
   pet: { select: { id: true, name: true, species: true } },
@@ -66,7 +80,10 @@ const OWNER_CANCELLABLE: AppointmentStatus[] = [
 
 @Injectable()
 export class AppointmentService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly accessService: AccessService,
+  ) {}
 
   async create(
     ownerId: string,
@@ -246,7 +263,7 @@ export class AppointmentService {
   ): Promise<AppointmentResponseDto> {
     const appointment = await this.prisma.appointment.findUnique({
       where: { id: appointmentId },
-      select: { clinicId: true, status: true },
+      select: { id: true, petId: true, clinicId: true, status: true },
     });
     if (!appointment) {
       throw new NotFoundException('Appointment not found');
@@ -258,23 +275,19 @@ export class AppointmentService {
     }
     this.assertTransitionAllowed(appointment.status, dto.status);
 
-    const [updated] = await this.prisma.$transaction([
-      this.prisma.appointment.update({
+    return this.prisma.$transaction(async (tx) => {
+      await this.changeStatusInTransaction(
+        tx,
+        appointment,
+        dto.status,
+        user.sub,
+        dto.reason,
+      );
+      return tx.appointment.findUniqueOrThrow({
         where: { id: appointmentId },
-        data: { status: dto.status },
         include: appointmentInclude,
-      }),
-      this.prisma.appointmentStatusLog.create({
-        data: {
-          appointmentId,
-          changedById: user.sub,
-          oldStatus: appointment.status,
-          newStatus: dto.status,
-          reason: dto.reason,
-        },
-      }),
-    ]);
-    return updated;
+      });
+    });
   }
 
   async cancel(
@@ -283,7 +296,13 @@ export class AppointmentService {
   ): Promise<MessageResponseDto> {
     const appointment = await this.prisma.appointment.findUnique({
       where: { id: appointmentId },
-      select: { status: true, pet: { select: { ownerId: true } } },
+      select: {
+        id: true,
+        petId: true,
+        clinicId: true,
+        status: true,
+        pet: { select: { ownerId: true } },
+      },
     });
     if (!appointment) {
       throw new NotFoundException('Appointment not found');
@@ -297,22 +316,56 @@ export class AppointmentService {
       );
     }
 
-    await this.prisma.$transaction([
-      this.prisma.appointment.update({
-        where: { id: appointmentId },
-        data: { status: AppointmentStatus.CANCELLED },
-      }),
-      this.prisma.appointmentStatusLog.create({
-        data: {
-          appointmentId,
-          changedById: user.sub,
-          oldStatus: appointment.status,
-          newStatus: AppointmentStatus.CANCELLED,
-          reason: 'Cancelled by owner',
-        },
-      }),
-    ]);
+    await this.prisma.$transaction((tx) =>
+      this.changeStatusInTransaction(
+        tx,
+        appointment,
+        AppointmentStatus.CANCELLED,
+        user.sub,
+        'Cancelled by owner',
+      ),
+    );
     return { message: 'Appointment cancelled' };
+  }
+
+  /**
+   * The only way an appointment status changes (clinic update, owner
+   * cancel, pet archive). Inside the caller's transaction it:
+   * 1. writes the new status only if the status is still the checked one
+   *    (D31, otherwise 409 and the whole transaction rolls back),
+   * 2. writes the status log,
+   * 3. updates the access grant (D1, D2, D4, D23 via AccessService).
+   */
+  async changeStatusInTransaction(
+    tx: Prisma.TransactionClient,
+    appointment: AppointmentForStatusChange,
+    newStatus: AppointmentStatus,
+    changedById: string,
+    reason?: string,
+  ): Promise<void> {
+    const { count } = await tx.appointment.updateMany({
+      where: { id: appointment.id, status: appointment.status },
+      data: { status: newStatus },
+    });
+    if (count === 0) {
+      throw new ConflictException(STATUS_CHANGED_MESSAGE);
+    }
+
+    await tx.appointmentStatusLog.create({
+      data: {
+        appointmentId: appointment.id,
+        changedById,
+        oldStatus: appointment.status,
+        newStatus,
+        reason,
+      },
+    });
+
+    await this.accessService.applyAppointmentStatusChange(
+      tx,
+      appointment,
+      newStatus,
+    );
   }
 
   async getLogs(

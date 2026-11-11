@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '@/database/prisma.service';
 import { CloudinaryService } from '@/infrastructure/upload/cloudinary.service';
+import { AppointmentService } from '@/appointment/appointment.service';
 import { AppointmentStatus, Role } from '@/database/generated/prisma/enums';
 import { AccessTokenPayload } from '@/auth/types/jwt-payload';
 import { CreatePetDto } from './dto/create-pet.dto';
@@ -27,6 +28,7 @@ export class PetService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly appointmentService: AppointmentService,
   ) {}
 
   create(ownerId: string, dto: CreatePetDto): Promise<PetResponseDto> {
@@ -118,32 +120,29 @@ export class PetService {
   async archive(petId: string, ownerId: string): Promise<MessageResponseDto> {
     await this.ensureOwnership(petId, ownerId);
 
-    const liveAppointments = await this.prisma.appointment.findMany({
-      where: { petId, status: { in: CANCEL_ON_ARCHIVE } },
-      select: { id: true, status: true },
-    });
-
-    await this.prisma.$transaction([
-      this.prisma.pet.update({
+    await this.prisma.$transaction(async (tx) => {
+      await tx.pet.update({
         where: { id: petId },
         data: { isActive: false },
-      }),
-      ...liveAppointments.flatMap((appointment) => [
-        this.prisma.appointment.update({
-          where: { id: appointment.id },
-          data: { status: AppointmentStatus.CANCELLED },
-        }),
-        this.prisma.appointmentStatusLog.create({
-          data: {
-            appointmentId: appointment.id,
-            changedById: ownerId,
-            oldStatus: appointment.status,
-            newStatus: AppointmentStatus.CANCELLED,
-            reason: 'Pet archived by owner',
-          },
-        }),
-      ]),
-    ]);
+      });
+
+      const liveAppointments = await tx.appointment.findMany({
+        where: { petId, status: { in: CANCEL_ON_ARCHIVE } },
+        select: { id: true, petId: true, clinicId: true, status: true },
+      });
+
+      // One at a time: a transaction runs its queries in order.
+      // Cancelling also ends each appointment's grant (US-02 AC4).
+      for (const appointment of liveAppointments) {
+        await this.appointmentService.changeStatusInTransaction(
+          tx,
+          appointment,
+          AppointmentStatus.CANCELLED,
+          ownerId,
+          'Pet archived by owner',
+        );
+      }
+    });
 
     return { message: 'Pet archived' };
   }
