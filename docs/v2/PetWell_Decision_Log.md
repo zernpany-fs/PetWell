@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.5 |
-| **Date** | 2026-11-10 |
+| **Status** | Draft v0.6 |
+| **Date** | 2026-11-11 |
 | **Author** | Nopparuth Panyanithiwat |
 | **Change** | Clinics can no longer read any pet's records by default. Access comes from a confirmed appointment or from the owner's explicit share. |
 
@@ -42,6 +42,10 @@ The original design let any clinic search and read the full history of every pet
 | D25 | Link a share code to its grant | `PetAccessGrant.shareCodeId?`, unique. | Shows which code created an owner share, and the database blocks a second grant from the same code (enforces single use, D7), even if two staff enter it at the same moment. |
 | D26 | Share-code storage and generation | `codeHash` = HMAC-SHA256 with a secret from `.env` (`SHARE_CODE_SECRET`). Codes are generated with `crypto.randomInt`. On generate, if an unused, unexpired code has the same hash, generate again (max 5 tries). | A plain hash of a 6-digit code can be reversed by trying all 1,000,000 values; without the secret it cannot. The same code always gives the same hash, so redeeming is a direct lookup. Clinics enter only the code, so two live codes must never collide. |
 | D27 | Repeat share and extension | Redeeming a new code for a clinic that already has an owner share creates a **new grant**; the clinic has access while any grant is active. The **owner** (not the clinic) can change the duration of an active `OWNER_SHARE` grant from the access list: 7 / 30 / 90 days or unlimited, counted from now. Ended grants and appointment-based grants cannot be extended. | Owners of a regular clinic should not have to generate a new code every time. Only the owner decides how long access lasts (D3), and an ended grant stays ended (D13). |
+| D28 | Completed appointment with no grant | An appointment that reaches `COMPLETED` with no grant (v1 data confirmed before the V2 migration) gets **no grant change**. Legacy data is handled by reseeding; a backfill script is in the backlog. | Portfolio project with no real customer data. Keeps the grant logic identical to the flowchart. |
+| D29 | Which grant the audit log records | When a clinic has several active grants for one pet, `PetAccessLog.grantId` is the grant that **expires last** (no expiry counts as latest; on a tie, the newest). | `PetAccessLog` holds one `grantId`. The longest-lasting grant is the one that explains why the clinic can still see the pet, which is easiest for an owner to read (US-06). |
+| D30 | What counts as authored records | Only **active** health records (`isActive = true`) count as authored for D6, D18 and D20. Soft-deleted records stay in the database for tracing but do not keep the pet visible to the clinic. | A deleted record is shown to no one, so it should not be a reason for the clinic to keep seeing the pet. |
+| D31 | Concurrent appointment status changes | Every status change (clinic update, owner cancel, pet archive) is written only if the status is still the one that was checked (compare-and-set inside the transaction). If another change happened first, the request fails with `409` and nothing is written (status, status log, grant). | Without it, an owner cancel and a clinic confirm at the same moment could leave a cancelled appointment with an open grant, breaking D4. |
 
 ## 3. Findings from code review (2026-11-09)
 
@@ -64,3 +68,5 @@ The original design let any clinic search and read the full history of every pet
 - Frozen snapshot of history at the date access ended
 - Owner-facing view of the audit log ("who viewed my pet")
 - Review of what owner contact info a clinic may keep after access ends (D9 follow-up)
+- Backfill grants for appointments confirmed before V2 (D28 follow-up)
+- Health record edit history: who changed what and when, with previous values kept (today only `createdById` and `updatedAt` are stored)
