@@ -60,6 +60,7 @@ The original design let any clinic search and read the full history of every pet
 | D43 | Owner's access list | `GET /pets/:petId/access-grants` shows only active grants, newest first. | Enough to revoke and extend; full history belongs to US-06 (backlog). |
 | D44 | Revoke and extend errors | Revoking a clinic with no active access → `404`. Extending an appointment grant or an ended grant → `409` with the reason. | Clear reasons for the frontend; 409 because the request conflicts with the grant's current state. |
 | D45 | Several live codes | An owner may have several unused codes at once. | Each code is single use and expires in 15 minutes, so the risk is small and no extra logic is needed. |
+| D46 | Database session time zone | Every database connection (app and seed) runs with `TimeZone=UTC`. Data stored before the fix was replaced by reseeding; a backup was kept outside the repo. | `@prisma/adapter-pg` sends timestamps without a UTC offset, so a server set to Asia/Bangkok stored them 7 hours early. Setting it in code works on any machine, with no server configuration. |
 
 ## 3. Findings from code review (2026-11-09)
 
@@ -74,7 +75,7 @@ The original design let any clinic search and read the full history of every pet
 ## 4. Findings during implementation (2026-11-13)
 
 - `GET /health-records/:recordId` let **any clinic read any record by id**, including archived ones. It was not in the impact analysis; closed with D36 and D37.
-- **Timestamps written by the app are stored 7 hours early** (the UTC time is saved as if it were Bangkok time). The app reads them back the same way, so access checks and expiry work, but Prisma Studio and SQL using `now()` show shifted times. Pre-existing since v1; root cause and fix still to be decided.
+- **Timestamps written by the app were stored 7 hours early** (the UTC time was saved as if it were Bangkok time). The app read them back the same way, so access checks still worked, but Prisma Studio and SQL using `now()` showed shifted times. Pre-existing since v1. Cause confirmed with a read-only probe and fixed by D46.
 - The frontend must handle `AUTHORED_ONLY` responses, which have no `owner`: the staff pet search page reads `pet.owner` directly.
 
 ## 5. Out of scope / backlog

@@ -58,8 +58,7 @@ check("B4 used code -> 400", s1 == 400, msg(d1))
 check("B5 wrong code -> same message as used code (AC3, D42)",
       s2 == 400 and msg(d1) == msg(d2), msg(d2))
 s, d = api("POST", f"/pets/{PET}/share-codes", OWN, {"durationDays": 30})
-# Force-expire: compare with the app-written created_at, not DB now(),
-# because app timestamps are stored shifted (known timezone issue).
+# Force-expire the code just created (expiry before its creation time).
 sql(f"update share_codes set expires_at = created_at - interval '1 minute' "
     f"where pet_id='{PET}' and used_at is null")
 s, d = api("POST", "/share-codes/redeem", W, {"code": d["code"]})
