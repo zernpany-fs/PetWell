@@ -2,9 +2,10 @@ import { Module } from '@nestjs/common';
 import { HealthRecordController } from './health-record.controller';
 import { HealthRecordService } from './health-record.service';
 import { UploadModule } from '@/infrastructure/upload/upload.module';
+import { AccessModule } from '@/access/access.module';
 
 @Module({
-  imports: [UploadModule],
+  imports: [UploadModule, AccessModule],
   controllers: [HealthRecordController],
   providers: [HealthRecordService],
   exports: [HealthRecordService],
