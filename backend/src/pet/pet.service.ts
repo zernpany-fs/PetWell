@@ -6,6 +6,7 @@ import {
 import { PrismaService } from '@/database/prisma.service';
 import { CloudinaryService } from '@/infrastructure/upload/cloudinary.service';
 import { AppointmentService } from '@/appointment/appointment.service';
+import { AccessService } from '@/access/access.service';
 import { AppointmentStatus, Role } from '@/database/generated/prisma/enums';
 import { AccessTokenPayload } from '@/auth/types/jwt-payload';
 import { CreatePetDto } from './dto/create-pet.dto';
@@ -13,6 +14,7 @@ import { UpdatePetDto } from './dto/update-pet.dto';
 import { PetResponseDto } from './dto/pet-response.dto';
 import { PetSearchResultDto } from './dto/pet-search-result.dto';
 import { SearchPetQueryDto } from './dto/search-pet-query.dto';
+import { ClinicPetResponseDto } from './dto/clinic-pet-response.dto';
 import { MessageResponseDto } from '@/common/dto/message-response.dto';
 
 const SEARCH_RESULT_LIMIT = 50;
@@ -29,6 +31,7 @@ export class PetService {
     private readonly prisma: PrismaService,
     private readonly cloudinaryService: CloudinaryService,
     private readonly appointmentService: AppointmentService,
+    private readonly accessService: AccessService,
   ) {}
 
   create(ownerId: string, dto: CreatePetDto): Promise<PetResponseDto> {
@@ -80,18 +83,73 @@ export class PetService {
     });
   }
 
-  async findOne(
+  findOne(
     petId: string,
     user: AccessTokenPayload,
+  ): Promise<PetResponseDto | ClinicPetResponseDto> {
+    return user.role === Role.OWNER
+      ? this.findOneForOwner(petId, user.sub)
+      : this.findOneForClinic(petId, user);
+  }
+
+  private async findOneForOwner(
+    petId: string,
+    ownerId: string,
   ): Promise<PetResponseDto> {
     const pet = await this.prisma.pet.findUnique({ where: { id: petId } });
-    if (!pet || !pet.isActive) {
-      throw new NotFoundException('Pet not found');
-    }
-    if (user.role === Role.OWNER && pet.ownerId !== user.sub) {
+    if (!pet || !pet.isActive || pet.ownerId !== ownerId) {
       throw new NotFoundException('Pet not found');
     }
     return pet;
+  }
+
+  /**
+   * Clinic view depends on its access level (D20):
+   * FULL = whole pet + owner contact, AUTHORED_ONLY = id/name/species,
+   * NONE = same 404 as a missing pet, so a clinic cannot tell them apart.
+   */
+  private async findOneForClinic(
+    petId: string,
+    user: AccessTokenPayload,
+  ): Promise<ClinicPetResponseDto> {
+    const pet = await this.prisma.pet.findUnique({
+      where: { id: petId },
+      include: {
+        owner: {
+          select: { firstName: true, lastName: true, phone: true, email: true },
+        },
+      },
+    });
+    if (!pet || !pet.isActive) {
+      throw new NotFoundException('Pet not found');
+    }
+
+    const access = await this.accessService.getClinicAccess(
+      user.clinicId,
+      petId,
+    );
+    // D32: a denied view is not logged.
+    if (access.level === 'NONE') {
+      throw new NotFoundException('Pet not found');
+    }
+
+    // D34: if the log write fails, the request fails and no data is sent.
+    await this.accessService.logAccess({
+      userId: user.sub,
+      clinicId: user.clinicId!, // not null: NONE is returned when it is
+      petId,
+      grantId: access.level === 'FULL' ? access.grantId : null,
+    });
+
+    if (access.level === 'FULL') {
+      return { ...pet, accessLevel: 'FULL' };
+    }
+    return {
+      accessLevel: 'AUTHORED_ONLY',
+      id: pet.id,
+      name: pet.name,
+      species: pet.species,
+    };
   }
 
   async update(
