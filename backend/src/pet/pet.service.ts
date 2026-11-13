@@ -12,7 +12,6 @@ import { AccessTokenPayload } from '@/auth/types/jwt-payload';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { PetResponseDto } from './dto/pet-response.dto';
-import { PetSearchResultDto } from './dto/pet-search-result.dto';
 import { SearchPetQueryDto } from './dto/search-pet-query.dto';
 import { ClinicPetResponseDto } from './dto/clinic-pet-response.dto';
 import { MessageResponseDto } from '@/common/dto/message-response.dto';
@@ -47,39 +46,73 @@ export class PetService {
     });
   }
 
-  search(query: SearchPetQueryDto): Promise<PetSearchResultDto[]> {
+  /**
+   * D18: a clinic finds only pets it has access to (FULL) or has authored
+   * active records for (AUTHORED_ONLY, D30). Searches are not logged (D39).
+   */
+  async search(
+    query: SearchPetQueryDto,
+    user: AccessTokenPayload,
+  ): Promise<ClinicPetResponseDto[]> {
     const term = query.q?.trim();
-    if (!term) {
-      return Promise.resolve([]);
+    // Staff without a clinic has access to no pet.
+    if (!term || !user.clinicId) {
+      return [];
     }
 
+    const clinicId = user.clinicId;
     const like = { contains: term, mode: 'insensitive' as const };
+    // Same rule as isGrantActive: not ended and not yet expired (D17).
+    const activeGrant = {
+      clinicId,
+      endedAt: null,
+      OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+    };
 
-    return this.prisma.pet.findMany({
+    const pets = await this.prisma.pet.findMany({
       where: {
         isActive: true,
         OR: [
-          { name: like },
-          { microchipNo: like },
-          { owner: { firstName: like } },
-          { owner: { lastName: like } },
-          { owner: { email: like } },
-          { owner: { phone: like } },
+          // FULL: match on any field, owner contact included.
+          {
+            accessGrants: { some: activeGrant },
+            OR: [
+              { name: like },
+              { microchipNo: like },
+              { owner: { firstName: like } },
+              { owner: { lastName: like } },
+              { owner: { email: like } },
+              { owner: { phone: like } },
+            ],
+          },
+          // AUTHORED_ONLY: pet name only, so owner contact cannot be
+          // probed after access has ended (D38, D9).
+          {
+            healthRecords: { some: { clinicId, isActive: true } },
+            name: like,
+          },
         ],
       },
       include: {
         owner: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            phone: true,
-            email: true,
-          },
+          select: { firstName: true, lastName: true, phone: true, email: true },
         },
+        accessGrants: { where: activeGrant, select: { id: true }, take: 1 },
       },
       orderBy: { name: 'asc' },
       take: SEARCH_RESULT_LIMIT,
+    });
+
+    return pets.map(({ accessGrants, ...pet }): ClinicPetResponseDto => {
+      if (accessGrants.length > 0) {
+        return { ...pet, accessLevel: 'FULL' };
+      }
+      return {
+        accessLevel: 'AUTHORED_ONLY',
+        id: pet.id,
+        name: pet.name,
+        species: pet.species,
+      };
     });
   }
 
