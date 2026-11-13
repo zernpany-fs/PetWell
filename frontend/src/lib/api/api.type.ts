@@ -67,14 +67,19 @@ export type Pet = {
 };
 
 export type PetSearchOwner = {
-  id: string;
   firstName: string;
   lastName: string;
   phone: string | null;
   email: string;
 };
 
-export type PetSearchResult = Pet & { owner: PetSearchOwner };
+// V2 (D18, D33, D38): FULL results have the whole pet and `owner`;
+// AUTHORED_ONLY results have only id, name and species.
+export type PetSearchResult = Pick<Pet, 'id' | 'name' | 'species'> &
+  Partial<Omit<Pet, 'id' | 'name' | 'species'>> & {
+    accessLevel: 'FULL' | 'AUTHORED_ONLY';
+    owner?: PetSearchOwner;
+  };
 
 export type RecordClinic = { id: string; name: string; clinicType: ClinicType };
 

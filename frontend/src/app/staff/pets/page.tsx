@@ -112,11 +112,14 @@ export default async function StaffPetLookupPage({
                       className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1 text-[#6E675C]"
                       style={{ fontSize: '12px' }}
                     >
-                      <span className="flex items-center gap-1">
-                        <User size={12} />
-                        {pet.owner.firstName} {pet.owner.lastName}
-                      </span>
-                      {pet.owner.phone && (
+                      {/* AUTHORED_ONLY results have no owner (D9, D38) */}
+                      {pet.owner && (
+                        <span className="flex items-center gap-1">
+                          <User size={12} />
+                          {pet.owner.firstName} {pet.owner.lastName}
+                        </span>
+                      )}
+                      {pet.owner?.phone && (
                         <span className="flex items-center gap-1">
                           <Phone size={12} />
                           {pet.owner.phone}
