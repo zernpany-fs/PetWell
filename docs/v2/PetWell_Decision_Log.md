@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.6 |
-| **Date** | 2026-11-11 |
+| **Status** | Draft v0.7 |
+| **Date** | 2026-11-13 |
 | **Author** | Nopparuth Panyanithiwat |
 | **Change** | Clinics can no longer read any pet's records by default. Access comes from a confirmed appointment or from the owner's explicit share. |
 
@@ -46,6 +46,20 @@ The original design let any clinic search and read the full history of every pet
 | D29 | Which grant the audit log records | When a clinic has several active grants for one pet, `PetAccessLog.grantId` is the grant that **expires last** (no expiry counts as latest; on a tie, the newest). | `PetAccessLog` holds one `grantId`. The longest-lasting grant is the one that explains why the clinic can still see the pet, which is easiest for an owner to read (US-06). |
 | D30 | What counts as authored records | Only **active** health records (`isActive = true`) count as authored for D6, D18 and D20. Soft-deleted records stay in the database for tracing but do not keep the pet visible to the clinic. | A deleted record is shown to no one, so it should not be a reason for the clinic to keep seeing the pet. |
 | D31 | Concurrent appointment status changes | Every status change (clinic update, owner cancel, pet archive) is written only if the status is still the one that was checked (compare-and-set inside the transaction). If another change happened first, the request fails with `409` and nothing is written (status, status log, grant). | Without it, an owner cancel and a clinic confirm at the same moment could leave a cancelled appointment with an open grant, breaking D4. |
+| D32 | Logging denied views | When a clinic gets `NONE` (404), nothing is written to `PetAccessLog`. Only views that return data are logged (`FULL` with its `grantId`, `AUTHORED_ONLY` with `grantId = null`). | `PetAccessLog` records what a clinic actually saw. A 404 shows nothing. Tracking repeated denied attempts can be a separate table later (backlog). |
+| D33 | Access level in clinic responses | Clinic responses for a pet include `accessLevel: 'FULL' \| 'AUTHORED_ONLY'`. | The frontend can choose what to show without guessing from missing fields, and manual testing is easier to read. |
+| D34 | Audit log write fails | If writing `PetAccessLog` fails, the whole request fails with `500` and no pet data is returned. | D10 requires every view to be traceable. Returning data without a log would leave a gap in the audit trail. |
+| D35 | Writing a record without full access | A clinic with `AUTHORED_ONLY` access gets `403 No active access to this pet`; with `NONE` it gets `404 Pet not found`. | An `AUTHORED_ONLY` clinic already knows the pet exists, so a clear 403 reveals nothing new; `NONE` keeps the D20 404. |
+| D36 | Audit log for reading records | Listing a pet's records and reading one record are logged like opening the pet (D24): `grantId` for `FULL`, null for `AUTHORED_ONLY` or own records. Denied reads are not logged (D32). | Health records are the most sensitive data; reading them through the API must leave a trace. |
+| D37 | Archived records | A record with `isActive = false` returns 404 to everyone (owner included) on `GET /health-records/:id`, and cannot be edited or get attachments. | D30: a deleted record is shown to no one. |
+| D38 | Search fields for `AUTHORED_ONLY` pets | They match on pet name only. Pets with `FULL` access match on all fields, owner contact included. | Searching by phone or email would reveal who owns the pet after access ended (D9). |
+| D39 | Logging searches | Searches are not logged. | Search finds a pet; opening it is logged. Logging every result row would flood the log. |
+| D40 | Lockout details | A staff account is blocked after 5 failed codes within 15 minutes (D14 gave no window). Attempts made while blocked are not recorded. Codes with the wrong format (not 6 digits) are rejected by validation and not counted. | Without a window, old mistakes would count forever; recording blocked attempts would extend the block without end. |
+| D41 | When owner-share time starts | The duration starts when the clinic redeems the code, not when the owner creates it. `durationDays` is required: 7, 30, 90, or `null` for unlimited. | The owner chooses "7 days of access", so it starts when access starts. A required field stops unlimited access being given by mistake. |
+| D42 | Redeem error responses | Wrong, expired and used codes all return `400 Invalid or expired code`. A blocked account or clinic gets `429` with the minutes left. | US-03 AC3; the wait time helps staff without revealing anything about codes. |
+| D43 | Owner's access list | `GET /pets/:petId/access-grants` shows only active grants, newest first. | Enough to revoke and extend; full history belongs to US-06 (backlog). |
+| D44 | Revoke and extend errors | Revoking a clinic with no active access → `404`. Extending an appointment grant or an ended grant → `409` with the reason. | Clear reasons for the frontend; 409 because the request conflicts with the grant's current state. |
+| D45 | Several live codes | An owner may have several unused codes at once. | Each code is single use and expires in 15 minutes, so the risk is small and no extra logic is needed. |
 
 ## 3. Findings from code review (2026-11-09)
 
@@ -57,7 +71,13 @@ The original design let any clinic search and read the full history of every pet
 - `HealthRecord.clinicId` already identifies the authoring clinic, which makes D6 a simple filter.
 - See `PetWell_Impact_Analysis.md` for the full list of affected endpoints.
 
-## 4. Out of scope / backlog
+## 4. Findings during implementation (2026-11-13)
+
+- `GET /health-records/:recordId` let **any clinic read any record by id**, including archived ones. It was not in the impact analysis; closed with D36 and D37.
+- **Timestamps written by the app are stored 7 hours early** (the UTC time is saved as if it were Bangkok time). The app reads them back the same way, so access checks and expiry work, but Prisma Studio and SQL using `now()` show shifted times. Pre-existing since v1; root cause and fix still to be decided.
+- The frontend must handle `AUTHORED_ONLY` responses, which have no `owner`: the staff pet search page reads `pet.owner` directly.
+
+## 5. Out of scope / backlog
 
 - Pets with no owner in the system, created by a clinic (D8, US-05 — deferred by D21)
 - Owner claims a pet that a clinic created (D8 follow-up)
@@ -69,4 +89,6 @@ The original design let any clinic search and read the full history of every pet
 - Owner-facing view of the audit log ("who viewed my pet")
 - Review of what owner contact info a clinic may keep after access ends (D9 follow-up)
 - Backfill grants for appointments confirmed before V2 (D28 follow-up)
+- Owner-facing history of ended grants (D43 follow-up)
+- Logging denied attempts to open a pet, e.g. to spot a clinic probing ids (D32 follow-up)
 - Health record edit history: who changed what and when, with previous values kept (today only `createdById` and `updatedAt` are stored)
