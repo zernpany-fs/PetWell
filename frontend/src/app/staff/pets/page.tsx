@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { Search, PawPrint, User, Phone, ScanLine } from 'lucide-react';
 import { PetApi } from '@/lib/api/pet.api';
 import { PetSearchResult } from '@/lib/api/api.type';
+import RedeemShareCodeForm from '@/components/features/access/RedeemShareCodeForm';
 
 export const metadata: Metadata = { title: 'Patient Lookup' };
 
@@ -25,8 +26,11 @@ export default async function StaffPetLookupPage({
         Patient Lookup
       </h2>
       <p className="text-[#6E675C] mt-1 mb-5">
-        Find any pet by name, microchip number, or owner details.
+        Find pets your clinic has access to, through a confirmed appointment
+        or the owner&rsquo;s share code.
       </p>
+
+      <RedeemShareCodeForm />
 
       <form method="get" className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
@@ -56,7 +60,7 @@ export default async function StaffPetLookupPage({
           </div>
           <p className="text-[#2D2A26] mb-1">Start typing to find a patient</p>
           <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
-            Health records follow the pet, so you will see their full history
+            While your clinic has access, you see the pet&rsquo;s full history
             across every clinic.
           </p>
         </div>
@@ -66,7 +70,8 @@ export default async function StaffPetLookupPage({
             No pets match &ldquo;{term}&rdquo;
           </p>
           <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
-            Try the owner&rsquo;s phone number or the microchip number instead.
+            You only see pets your clinic has access to. For a walk-in, ask
+            the owner for a share code.
           </p>
         </div>
       ) : (

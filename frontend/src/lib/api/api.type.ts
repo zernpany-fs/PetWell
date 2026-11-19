@@ -149,3 +149,10 @@ export type AppointmentStatusLog = {
   changedAt: string;
   changedBy?: StatusLogAuthor;
 };
+
+// V2: clinic staff redeem an owner's share code (US-03).
+export type RedeemShareCodeResponse = {
+  grantId: string;
+  pet: { id: string; name: string; species: string };
+  expiresAt: string | null; // null = unlimited access
+};
