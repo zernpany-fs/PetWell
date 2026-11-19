@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.4 |
-| **Date** | 2026-11-10 |
-| **Related** | `PetWell_Decision_Log.md` (decision IDs D1–D27) |
+| **Status** | Draft v0.5 |
+| **Date** | 2026-11-19 |
+| **Related** | `PetWell_Decision_Log.md` (decision IDs D1–D48) |
 | **Roles** | `OWNER`, `CLINIC_STAFF` (as in the system) |
 
 ## Terms
