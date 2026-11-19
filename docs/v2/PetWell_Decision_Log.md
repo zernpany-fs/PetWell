@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.7 |
-| **Date** | 2026-11-13 |
+| **Status** | Draft v0.8 |
+| **Date** | 2026-11-19 |
 | **Author** | Nopparuth Panyanithiwat |
 | **Change** | Clinics can no longer read any pet's records by default. Access comes from a confirmed appointment or from the owner's explicit share. |
 
@@ -61,6 +61,8 @@ The original design let any clinic search and read the full history of every pet
 | D44 | Revoke and extend errors | Revoking a clinic with no active access → `404`. Extending an appointment grant or an ended grant → `409` with the reason. | Clear reasons for the frontend; 409 because the request conflicts with the grant's current state. |
 | D45 | Several live codes | An owner may have several unused codes at once. | Each code is single use and expires in 15 minutes, so the risk is small and no extra logic is needed. |
 | D46 | Database session time zone | Every database connection (app and seed) runs with `TimeZone=UTC`. Data stored before the fix was replaced by reseeding; a backup was kept outside the repo. | `@prisma/adapter-pg` sends timestamps without a UTC offset, so a server set to Asia/Bangkok stored them 7 hours early. Setting it in code works on any machine, with no server configuration. |
+| D47 | Test database | Integration tests use a separate database, `petwell_test`, configured in `backend/.env.test` (git-ignored). `test/setup-env.ts` stops the run if `DATABASE_URL` is not `petwell_test`. | Tests empty the database on every run. A separate database keeps dev data and manual test accounts safe, and makes runs repeatable. |
+| D48 | Test level | Automated access tests call the services directly against `petwell_test` and check the thrown error. HTTP-level checks (guards, roles, status codes end to end) stay in the Python scripts in `scripts/`. | The 404/403/409 rules are thrown inside the services, so this tests them directly without extra packages (`@nestjs/testing`, `supertest`) or JWT setup. The scripts already cover the HTTP layer. |
 
 ## 3. Findings from code review (2026-11-09)
 
