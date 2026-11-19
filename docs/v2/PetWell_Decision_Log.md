@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.8 |
+| **Status** | Draft v0.9 |
 | **Date** | 2026-11-19 |
 | **Author** | Nopparuth Panyanithiwat |
 | **Change** | Clinics can no longer read any pet's records by default. Access comes from a confirmed appointment or from the owner's explicit share. |
@@ -63,6 +63,7 @@ The original design let any clinic search and read the full history of every pet
 | D46 | Database session time zone | Every database connection (app and seed) runs with `TimeZone=UTC`. Data stored before the fix was replaced by reseeding; a backup was kept outside the repo. | `@prisma/adapter-pg` sends timestamps without a UTC offset, so a server set to Asia/Bangkok stored them 7 hours early. Setting it in code works on any machine, with no server configuration. |
 | D47 | Test database | Integration tests use a separate database, `petwell_test`, configured in `backend/.env.test` (git-ignored). `test/setup-env.ts` stops the run if `DATABASE_URL` is not `petwell_test`. | Tests empty the database on every run. A separate database keeps dev data and manual test accounts safe, and makes runs repeatable. |
 | D48 | Test level | Automated access tests call the services directly against `petwell_test` and check the thrown error. HTTP-level checks (guards, roles, status codes end to end) stay in the Python scripts in `scripts/`. | The 404/403/409 rules are thrown inside the services, so this tests them directly without extra packages (`@nestjs/testing`, `supertest`) or JWT setup. The scripts already cover the HTTP layer. |
+| D49 | When to merge V2 | Keep `feat/consent-access` unmerged until the remaining frontend (owner share-code screens, access list, revoke, staff `AUTHORED_ONLY` view) is done. The 7-day timebox is extended for this. | The backend and tests are complete, but without the owner screens the main V2 flow cannot be demoed end to end. |
 
 ## 3. Findings from code review (2026-11-09)
 

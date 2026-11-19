@@ -17,7 +17,7 @@ In v1 any clinic on the platform could read every pet. V2 (branch `feat/consent-
 
 While access is active the clinic sees the full history from every clinic. Afterwards it sees only the records it wrote itself. Every time a clinic opens a pet or its records, an audit log row is written; if that write fails, the request fails.
 
-The rules, and why each was chosen, are in [`docs/v2/PetWell_Decision_Log.md`](./docs/v2/PetWell_Decision_Log.md) (D1–D48).
+The rules, and why each was chosen, are in [`docs/v2/PetWell_Decision_Log.md`](./docs/v2/PetWell_Decision_Log.md) (D1–D49).
 
 ## Roles
 
@@ -146,7 +146,7 @@ Existing pet, health-record and search endpoints now check access; see the impac
 
 | File | What's in it |
 |---|---|
-| `docs/v2/PetWell_Decision_Log.md` | **V2:** every access rule as a numbered decision (D1–D48), with the reason and findings from implementation |
+| `docs/v2/PetWell_Decision_Log.md` | **V2:** every access rule as a numbered decision (D1–D49), with the reason and findings from implementation |
 | `docs/v2/PetWell_User_Stories_Access_Control.md` | **V2:** user stories US-01–US-04 with acceptance criteria |
 | `docs/v2/PetWell_Impact_Analysis.md` | **V2:** which endpoints, tables and screens the change touches |
 | `docs/v2/PetWell_Appointment_Grant_Flow.svg` | **V2:** how each appointment status creates, extends or ends access |
