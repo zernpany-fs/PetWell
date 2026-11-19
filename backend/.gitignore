@@ -9,3 +9,4 @@ src/database/generated/
 
 # Keep the template, ignore real env files
 !.env.example
+.env.test

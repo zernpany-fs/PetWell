@@ -12,5 +12,7 @@ export default defineConfig({
   test: {
     include: ['src/**/*.spec.ts'],
     environment: 'node',
+    // D47: load .env.test and refuse to run against any DB but petwell_test.
+    setupFiles: ['./test/setup-env.ts'],
   },
 });
