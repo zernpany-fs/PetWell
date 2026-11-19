@@ -11,6 +11,7 @@ import { AccessService } from '@/access/access.service';
 import { ShareCodeService } from '@/access/share-code.service';
 import { PetService } from '@/pet/pet.service';
 import { HealthRecordService } from '@/health-record/health-record.service';
+import { AppointmentService } from '@/appointment/appointment.service';
 
 type Config = ConfigService<EnvVariable, true>;
 
@@ -25,11 +26,13 @@ export type TestServices = {
   pets: PetService;
   records: HealthRecordService;
   shareCodes: ShareCodeService;
+  appointments: AppointmentService;
 };
 
 /**
  * Builds the real services on a real PrismaService.
- * Cloudinary and AppointmentService are not used by the methods under test;
+ * Cloudinary (and AppointmentService inside PetService, used only by
+ * archive) are not used by the methods under test;
  * the placeholder throws if a test ever reaches them by mistake.
  */
 export function createTestServices(): TestServices {
@@ -46,6 +49,7 @@ export function createTestServices(): TestServices {
     pets: new PetService(prisma, unused, unused, access),
     records: new HealthRecordService(prisma, unused, access),
     shareCodes: new ShareCodeService(prisma, testConfig),
+    appointments: new AppointmentService(prisma, access),
   };
 }
 

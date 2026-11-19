@@ -14,5 +14,8 @@ export default defineConfig({
     environment: 'node',
     // D47: load .env.test and refuse to run against any DB but petwell_test.
     setupFiles: ['./test/setup-env.ts'],
+    // Integration test files each empty the shared petwell_test database,
+    // so test files must run one after another, not in parallel.
+    fileParallelism: false,
   },
 });
