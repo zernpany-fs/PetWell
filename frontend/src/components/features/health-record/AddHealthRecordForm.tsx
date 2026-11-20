@@ -36,6 +36,11 @@ export default function AddHealthRecordForm({ petId }: { petId: string }) {
         setRecordDate('');
         setNextDueDate('');
         router.refresh();
+      } else if (r.code === 'NO_ACCESS') {
+        // 403 (D35): access ended while the page was open. Reload so the
+        // page switches to the limited view, which hides this form.
+        toast.error(r.message);
+        router.refresh();
       } else setError(r.message);
     });
   }

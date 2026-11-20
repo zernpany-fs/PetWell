@@ -1,5 +1,5 @@
 import { authFetch } from './auth-fetch';
-import { MessageResponse, Pet, PetSearchResult } from './api.type';
+import { ClinicPet, MessageResponse, Pet, PetSearchResult } from './api.type';
 import { CreatePetInput, UpdatePetInput } from '../schemas/pet.schema';
 
 export const PetApi = {
@@ -15,6 +15,11 @@ export const PetApi = {
 
   get(petId: string) {
     return authFetch<Pet>(`/pets/${petId}`);
+  },
+
+  /** Clinic staff: same endpoint, but the shape depends on access (D33). */
+  getForClinic(petId: string) {
+    return authFetch<ClinicPet>(`/pets/${petId}`);
   },
 
   create(data: CreatePetInput) {

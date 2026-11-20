@@ -81,6 +81,13 @@ export type PetSearchResult = Pick<Pet, 'id' | 'name' | 'species'> &
     owner?: PetSearchOwner;
   };
 
+// V2 (D20, D33): what GET /pets/:id returns to clinic staff.
+// FULL = active access: whole pet + owner contact (D5, D9).
+// AUTHORED_ONLY = no access, but the clinic wrote records: id/name/species.
+export type ClinicPet =
+  | (Pet & { accessLevel: 'FULL'; owner: PetSearchOwner })
+  | (Pick<Pet, 'id' | 'name' | 'species'> & { accessLevel: 'AUTHORED_ONLY' });
+
 export type RecordClinic = { id: string; name: string; clinicType: ClinicType };
 
 export type HealthRecord = {
