@@ -1,4 +1,4 @@
-import { AccessTokenPayload } from '@/auth/types/jwt-payload';
+import { AccessTokenPayload } from '../auth/types/jwt-payload';
 import 'express';
 
 declare module 'express' {

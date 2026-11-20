@@ -3,8 +3,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from '@/database/prisma.service';
-import { AccessTokenPayload } from '@/auth/types/jwt-payload';
+import { PrismaService } from '../database/prisma.service';
+import { AccessTokenPayload } from '../auth/types/jwt-payload';
 import { ClinicResponseDto } from './dto/clinic-response.dto';
 import { ListClinicQueryDto } from './dto/list-clinic-query.dto';
 import { UpdateClinicDto } from './dto/update-clinic.dto';

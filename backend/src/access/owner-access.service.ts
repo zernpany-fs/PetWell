@@ -3,8 +3,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from '@/database/prisma.service';
-import { AccessType, GrantEndReason } from '@/database/generated/prisma/enums';
+import { PrismaService } from '../database/prisma.service';
+import { AccessType, GrantEndReason } from '../database/generated/prisma/enums';
 import { isGrantActive } from './access-level';
 import { ShareDuration, shareExpiry } from './share-code';
 import { ensureOwnedActivePet } from './owned-pet';

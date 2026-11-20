@@ -9,11 +9,11 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { CurrentUser } from '@/common/decorators/current-user.decorator';
-import { Roles } from '@/common/decorators/roles.decorator';
-import { RolesGuard } from '@/common/guards/roles.guard';
-import { Role } from '@/database/generated/prisma/enums';
-import type { AccessTokenPayload } from '@/auth/types/jwt-payload';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { Roles } from '../common/decorators/roles.decorator';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Role } from '../database/generated/prisma/enums';
+import type { AccessTokenPayload } from '../auth/types/jwt-payload';
 import { ShareCodeService } from './share-code.service';
 import { OwnerAccessService } from './owner-access.service';
 import { ShareDurationDto } from './dto/share-duration.dto';

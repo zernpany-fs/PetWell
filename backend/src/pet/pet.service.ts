@@ -3,18 +3,18 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from '@/database/prisma.service';
-import { CloudinaryService } from '@/infrastructure/upload/cloudinary.service';
-import { AppointmentService } from '@/appointment/appointment.service';
-import { AccessService } from '@/access/access.service';
-import { AppointmentStatus, Role } from '@/database/generated/prisma/enums';
-import { AccessTokenPayload } from '@/auth/types/jwt-payload';
+import { PrismaService } from '../database/prisma.service';
+import { CloudinaryService } from '../infrastructure/upload/cloudinary.service';
+import { AppointmentService } from '../appointment/appointment.service';
+import { AccessService } from '../access/access.service';
+import { AppointmentStatus, Role } from '../database/generated/prisma/enums';
+import { AccessTokenPayload } from '../auth/types/jwt-payload';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { PetResponseDto } from './dto/pet-response.dto';
 import { SearchPetQueryDto } from './dto/search-pet-query.dto';
 import { ClinicPetResponseDto } from './dto/clinic-pet-response.dto';
-import { MessageResponseDto } from '@/common/dto/message-response.dto';
+import { MessageResponseDto } from '../common/dto/message-response.dto';
 
 const SEARCH_RESULT_LIMIT = 50;
 

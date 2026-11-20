@@ -1,4 +1,4 @@
-import { ClinicType, RecordType } from '@/database/generated/prisma/enums';
+import { ClinicType, RecordType } from '../../database/generated/prisma/enums';
 
 export class RecordClinicDto {
   id: string;

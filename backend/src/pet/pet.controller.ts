@@ -19,12 +19,12 @@ import { UpdatePetDto } from './dto/update-pet.dto';
 import { PetResponseDto } from './dto/pet-response.dto';
 import { SearchPetQueryDto } from './dto/search-pet-query.dto';
 import type { ClinicPetResponseDto } from './dto/clinic-pet-response.dto';
-import { CurrentUser } from '@/common/decorators/current-user.decorator';
-import { Roles } from '@/common/decorators/roles.decorator';
-import { RolesGuard } from '@/common/guards/roles.guard';
-import { Role } from '@/database/generated/prisma/enums';
-import type { AccessTokenPayload } from '@/auth/types/jwt-payload';
-import { MessageResponseDto } from '@/common/dto/message-response.dto';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { Roles } from '../common/decorators/roles.decorator';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Role } from '../database/generated/prisma/enums';
+import type { AccessTokenPayload } from '../auth/types/jwt-payload';
+import { MessageResponseDto } from '../common/dto/message-response.dto';
 
 @Controller('pets')
 export class PetController {

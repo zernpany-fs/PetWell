@@ -17,12 +17,12 @@ import { AppointmentResponseDto } from './dto/appointment-response.dto';
 import { AppointmentStatusLogResponseDto } from './dto/appointment-status-log-response.dto';
 import { AvailabilityQueryDto } from './dto/availability-query.dto';
 import { DayAvailabilityResponseDto } from './dto/slot-availability-response.dto';
-import { CurrentUser } from '@/common/decorators/current-user.decorator';
-import { Roles } from '@/common/decorators/roles.decorator';
-import { RolesGuard } from '@/common/guards/roles.guard';
-import { Role } from '@/database/generated/prisma/enums';
-import { MessageResponseDto } from '@/common/dto/message-response.dto';
-import type { AccessTokenPayload } from '@/auth/types/jwt-payload';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { Roles } from '../common/decorators/roles.decorator';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Role } from '../database/generated/prisma/enums';
+import { MessageResponseDto } from '../common/dto/message-response.dto';
+import type { AccessTokenPayload } from '../auth/types/jwt-payload';
 
 @Controller()
 export class AppointmentController {

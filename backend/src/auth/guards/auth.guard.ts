@@ -8,7 +8,7 @@ import {
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { JsonWebTokenError, TokenExpiredError } from '@nestjs/jwt';
-import { IS_PUBLIC_KEY } from '@/common/decorators/public.decorator';
+import { IS_PUBLIC_KEY } from '../../common/decorators/public.decorator';
 import { AccessTokenService } from '../access-token.service';
 
 @Injectable()

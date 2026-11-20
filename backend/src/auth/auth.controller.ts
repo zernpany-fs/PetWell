@@ -7,10 +7,10 @@ import {
   Post,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { MessageResponseDto } from '@/common/dto/message-response.dto';
-import { CurrentUser } from '@/common/decorators/current-user.decorator';
-import { Public } from '@/common/decorators/public.decorator';
-import { UserResponseDto } from '@/user/dto/user-response.dto';
+import { MessageResponseDto } from '../common/dto/message-response.dto';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { Public } from '../common/decorators/public.decorator';
+import { UserResponseDto } from '../user/dto/user-response.dto';
 import { RegisterDto } from './dto/register.dto';
 import { RegisterClinicStaffDto } from './dto/register-clinic-staff.dto';
 import { LoginDto } from './dto/login.dto';

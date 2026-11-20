@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { EnvVariable } from '@/config/env.validation';
+import { EnvVariable } from '../config/env.validation';
 import { AccessTokenPayload } from './types/jwt-payload';
 
 @Injectable()

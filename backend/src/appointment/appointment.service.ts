@@ -5,13 +5,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from '@/database/prisma.service';
-import { Prisma } from '@/database/generated/prisma/client';
-import { AccessService } from '@/access/access.service';
-import { AccessTokenPayload } from '@/auth/types/jwt-payload';
-import { AppointmentStatus, Role } from '@/database/generated/prisma/enums';
-import { PrismaClientKnownRequestError } from '@/database/generated/prisma/internal/prismaNamespace';
-import { MessageResponseDto } from '@/common/dto/message-response.dto';
+import { PrismaService } from '../database/prisma.service';
+import { Prisma } from '../database/generated/prisma/client';
+import { AccessService } from '../access/access.service';
+import { AccessTokenPayload } from '../auth/types/jwt-payload';
+import { AppointmentStatus, Role } from '../database/generated/prisma/enums';
+import { PrismaClientKnownRequestError } from '../database/generated/prisma/internal/prismaNamespace';
+import { MessageResponseDto } from '../common/dto/message-response.dto';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentStatusDto } from './dto/update-appointment-status.dto';
 import { AppointmentResponseDto } from './dto/appointment-response.dto';

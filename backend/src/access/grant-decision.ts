@@ -1,7 +1,7 @@
 import {
   AppointmentStatus,
   GrantEndReason,
-} from '@/database/generated/prisma/enums';
+} from '../database/generated/prisma/enums';
 
 // D2: appointment access lasts until COMPLETED + 30 days.
 export const APPOINTMENT_GRANT_DAYS_AFTER_COMPLETED = 30;

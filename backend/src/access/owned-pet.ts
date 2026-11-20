@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { PrismaService } from '@/database/prisma.service';
+import { PrismaService } from '../database/prisma.service';
 
 /**
  * 404 unless `ownerId` owns the pet and it is not archived.

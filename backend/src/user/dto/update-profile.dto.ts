@@ -1,5 +1,5 @@
-import { Trim } from '@/common/decorators/trim.decorator';
-import { TrimToNull } from '@/common/decorators/trim-to-null.decorator';
+import { Trim } from '../../common/decorators/trim.decorator';
+import { TrimToNull } from '../../common/decorators/trim-to-null.decorator';
 import {
   IsOptional,
   IsString,

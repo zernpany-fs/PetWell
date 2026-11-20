@@ -5,13 +5,13 @@
 import { ConfigService } from '@nestjs/config';
 import { HttpException } from '@nestjs/common';
 import { expect } from 'vitest';
-import { PrismaService } from '@/database/prisma.service';
-import { EnvVariable } from '@/config/env.validation';
-import { AccessService } from '@/access/access.service';
-import { ShareCodeService } from '@/access/share-code.service';
-import { PetService } from '@/pet/pet.service';
-import { HealthRecordService } from '@/health-record/health-record.service';
-import { AppointmentService } from '@/appointment/appointment.service';
+import { PrismaService } from '../src/database/prisma.service';
+import { EnvVariable } from '../src/config/env.validation';
+import { AccessService } from '../src/access/access.service';
+import { ShareCodeService } from '../src/access/share-code.service';
+import { PetService } from '../src/pet/pet.service';
+import { HealthRecordService } from '../src/health-record/health-record.service';
+import { AppointmentService } from '../src/appointment/appointment.service';
 
 type Config = ConfigService<EnvVariable, true>;
 

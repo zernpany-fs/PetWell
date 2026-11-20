@@ -7,10 +7,10 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from '@/database/prisma.service';
-import { EnvVariable } from '@/config/env.validation';
-import { AccessTokenPayload } from '@/auth/types/jwt-payload';
-import { AccessType } from '@/database/generated/prisma/enums';
+import { PrismaService } from '../database/prisma.service';
+import { EnvVariable } from '../config/env.validation';
+import { AccessTokenPayload } from '../auth/types/jwt-payload';
+import { AccessType } from '../database/generated/prisma/enums';
 import {
   generateShareCode,
   hashShareCode,

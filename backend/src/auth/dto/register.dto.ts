@@ -1,4 +1,4 @@
-import { Trim } from '@/common/decorators/trim.decorator';
+import { Trim } from '../../common/decorators/trim.decorator';
 import {
   IsAlphanumeric,
   IsEmail,

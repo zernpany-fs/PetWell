@@ -3,12 +3,12 @@ import {
   ConflictException,
   Injectable,
 } from '@nestjs/common';
-import { PrismaService } from '@/database/prisma.service';
-import { BcryptService } from '@/infrastructure/hash/bcrypt.service';
-import { CloudinaryService } from '@/infrastructure/upload/cloudinary.service';
-import { Role } from '@/database/generated/prisma/enums';
-import { User } from '@/database/generated/prisma/client';
-import { PrismaClientKnownRequestError } from '@/database/generated/prisma/internal/prismaNamespace';
+import { PrismaService } from '../database/prisma.service';
+import { BcryptService } from '../infrastructure/hash/bcrypt.service';
+import { CloudinaryService } from '../infrastructure/upload/cloudinary.service';
+import { Role } from '../database/generated/prisma/enums';
+import { User } from '../database/generated/prisma/client';
+import { PrismaClientKnownRequestError } from '../database/generated/prisma/internal/prismaNamespace';
 import { UserCreateInput } from './types/user.type';
 import { UserResponseDto } from './dto/user-response.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';

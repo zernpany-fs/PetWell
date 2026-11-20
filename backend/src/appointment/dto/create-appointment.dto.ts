@@ -1,4 +1,4 @@
-import { Trim } from '@/common/decorators/trim.decorator';
+import { Trim } from '../../common/decorators/trim.decorator';
 import { Type } from 'class-transformer';
 import { IsDate, IsOptional, IsString, IsUUID, MinDate } from 'class-validator';
 

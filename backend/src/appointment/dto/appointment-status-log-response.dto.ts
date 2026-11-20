@@ -1,4 +1,4 @@
-import { AppointmentStatus, Role } from '@/database/generated/prisma/enums';
+import { AppointmentStatus, Role } from '../../database/generated/prisma/enums';
 
 export class StatusLogAuthorDto {
   id: string;

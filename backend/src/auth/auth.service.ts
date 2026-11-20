@@ -3,10 +3,10 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserService } from '@/user/user.service';
-import { BcryptService } from '@/infrastructure/hash/bcrypt.service';
-import { Role } from '@/database/generated/prisma/enums';
-import { UserResponseDto } from '@/user/dto/user-response.dto';
+import { UserService } from '../user/user.service';
+import { BcryptService } from '../infrastructure/hash/bcrypt.service';
+import { Role } from '../database/generated/prisma/enums';
+import { UserResponseDto } from '../user/dto/user-response.dto';
 import { RegisterDto } from './dto/register.dto';
 import { RegisterClinicStaffDto } from './dto/register-clinic-staff.dto';
 import { LoginDto } from './dto/login.dto';

@@ -1,4 +1,4 @@
-import { AppointmentStatus } from '@/database/generated/prisma/enums';
+import { AppointmentStatus } from '../database/generated/prisma/enums';
 
 export const MAX_APPOINTMENTS_PER_SLOT = 2;
 

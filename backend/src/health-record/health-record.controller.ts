@@ -16,12 +16,12 @@ import { HealthRecordService } from './health-record.service';
 import { CreateHealthRecordDto } from './dto/create-health-record.dto';
 import { UpdateHealthRecordDto } from './dto/update-health-record.dto';
 import { HealthRecordResponseDto } from './dto/health-record-response.dto';
-import { CurrentUser } from '@/common/decorators/current-user.decorator';
-import { Roles } from '@/common/decorators/roles.decorator';
-import { RolesGuard } from '@/common/guards/roles.guard';
-import { Role } from '@/database/generated/prisma/enums';
-import { MessageResponseDto } from '@/common/dto/message-response.dto';
-import type { AccessTokenPayload } from '@/auth/types/jwt-payload';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { Roles } from '../common/decorators/roles.decorator';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Role } from '../database/generated/prisma/enums';
+import { MessageResponseDto } from '../common/dto/message-response.dto';
+import type { AccessTokenPayload } from '../auth/types/jwt-payload';
 
 @Controller()
 export class HealthRecordController {

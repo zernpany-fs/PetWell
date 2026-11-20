@@ -1,4 +1,4 @@
-import { EnvVariable } from '@/config/env.validation';
+import { EnvVariable } from '../../config/env.validation';
 import {
   BadRequestException,
   Injectable,

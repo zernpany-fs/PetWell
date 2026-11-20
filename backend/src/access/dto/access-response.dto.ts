@@ -1,4 +1,4 @@
-import { AccessType } from '@/database/generated/prisma/enums';
+import { AccessType } from '../../database/generated/prisma/enums';
 
 // Shown to the owner once; only the hash is stored (D26).
 export class ShareCodeResponseDto {

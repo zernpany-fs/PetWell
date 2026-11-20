@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   AppointmentStatus,
   GrantEndReason,
-} from '@/database/generated/prisma/enums';
+} from '../database/generated/prisma/enums';
 import { decideGrantChange } from './grant-decision';
 
 // Rows follow docs/v2/PetWell_Appointment_Grant_Flow (+ D28 for legacy data).

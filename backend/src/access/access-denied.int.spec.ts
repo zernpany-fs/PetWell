@@ -4,8 +4,8 @@
  * HTTP-level checks (guards, roles) stay in scripts/v2_api_*_check.py.
  */
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { RecordType, Role } from '@/database/generated/prisma/enums';
-import { AccessTokenPayload } from '@/auth/types/jwt-payload';
+import { RecordType, Role } from '../database/generated/prisma/enums';
+import { AccessTokenPayload } from '../auth/types/jwt-payload';
 import { hashShareCode } from './share-code';
 import {
   createTestServices,

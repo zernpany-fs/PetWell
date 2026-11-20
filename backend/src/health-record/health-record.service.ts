@@ -3,13 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from '@/database/prisma.service';
-import { CloudinaryService } from '@/infrastructure/upload/cloudinary.service';
-import { AccessService } from '@/access/access.service';
-import type { AccessLevel } from '@/access/access-level';
-import { Role } from '@/database/generated/prisma/enums';
-import { AccessTokenPayload } from '@/auth/types/jwt-payload';
-import { MessageResponseDto } from '@/common/dto/message-response.dto';
+import { PrismaService } from '../database/prisma.service';
+import { CloudinaryService } from '../infrastructure/upload/cloudinary.service';
+import { AccessService } from '../access/access.service';
+import type { AccessLevel } from '../access/access-level';
+import { Role } from '../database/generated/prisma/enums';
+import { AccessTokenPayload } from '../auth/types/jwt-payload';
+import { MessageResponseDto } from '../common/dto/message-response.dto';
 import { CreateHealthRecordDto } from './dto/create-health-record.dto';
 import { UpdateHealthRecordDto } from './dto/update-health-record.dto';
 import { HealthRecordResponseDto } from './dto/health-record-response.dto';

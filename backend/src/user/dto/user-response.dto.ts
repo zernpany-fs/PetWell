@@ -1,4 +1,4 @@
-import { Role } from '@/database/generated/prisma/enums';
+import { Role } from '../../database/generated/prisma/enums';
 
 export class UserResponseDto {
   id: string;

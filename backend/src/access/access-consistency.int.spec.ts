@@ -14,9 +14,9 @@ import {
   vi,
 } from 'vitest';
 import { HttpException } from '@nestjs/common';
-import { AppointmentStatus, Role } from '@/database/generated/prisma/enums';
-import { AccessTokenPayload } from '@/auth/types/jwt-payload';
-import { UpdateAppointmentStatusDto } from '@/appointment/dto/update-appointment-status.dto';
+import { AppointmentStatus, Role } from '../database/generated/prisma/enums';
+import { AccessTokenPayload } from '../auth/types/jwt-payload';
+import { UpdateAppointmentStatusDto } from '../appointment/dto/update-appointment-status.dto';
 import {
   createTestServices,
   expectStatus,

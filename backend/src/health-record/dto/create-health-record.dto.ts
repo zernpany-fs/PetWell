@@ -1,5 +1,5 @@
-import { Trim } from '@/common/decorators/trim.decorator';
-import { RecordType } from '@/database/generated/prisma/enums';
+import { Trim } from '../../common/decorators/trim.decorator';
+import { RecordType } from '../../database/generated/prisma/enums';
 import { Type } from 'class-transformer';
 import {
   IsDate,

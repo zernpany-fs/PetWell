@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { EnvVariable } from '@/config/env.validation';
+import { EnvVariable } from '../config/env.validation';
 import { PrismaClient } from './generated/prisma/client';
 import { PG_SESSION_OPTIONS } from './pg-options';
 

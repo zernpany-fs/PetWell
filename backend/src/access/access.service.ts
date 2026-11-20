@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/database/prisma.service';
-import { Prisma } from '@/database/generated/prisma/client';
+import { PrismaService } from '../database/prisma.service';
+import { Prisma } from '../database/generated/prisma/client';
 import {
   AccessType,
   AppointmentStatus,
-} from '@/database/generated/prisma/enums';
+} from '../database/generated/prisma/enums';
 import { AccessLevel, resolveAccessLevel } from './access-level';
 import { decideGrantChange } from './grant-decision';
 

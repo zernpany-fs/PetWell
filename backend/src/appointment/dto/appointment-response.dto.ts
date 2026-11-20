@@ -1,7 +1,7 @@
 import {
   AppointmentStatus,
   ClinicType,
-} from '@/database/generated/prisma/enums';
+} from '../../database/generated/prisma/enums';
 
 export class AppointmentPetDto {
   id: string;
