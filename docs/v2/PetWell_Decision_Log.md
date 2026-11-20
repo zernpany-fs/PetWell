@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.9 |
-| **Date** | 2026-11-19 |
+| **Status** | Draft v1.0 |
+| **Date** | 2026-11-20 |
 | **Author** | Nopparuth Panyanithiwat |
 | **Change** | Clinics can no longer read any pet's records by default. Access comes from a confirmed appointment or from the owner's explicit share. |
 
@@ -64,6 +64,11 @@ The original design let any clinic search and read the full history of every pet
 | D47 | Test database | Integration tests use a separate database, `petwell_test`, configured in `backend/.env.test` (git-ignored). `test/setup-env.ts` stops the run if `DATABASE_URL` is not `petwell_test`. | Tests empty the database on every run. A separate database keeps dev data and manual test accounts safe, and makes runs repeatable. |
 | D48 | Test level | Automated access tests call the services directly against `petwell_test` and check the thrown error. HTTP-level checks (guards, roles, status codes end to end) stay in the Python scripts in `scripts/`. | The 404/403/409 rules are thrown inside the services, so this tests them directly without extra packages (`@nestjs/testing`, `supertest`) or JWT setup. The scripts already cover the HTTP layer. |
 | D49 | When to merge V2 | Keep `feat/consent-access` unmerged until the remaining frontend (owner share-code screens, access list, revoke, staff `AUTHORED_ONLY` view) is done. The 7-day timebox is extended for this. | The backend and tests are complete, but without the owner screens the main V2 flow cannot be demoed end to end. |
+| D50 | Frontend extension after the timebox | The extension for the remaining frontend (D49) is capped at **2 working days**. If it is not done by then, cut in this order: the extend button, then the access-level badge in search; then merge. | Keeps the extension bounded. The cut order follows the timebox rule: frontend first, least important first. |
+| D51 | Owner share-code screen | A **Clinic access** card on the owner's pet page (the access list from D52 is in the same card). Default duration is **7 days**. The code is shown once with an mm:ss countdown; at 0 it is hidden and a **Generate new code** button appears. | The shortest duration is the safest default. A live countdown stops owners reading out an expired code. One card keeps share, list and revoke together without a new page. |
+| D52 | Owner access list | One row per clinic (revoke works per clinic, D12), listing each active grant's kind and end date. Owner-share grants have a **Change** action (7 / 30 / 90 days or unlimited, from now, D27); appointment grants do not. Revoke uses a confirmation inside the row (no browser dialog) that says the appointment is not cancelled. The list refreshes after a change; a code redeemed while the page is open shows after a reload. | Matches how revoke and extend work in the backend, so the owner is not surprised that both kinds of access end. A confirmation in the row avoids blocking browser dialogs. Live updates do not fit the timebox. |
+| D53 | Staff pet page by access level | `AUTHORED_ONLY`: name and species only, a limited-access notice that says how to get access again (share code or new appointment), and the clinic's own records; no owner contact and no add-record form. `FULL`: the whole pet, owner contact (D9) and the add-record form. A `403` when adding a record (access ended while the page was open, D35) shows a message and reloads into the limited view. | Staff should see why data is missing and what to do next, not an error. Hiding the form avoids a 403 in the normal case; the message covers access that ends while the page is open. |
+| D54 | Access level in staff search | Only `AUTHORED_ONLY` results get a badge (**Own records only**); `FULL` results have none. The empty state says these pets are found by pet name only (D38). | `FULL` is the normal case, so labelling only the exception keeps the list quiet and explains why contact details are missing. |
 
 ## 3. Findings from code review (2026-11-09)
 
@@ -80,6 +85,7 @@ The original design let any clinic search and read the full history of every pet
 - `GET /health-records/:recordId` let **any clinic read any record by id**, including archived ones. It was not in the impact analysis; closed with D36 and D37.
 - **Timestamps written by the app were stored 7 hours early** (the UTC time was saved as if it were Bangkok time). The app read them back the same way, so access checks still worked, but Prisma Studio and SQL using `now()` showed shifted times. Pre-existing since v1. Cause confirmed with a read-only probe and fixed by D46.
 - The frontend must handle `AUTHORED_ONLY` responses, which have no `owner`: the staff pet search page reads `pet.owner` directly.
+- (2026-11-20) The staff pet page did not show owner contact even with `FULL` access, although D9 allows it. Added with D53.
 
 ## 5. Out of scope / backlog
 

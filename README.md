@@ -17,7 +17,7 @@ In v1 any clinic on the platform could read every pet. V2 (branch `feat/consent-
 
 While access is active the clinic sees the full history from every clinic. Afterwards it sees only the records it wrote itself. Every time a clinic opens a pet or its records, an audit log row is written; if that write fails, the request fails.
 
-The rules, and why each was chosen, are in [`docs/v2/PetWell_Decision_Log.md`](./docs/v2/PetWell_Decision_Log.md) (D1–D49).
+The rules, and why each was chosen, are in [`docs/v2/PetWell_Decision_Log.md`](./docs/v2/PetWell_Decision_Log.md) (D1–D54).
 
 ## Roles
 
@@ -128,7 +128,7 @@ Register as an owner → add a pet → book an appointment at the clinic of `vet
 
 Sign in as `vet2@test.com` — a clinic with no appointment — and the same search finds nothing.
 
-Share codes, revoke and extend have API endpoints but no screens yet: try them with Postman, or see `scripts/v2_api_share_check.py` for the full flow.
+**V2 walk-in flow:** on the owner account, open the pet → **Clinic access** → choose a duration and **Generate share code** (valid 15 minutes, shown once) → as `vet2@test.com`, enter the code under **Patients → Walk-in with a share code?** → the pet opens with full history and owner contact → back on the owner account, reload: the clinic is listed under Clinic access, where you can **Change** the duration or **Revoke** → as `vet2`, the pet now shows only the records vet2's clinic wrote (or is not found if it wrote none).
 
 ## New V2 endpoints
 
@@ -146,7 +146,7 @@ Existing pet, health-record and search endpoints now check access; see the impac
 
 | File | What's in it |
 |---|---|
-| `docs/v2/PetWell_Decision_Log.md` | **V2:** every access rule as a numbered decision (D1–D49), with the reason and findings from implementation |
+| `docs/v2/PetWell_Decision_Log.md` | **V2:** every access rule as a numbered decision (D1–D54), with the reason and findings from implementation |
 | `docs/v2/PetWell_User_Stories_Access_Control.md` | **V2:** user stories US-01–US-04 with acceptance criteria |
 | `docs/v2/PetWell_Impact_Analysis.md` | **V2:** which endpoints, tables and screens the change touches |
 | `docs/v2/PetWell_Appointment_Grant_Flow.svg` | **V2:** how each appointment status creates, extends or ends access |
@@ -164,8 +164,9 @@ Existing pet, health-record and search endpoints now check access; see the impac
 
 **v1** (tag `v1.0`): feature-complete; all four grading requirements (auth with JWT + protected routes, two roles, CRUD on two-plus entities, two-plus core features) are covered — see `docs/PetWell_Feature_List.md` for the mapping.
 
-**V2** (branch `feat/consent-access`):
-- Done: access rules enforced in the backend on every pet, health-record and search endpoint; share code, revoke and extend endpoints; audit log; 88 Vitest tests and two API check scripts, all passing; backend typechecks.
-- Not done yet: screens for share codes, the access list and redeeming a code; the staff pet page and search page do not yet show the clinic's access level. Backend `pnpm lint` does not run (ESLint is not installed).
+**V2** (merged into `main`):
+- Backend: access rules enforced on every pet, health-record and search endpoint; share code, revoke and extend endpoints; audit log; 88 Vitest tests and two API check scripts, all passing.
+- Frontend: owner generates a share code, sees which clinics have access, changes a share's duration and revokes; staff redeem a code; the staff pet page and search show limited access (own records only) and handle a 403 on new records. Backend and frontend typecheck.
+- Known gaps: frontend has no automated tests (V2 screens were checked by hand in the browser); the owner's access list updates on reload, not live; backend `pnpm lint` does not run (ESLint is not installed). The owner audit-log view (US-06) is in the backlog.
 
 Deliberately out of scope: admin module, password reset, telemedicine, payments, community features.
