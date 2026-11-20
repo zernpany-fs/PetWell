@@ -17,8 +17,8 @@ import { PetService } from './pet.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { PetResponseDto } from './dto/pet-response.dto';
-import { PetSearchResultDto } from './dto/pet-search-result.dto';
 import { SearchPetQueryDto } from './dto/search-pet-query.dto';
+import type { ClinicPetResponseDto } from './dto/clinic-pet-response.dto';
 import { CurrentUser } from '@/common/decorators/current-user.decorator';
 import { Roles } from '@/common/decorators/roles.decorator';
 import { RolesGuard } from '@/common/guards/roles.guard';
@@ -50,15 +50,18 @@ export class PetController {
   @UseGuards(RolesGuard)
   @Roles(Role.CLINIC_STAFF)
   @Get('search')
-  search(@Query() query: SearchPetQueryDto): Promise<PetSearchResultDto[]> {
-    return this.petService.search(query);
+  search(
+    @CurrentUser() user: AccessTokenPayload,
+    @Query() query: SearchPetQueryDto,
+  ): Promise<ClinicPetResponseDto[]> {
+    return this.petService.search(query, user);
   }
 
   @Get(':petId')
   findOne(
     @CurrentUser() user: AccessTokenPayload,
     @Param('petId', ParseUUIDPipe) petId: string,
-  ): Promise<PetResponseDto> {
+  ): Promise<PetResponseDto | ClinicPetResponseDto> {
     return this.petService.findOne(petId, user);
   }
 

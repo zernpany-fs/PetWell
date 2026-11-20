@@ -2,9 +2,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Metadata } from 'next';
 import { format } from 'date-fns';
-import { Search, PawPrint, User, Phone, ScanLine } from 'lucide-react';
+import { Search, PawPrint, User, Phone, ScanLine, Lock } from 'lucide-react';
 import { PetApi } from '@/lib/api/pet.api';
 import { PetSearchResult } from '@/lib/api/api.type';
+import RedeemShareCodeForm from '@/components/features/access/RedeemShareCodeForm';
 
 export const metadata: Metadata = { title: 'Patient Lookup' };
 
@@ -25,8 +26,11 @@ export default async function StaffPetLookupPage({
         Patient Lookup
       </h2>
       <p className="text-[#6E675C] mt-1 mb-5">
-        Find any pet by name, microchip number, or owner details.
+        Find pets your clinic has access to, through a confirmed appointment
+        or the owner&rsquo;s share code.
       </p>
+
+      <RedeemShareCodeForm />
 
       <form method="get" className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
@@ -56,7 +60,7 @@ export default async function StaffPetLookupPage({
           </div>
           <p className="text-[#2D2A26] mb-1">Start typing to find a patient</p>
           <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
-            Health records follow the pet, so you will see their full history
+            While your clinic has access, you see the pet&rsquo;s full history
             across every clinic.
           </p>
         </div>
@@ -66,7 +70,9 @@ export default async function StaffPetLookupPage({
             No pets match &ldquo;{term}&rdquo;
           </p>
           <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
-            Try the owner&rsquo;s phone number or the microchip number instead.
+            You only see pets your clinic has access to. For a walk-in, ask
+            the owner for a share code. Pets you only wrote records for can
+            be found by pet name.
           </p>
         </div>
       ) : (
@@ -112,11 +118,14 @@ export default async function StaffPetLookupPage({
                       className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1 text-[#6E675C]"
                       style={{ fontSize: '12px' }}
                     >
-                      <span className="flex items-center gap-1">
-                        <User size={12} />
-                        {pet.owner.firstName} {pet.owner.lastName}
-                      </span>
-                      {pet.owner.phone && (
+                      {/* AUTHORED_ONLY results have no owner (D9, D38) */}
+                      {pet.owner && (
+                        <span className="flex items-center gap-1">
+                          <User size={12} />
+                          {pet.owner.firstName} {pet.owner.lastName}
+                        </span>
+                      )}
+                      {pet.owner?.phone && (
                         <span className="flex items-center gap-1">
                           <Phone size={12} />
                           {pet.owner.phone}
@@ -131,18 +140,35 @@ export default async function StaffPetLookupPage({
                     </div>
                   </div>
 
-                  {pet.drugAllergy && (
-                    <span
-                      className="rounded-full px-2.5 py-0.5 shrink-0 self-start"
-                      style={{
-                        backgroundColor: '#F8E6E4',
-                        color: '#C4534E',
-                        fontSize: '12px',
-                      }}
-                    >
-                      Allergy
-                    </span>
-                  )}
+                  <div className="flex flex-col items-end gap-1 shrink-0 self-start">
+                    {/* D54: only the exception is labelled; FULL is the normal case. */}
+                    {pet.accessLevel === 'AUTHORED_ONLY' && (
+                      <span
+                        className="rounded-full px-2.5 py-0.5 flex items-center gap-1"
+                        style={{
+                          backgroundColor: '#FBF3E2',
+                          color: '#6B5414',
+                          fontSize: '12px',
+                        }}
+                        title="No access now: you only see records your clinic wrote."
+                      >
+                        <Lock size={11} />
+                        Own records only
+                      </span>
+                    )}
+                    {pet.drugAllergy && (
+                      <span
+                        className="rounded-full px-2.5 py-0.5"
+                        style={{
+                          backgroundColor: '#F8E6E4',
+                          color: '#C4534E',
+                          fontSize: '12px',
+                        }}
+                      >
+                        Allergy
+                      </span>
+                    )}
+                  </div>
                 </div>
               </Link>
             ))}

@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { ConfigService } from "@nestjs/config";
-import { EnvVariable } from "@/config/env.validation";
-import { AccessTokenPayload } from "./types/jwt-payload";
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { EnvVariable } from '@/config/env.validation';
+import { AccessTokenPayload } from './types/jwt-payload';
 
 @Injectable()
 export class AccessTokenService {
@@ -13,8 +13,8 @@ export class AccessTokenService {
 
   sign(payload: AccessTokenPayload): Promise<string> {
     return this.jwtService.signAsync(payload, {
-      secret: this.configService.get("ACCESS_TOKEN_SECRET", { infer: true }),
-      expiresIn: this.configService.get("ACCESS_TOKEN_EXPIRES_IN", {
+      secret: this.configService.get('ACCESS_TOKEN_SECRET', { infer: true }),
+      expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRES_IN', {
         infer: true,
       }),
     });
@@ -22,7 +22,7 @@ export class AccessTokenService {
 
   verify(token: string): Promise<AccessTokenPayload> {
     return this.jwtService.verifyAsync(token, {
-      secret: this.configService.get("ACCESS_TOKEN_SECRET", { infer: true }),
+      secret: this.configService.get('ACCESS_TOKEN_SECRET', { infer: true }),
     });
   }
 }

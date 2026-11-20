@@ -67,14 +67,26 @@ export type Pet = {
 };
 
 export type PetSearchOwner = {
-  id: string;
   firstName: string;
   lastName: string;
   phone: string | null;
   email: string;
 };
 
-export type PetSearchResult = Pet & { owner: PetSearchOwner };
+// V2 (D18, D33, D38): FULL results have the whole pet and `owner`;
+// AUTHORED_ONLY results have only id, name and species.
+export type PetSearchResult = Pick<Pet, 'id' | 'name' | 'species'> &
+  Partial<Omit<Pet, 'id' | 'name' | 'species'>> & {
+    accessLevel: 'FULL' | 'AUTHORED_ONLY';
+    owner?: PetSearchOwner;
+  };
+
+// V2 (D20, D33): what GET /pets/:id returns to clinic staff.
+// FULL = active access: whole pet + owner contact (D5, D9).
+// AUTHORED_ONLY = no access, but the clinic wrote records: id/name/species.
+export type ClinicPet =
+  | (Pet & { accessLevel: 'FULL'; owner: PetSearchOwner })
+  | (Pick<Pet, 'id' | 'name' | 'species'> & { accessLevel: 'AUTHORED_ONLY' });
 
 export type RecordClinic = { id: string; name: string; clinicType: ClinicType };
 
@@ -144,3 +156,31 @@ export type AppointmentStatusLog = {
   changedAt: string;
   changedBy?: StatusLogAuthor;
 };
+
+// V2: clinic staff redeem an owner's share code (US-03).
+export type RedeemShareCodeResponse = {
+  grantId: string;
+  pet: { id: string; name: string; species: string };
+  expiresAt: string | null; // null = unlimited access
+};
+
+// V2: an owner generates a share code (US-03 AC1). The code is shown
+// only once: the backend keeps just its hash (D26).
+export type ShareCodeResponse = {
+  code: string; // a string, so a leading 0 is kept ("048213")
+  durationDays: number | null; // access length once redeemed; null = unlimited
+  expiresAt: string; // when the code itself stops working (15 min, D7)
+};
+
+// V2: one active grant in the owner's access list (US-04, D43).
+export type AccessType = 'APPOINTMENT' | 'OWNER_SHARE';
+export type AccessGrant = {
+  id: string;
+  type: AccessType;
+  clinic: { id: string; name: string };
+  // null: OWNER_SHARE = unlimited; APPOINTMENT = not completed yet (D2)
+  expiresAt: string | null;
+  createdAt: string;
+};
+
+export type RevokeAccessResponse = { message: string; endedGrants: number };

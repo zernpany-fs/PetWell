@@ -13,7 +13,9 @@ import { Readable } from 'node:stream';
 export class CloudinaryService {
   private readonly logger = new Logger(CloudinaryService.name);
 
-  constructor(private readonly configService: ConfigService<EnvVariable, true>) {
+  constructor(
+    private readonly configService: ConfigService<EnvVariable, true>,
+  ) {
     cloudinary.config({
       cloud_name: configService.get('CLOUDINARY_CLOUD_NAME', { infer: true }),
       api_key: configService.get('CLOUDINARY_API_KEY', { infer: true }),

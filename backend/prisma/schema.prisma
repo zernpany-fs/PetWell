@@ -33,6 +33,17 @@ enum AppointmentStatus {
   CANCELLED
 }
 
+enum AccessType {
+  APPOINTMENT
+  OWNER_SHARE
+}
+
+enum GrantEndReason {
+  REVOKED
+  CANCELLED
+  REJECTED
+}
+
 model User {
   id          String   @id @default(uuid()) @db.Uuid
   firstName   String   @map("first_name")
@@ -54,9 +65,11 @@ model User {
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz()
 
-  pets           Pet[]
-  createdRecords HealthRecord[]         @relation("RecordAuthor")
-  statusChanges  AppointmentStatusLog[]
+  pets              Pet[]
+  createdRecords    HealthRecord[]         @relation("RecordAuthor")
+  statusChanges     AppointmentStatusLog[]
+  accessLogs        PetAccessLog[]
+  shareCodeAttempts ShareCodeAttempt[]
 
   @@map("users")
 }
@@ -80,6 +93,9 @@ model Pet {
 
   healthRecords HealthRecord[]
   appointments  Appointment[]
+  accessGrants  PetAccessGrant[]
+  shareCodes    ShareCode[]
+  accessLogs    PetAccessLog[]
 
   @@map("pets")
 }
@@ -118,9 +134,12 @@ model Clinic {
   isActive       Boolean    @default(true) @map("is_active")
   createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz()
 
-  staff         User[]         @relation("ClinicStaff")
-  healthRecords HealthRecord[]
-  appointments  Appointment[]
+  staff             User[]             @relation("ClinicStaff")
+  healthRecords     HealthRecord[]
+  appointments      Appointment[]
+  accessGrants      PetAccessGrant[]
+  accessLogs        PetAccessLog[]
+  shareCodeAttempts ShareCodeAttempt[]
 
   @@map("clinics")
 }
@@ -139,6 +158,7 @@ model Appointment {
 
   statusLogs    AppointmentStatusLog[]
   healthRecords HealthRecord[]
+  accessGrant   PetAccessGrant?
 
   @@index([clinicId, appointmentDate])
   @@map("appointments")
@@ -156,4 +176,73 @@ model AppointmentStatusLog {
   changedAt     DateTime           @default(now()) @map("changed_at") @db.Timestamptz()
 
   @@map("appointment_status_logs")
+}
+
+// ---------- V2: consent-based access (D17, D23–D27) ----------
+
+model PetAccessGrant {
+  id            String          @id @default(uuid()) @db.Uuid
+  type          AccessType
+  petId         String          @map("pet_id") @db.Uuid
+  pet           Pet             @relation(fields: [petId], references: [id])
+  clinicId      String          @map("clinic_id") @db.Uuid
+  clinic        Clinic          @relation(fields: [clinicId], references: [id])
+  appointmentId String?         @unique @map("appointment_id") @db.Uuid
+  appointment   Appointment?    @relation(fields: [appointmentId], references: [id])
+  shareCodeId   String?         @unique @map("share_code_id") @db.Uuid
+  shareCode     ShareCode?      @relation(fields: [shareCodeId], references: [id])
+  expiresAt     DateTime?       @map("expires_at") @db.Timestamptz()
+  endedAt       DateTime?       @map("ended_at") @db.Timestamptz()
+  endReason     GrantEndReason? @map("end_reason")
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz()
+
+  accessLogs PetAccessLog[]
+
+  @@index([petId, clinicId])
+  @@map("pet_access_grants")
+}
+
+model ShareCode {
+  id           String    @id @default(uuid()) @db.Uuid
+  petId        String    @map("pet_id") @db.Uuid
+  pet          Pet       @relation(fields: [petId], references: [id])
+  codeHash     String    @map("code_hash")
+  durationDays Int?      @map("duration_days")
+  expiresAt    DateTime  @map("expires_at") @db.Timestamptz()
+  usedAt       DateTime? @map("used_at") @db.Timestamptz()
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  grant PetAccessGrant?
+
+  @@index([codeHash])
+  @@map("share_codes")
+}
+
+model PetAccessLog {
+  id       String          @id @default(uuid()) @db.Uuid
+  userId   String          @map("user_id") @db.Uuid
+  user     User            @relation(fields: [userId], references: [id])
+  clinicId String          @map("clinic_id") @db.Uuid
+  clinic   Clinic          @relation(fields: [clinicId], references: [id])
+  petId    String          @map("pet_id") @db.Uuid
+  pet      Pet             @relation(fields: [petId], references: [id])
+  grantId  String?         @map("grant_id") @db.Uuid
+  grant    PetAccessGrant? @relation(fields: [grantId], references: [id])
+  viewedAt DateTime        @default(now()) @map("viewed_at") @db.Timestamptz()
+
+  @@map("pet_access_logs")
+}
+
+model ShareCodeAttempt {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
+  clinicId    String   @map("clinic_id") @db.Uuid
+  clinic      Clinic   @relation(fields: [clinicId], references: [id])
+  success     Boolean
+  attemptedAt DateTime @default(now()) @map("attempted_at") @db.Timestamptz()
+
+  @@index([userId, attemptedAt])
+  @@index([clinicId, attemptedAt])
+  @@map("share_code_attempts")
 }

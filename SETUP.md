@@ -86,7 +86,7 @@ pnpm add -D @types/node @types/express @types/bcrypt @types/multer
 
 ### After install — get the DB running
 ```bash
-cp .env.example .env               # fill DATABASE_URL, ACCESS_TOKEN_SECRET (32+ chars), Cloudinary keys
+cp .env.example .env               # fill DATABASE_URL, ACCESS_TOKEN_SECRET (32+ chars), SHARE_CODE_SECRET (32+ chars), Cloudinary keys
 pnpm exec prisma generate          # generate client -> src/database/generated/prisma
 pnpm exec prisma migrate dev --name init   # create tables
 pnpm db:seed                       # seed clinics

@@ -3,13 +3,15 @@ import bcrypt from 'bcrypt';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../src/database/generated/prisma/client';
 import { ClinicType, Role } from '../src/database/generated/prisma/enums';
+import { PG_SESSION_OPTIONS } from '../src/database/pg-options';
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
   throw new Error('DATABASE_URL is not set');
 }
 
-const adapter = new PrismaPg({ connectionString });
+// D46: same UTC session as PrismaService.
+const adapter = new PrismaPg({ connectionString, options: PG_SESSION_OPTIONS });
 const prisma = new PrismaClient({ adapter });
 
 // Matches BcryptService, so a seeded account and a registered one look
@@ -38,7 +40,11 @@ const clinics: SeedClinic[] = [
     description: 'โรงพยาบาลสัตว์ทั่วไป เปิดบริการทุกวัน',
     clinicType: 'GENERAL',
     googleMapsLink: 'https://maps.google.com/?q=13.7367,100.5601',
-    staff: { email: 'vet1@test.com', firstName: 'สมชาย', lastName: 'รักษ์เพื่อน' },
+    staff: {
+      email: 'vet1@test.com',
+      firstName: 'สมชาย',
+      lastName: 'รักษ์เพื่อน',
+    },
   },
   {
     name: 'คลินิกสัตว์เลี้ยงพิเศษ Exotic Care',
@@ -65,7 +71,11 @@ const clinics: SeedClinic[] = [
     description: 'โรงพยาบาลสัตว์ทั่วไป ภาคเหนือ',
     clinicType: 'GENERAL',
     googleMapsLink: 'https://maps.google.com/?q=18.7967,98.9670',
-    staff: { email: 'vet4@test.com', firstName: 'อารีย์', lastName: 'เชียงใหม่' },
+    staff: {
+      email: 'vet4@test.com',
+      firstName: 'อารีย์',
+      lastName: 'เชียงใหม่',
+    },
   },
   {
     name: 'คลินิกรักษาสัตว์บ้านหมอหมา',

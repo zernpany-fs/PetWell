@@ -8,6 +8,10 @@ import { HealthRecordApi } from '@/lib/api/health-record.api';
 import { HealthRecord } from '@/lib/api/api.type';
 import { PhotoPlaceholder } from '@/components/shared/PhotoPlaceholder';
 import PetPhotoUpload from '@/components/features/pet/PetPhotoUpload';
+import GenerateShareCodeForm from '@/components/features/access/GenerateShareCodeForm';
+import ClinicAccessList from '@/components/features/access/ClinicAccessList';
+import { AccessApi } from '@/lib/api/access.api';
+import { AccessGrant } from '@/lib/api/api.type';
 
 export default async function PetProfilePage({
   params,
@@ -17,7 +21,10 @@ export default async function PetProfilePage({
   const { petId } = await params;
   const pet = await PetApi.get(petId).catch(() => null);
   if (!pet) notFound();
-  const records = await HealthRecordApi.listByPet(petId).catch((): HealthRecord[] => []);
+  const [records, grants] = await Promise.all([
+    HealthRecordApi.listByPet(petId).catch((): HealthRecord[] => []),
+    AccessApi.listGrants(petId).catch((): AccessGrant[] => []),
+  ]);
 
   return (
     <div className="pw-fade max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
@@ -71,6 +78,21 @@ export default async function PetProfilePage({
               <p className="text-[#6E675C]">Allergy: <span className="text-[#2D2A26]">{pet.drugAllergy}</span></p>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* V2 (D51, D52): who can see the pet, revoke, and share by code. */}
+      <div className="bg-white border border-[#E6DFD3] rounded-2xl p-6 shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
+        <h3 className="font-display text-[#2D2A26] mb-1" style={{ fontSize: '20px' }}>
+          Clinic access
+        </h3>
+        <p className="text-[#6E675C] mb-4" style={{ fontSize: '14px' }}>
+          Clinics can only see {pet.name}&apos;s records after confirming an appointment
+          or when you give them a share code.
+        </p>
+        <ClinicAccessList petId={pet.id} grants={grants} />
+        <div className="border-t border-[#E6DFD3] mt-4 pt-4">
+          <GenerateShareCodeForm petId={pet.id} />
         </div>
       </div>
 
