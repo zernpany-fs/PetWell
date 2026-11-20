@@ -46,6 +46,34 @@ export async function generateShareCodeAction(
   }
 }
 
+/** US-04 AC4, D27: owner shares only; counted from now. */
+export async function extendGrantAction(
+  petId: string,
+  grantId: string,
+  input: ShareDurationInput,
+): Promise<ActionResult> {
+  const parsed = shareDurationSchema.safeParse(input);
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: parsed.error.issues[0].message,
+      code: 'VALIDATION_ERROR',
+    };
+  }
+  try {
+    await AccessApi.extendGrant(grantId, parsed.data.durationDays);
+    revalidatePath(`/owner/pets/${petId}`);
+    return { success: true, message: 'Access updated.' };
+  } catch (error) {
+    // 409: already ended or not an owner share (D44); refresh the list.
+    if (error instanceof ApiError) {
+      revalidatePath(`/owner/pets/${petId}`);
+      return { success: false, message: error.message, code: 'API_ERROR' };
+    }
+    throw error;
+  }
+}
+
 /** US-04 AC1–AC2: the clinic loses both kinds of access (D12). */
 export async function revokeClinicAccessAction(
   petId: string,

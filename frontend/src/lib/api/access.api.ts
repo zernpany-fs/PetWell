@@ -20,6 +20,14 @@ export const AccessApi = {
     );
   },
 
+  /** Owner: new duration for an active owner share, from now (US-04 AC4, D27). */
+  extendGrant(grantId: string, durationDays: number | null) {
+    return authFetch<AccessGrant>(`/access-grants/${grantId}`, {
+      method: 'PATCH',
+      body: { durationDays },
+    });
+  },
+
   /**
    * Owner: create a 6-digit code for one pet (US-03 AC1).
    * durationDays must always be sent; null = unlimited (D41).
