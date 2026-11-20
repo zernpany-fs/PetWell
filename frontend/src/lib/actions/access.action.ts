@@ -46,6 +46,25 @@ export async function generateShareCodeAction(
   }
 }
 
+/** US-04 AC1–AC2: the clinic loses both kinds of access (D12). */
+export async function revokeClinicAccessAction(
+  petId: string,
+  clinicId: string,
+): Promise<ActionResult> {
+  try {
+    await AccessApi.revokeClinic(petId, clinicId);
+    revalidatePath(`/owner/pets/${petId}`);
+    return { success: true, message: 'Access revoked.' };
+  } catch (error) {
+    // 404: the access already ended (e.g. expired); refresh the list.
+    if (error instanceof ApiError) {
+      revalidatePath(`/owner/pets/${petId}`);
+      return { success: false, message: error.message, code: 'API_ERROR' };
+    }
+    throw error;
+  }
+}
+
 // On success the form opens the pet, so it needs the pet's id.
 export type RedeemShareCodeResult =
   | { success: true; message: string; petId: string }

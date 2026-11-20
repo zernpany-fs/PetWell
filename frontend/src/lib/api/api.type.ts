@@ -164,3 +164,16 @@ export type ShareCodeResponse = {
   durationDays: number | null; // access length once redeemed; null = unlimited
   expiresAt: string; // when the code itself stops working (15 min, D7)
 };
+
+// V2: one active grant in the owner's access list (US-04, D43).
+export type AccessType = 'APPOINTMENT' | 'OWNER_SHARE';
+export type AccessGrant = {
+  id: string;
+  type: AccessType;
+  clinic: { id: string; name: string };
+  // null: OWNER_SHARE = unlimited; APPOINTMENT = not completed yet (D2)
+  expiresAt: string | null;
+  createdAt: string;
+};
+
+export type RevokeAccessResponse = { message: string; endedGrants: number };

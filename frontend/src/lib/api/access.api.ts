@@ -1,7 +1,25 @@
 import { authFetch } from './auth-fetch';
-import { RedeemShareCodeResponse, ShareCodeResponse } from './api.type';
+import {
+  AccessGrant,
+  RedeemShareCodeResponse,
+  RevokeAccessResponse,
+  ShareCodeResponse,
+} from './api.type';
 
 export const AccessApi = {
+  /** Owner: clinics that can see this pet right now (US-04, D43). */
+  listGrants(petId: string) {
+    return authFetch<AccessGrant[]>(`/pets/${petId}/access-grants`);
+  },
+
+  /** Owner: end every active grant of one clinic, both kinds (D12). */
+  revokeClinic(petId: string, clinicId: string) {
+    return authFetch<RevokeAccessResponse>(
+      `/pets/${petId}/clinics/${clinicId}/access`,
+      { method: 'DELETE' },
+    );
+  },
+
   /**
    * Owner: create a 6-digit code for one pet (US-03 AC1).
    * durationDays must always be sent; null = unlimited (D41).
