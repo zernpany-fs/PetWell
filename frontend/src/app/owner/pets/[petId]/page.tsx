@@ -8,6 +8,7 @@ import { HealthRecordApi } from '@/lib/api/health-record.api';
 import { HealthRecord } from '@/lib/api/api.type';
 import { PhotoPlaceholder } from '@/components/shared/PhotoPlaceholder';
 import PetPhotoUpload from '@/components/features/pet/PetPhotoUpload';
+import GenerateShareCodeForm from '@/components/features/access/GenerateShareCodeForm';
 
 export default async function PetProfilePage({
   params,
@@ -72,6 +73,18 @@ export default async function PetProfilePage({
             )}
           </div>
         </div>
+      </div>
+
+      {/* V2 (D51): share code now; the access list + revoke (US-04) go here too. */}
+      <div className="bg-white border border-[#E6DFD3] rounded-2xl p-6 shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
+        <h3 className="font-display text-[#2D2A26] mb-1" style={{ fontSize: '20px' }}>
+          Clinic access
+        </h3>
+        <p className="text-[#6E675C] mb-4" style={{ fontSize: '14px' }}>
+          Clinics can only see {pet.name}&apos;s records after confirming an appointment
+          or when you give them a share code.
+        </p>
+        <GenerateShareCodeForm petId={pet.id} />
       </div>
 
       <div>

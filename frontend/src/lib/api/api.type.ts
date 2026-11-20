@@ -156,3 +156,11 @@ export type RedeemShareCodeResponse = {
   pet: { id: string; name: string; species: string };
   expiresAt: string | null; // null = unlimited access
 };
+
+// V2: an owner generates a share code (US-03 AC1). The code is shown
+// only once: the backend keeps just its hash (D26).
+export type ShareCodeResponse = {
+  code: string; // a string, so a leading 0 is kept ("048213")
+  durationDays: number | null; // access length once redeemed; null = unlimited
+  expiresAt: string; // when the code itself stops working (15 min, D7)
+};
