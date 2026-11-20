@@ -148,6 +148,7 @@ Existing pet, health-record and search endpoints now check access; see the impac
 |---|---|
 | `docs/v2/PetWell_Decision_Log.md` | **V2:** every access rule as a numbered decision (D1–D54), with the reason and findings from implementation |
 | `docs/v2/PetWell_User_Stories_Access_Control.md` | **V2:** user stories US-01–US-04 with acceptance criteria |
+| `docs/v2/PetWell_Change_Request.md` | **V2:** one-page change request — problem, scope, impact, risks, rollback |
 | `docs/v2/PetWell_Impact_Analysis.md` | **V2:** which endpoints, tables and screens the change touches |
 | `docs/v2/PetWell_Appointment_Grant_Flow.svg` | **V2:** how each appointment status creates, extends or ends access |
 | `docs/PetWell_API_Endpoints.md` / `.xlsx` | Every v1 endpoint, body, and auth requirement (new V2 endpoints: see the table above) |
