@@ -132,3 +132,29 @@ pnpm dev                     # → http://localhost:3000
 > There is no axios instance and no client-side token storage. `lib/api/auth-fetch.ts` pulls the access token from the next-auth session on the server and attaches the `Bearer` header, so the token never reaches the client bundle.
 
 See [`frontend/README.md`](./frontend/README.md) for the layer diagram and route inventory.
+
+## Deploy (Vercel)
+
+The live demo runs as **two Vercel projects** built from this one GitHub repo, plus a Prisma Postgres database created from Vercel Storage. There is no `vercel.json`; everything is set in each project's settings. Every push to `main` deploys both projects to production automatically.
+
+| | Frontend | API |
+|---|---|---|
+| Vercel project | `petwell` | `petwell-api` |
+| URL | https://petwell-zern.vercel.app | https://petwell-api-sandy.vercel.app |
+| Framework preset | Next.js | NestJS |
+| Root directory | `frontend` | `backend` |
+| Build command | default (`next build`) | `pnpm exec prisma generate && pnpm exec prisma migrate deploy && pnpm db:seed` |
+| Environment variables | `API_URL` (the API's URL), `AUTH_SECRET` | `DATABASE_URL`, `ACCESS_TOKEN_SECRET`, `ACCESS_TOKEN_EXPIRES_IN`, `SHARE_CODE_SECRET`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `PORT` |
+
+**Database.** `petwell-db` (Prisma Postgres, free tier) is connected to `petwell-api` only. Connecting it added the `DATABASE_*` variables; the app reads `DATABASE_URL`.
+
+**Why the API build command is custom:**
+- `prisma generate` — the generated client (`src/database/generated`) is not in git, so every build has to create it.
+- `prisma migrate deploy` — applies any new migration to the production database before the new code goes live. It only applies; it never resets data.
+- `pnpm db:seed` — makes sure the six demo clinics and their staff logins exist. The seed looks each one up first and only creates what is missing, so running it on every deploy is safe and does not overwrite changed passwords.
+
+**Things that bit us:**
+- Vercel compiles NestJS without `nest build`, so the `@/` import alias from `tsconfig.json` was never rewritten and the API crashed with `Cannot find module '@/…'`. All backend imports are relative for this reason (commit `c3b364d`). Do not reintroduce `@/` imports in `backend/`.
+- The frontend calls the API only from the server (Server Components and Server Actions), so the browser never talks to the API directly and `FRONTEND_URL` (CORS) is not needed in production.
+
+**To deploy your own copy:** import the repo into Vercel twice (once with root directory `backend`, once with `frontend`), create a Postgres database under Storage and connect it to the API project, set the variables above (secrets of at least 32 characters, see `backend/.env.example`), then set the frontend's `API_URL` to the API project's URL and redeploy the frontend.

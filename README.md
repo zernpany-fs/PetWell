@@ -4,6 +4,8 @@ Pet Health Passport & Appointment Management System — clinic-agnostic, portabl
 
 **Stack:** Next.js 16 · NestJS 11 · PostgreSQL · Prisma 7 · JWT · Cloudinary
 
+**Live demo:** https://petwell-zern.vercel.app (try the clinic side with `vet1@test.com` / `pass123`). How it is deployed: [SETUP.md → Deploy](SETUP.md#deploy-vercel).
+
 ## The idea
 
 In practice a pet's medical history lives inside whichever clinic wrote it. Change clinics and the history stays behind. PetWell inverts that: the **owner** holds the record, and clinics read the pet's full history and append to it. Every record is stamped with the clinic that authored it, so provenance is never lost.
