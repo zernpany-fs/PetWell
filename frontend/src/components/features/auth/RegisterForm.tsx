@@ -63,7 +63,11 @@ export default function RegisterForm({ clinics }: { clinics: Clinic[] }) {
   );
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form
+      method="post"
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4"
+    >
       <div>
         <label className="block text-[#2D2A26] mb-1.5" style={{ fontSize: '13px' }}>
           I am registering as
