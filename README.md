@@ -124,6 +124,8 @@ They create their own owners, pets and records on every run, in the dev database
 
 Pet owners are not seeded — register one through the UI. The seed is safe to re-run: it skips clinics and accounts that already exist, and never overwrites a password you have changed.
 
+**Postman:** [`docs/postman/PetWell_Core.postman_collection.json`](docs/postman/PetWell_Core.postman_collection.json) runs the main flow top to bottom — register an owner, create a pet, book, confirm and cancel an appointment, and check the clinic's access before and after. It saves every token and id it needs, and picks a random future slot so it can be run again.
+
 ## Demo path
 
 Register as an owner → add a pet → book an appointment at the clinic of `vet1@test.com` → sign in as `vet1@test.com` in a second browser and try to look the pet up under **Patients**: it is not found, because the clinic has no access yet → confirm the appointment → now the pet is found → add a vaccine record → back on the owner account, see that record appear in the passport labelled with the clinic → open the appointment to see the status history.
