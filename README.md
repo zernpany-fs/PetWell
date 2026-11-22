@@ -142,6 +142,8 @@ Sign in as `vet2@test.com` — a clinic with no appointment — and the same sea
 
 Existing pet, health-record and search endpoints now check access; see the impact analysis for what each one returns.
 
+To try them in Postman, import [`docs/v2/postman/PetWell_V2_Share.postman_collection.json`](docs/v2/postman/PetWell_V2_Share.postman_collection.json) and run it top to bottom (needs a registered owner `owner1@test.com` and the seeded clinic accounts). Each request saves the token or id the next one needs.
+
 ## Docs
 
 | File | What's in it |
