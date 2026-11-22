@@ -7,7 +7,12 @@ export default auth((req) => {
   const role = session?.user?.role;
   const path = nextUrl.pathname;
 
-  const isAuthPage = path === '/login' || path === '/register';
+  const isAuthPage = [
+    '/login',
+    '/register',
+    '/forgot-password',
+    '/reset-password',
+  ].includes(path);
   const isOwnerArea = path.startsWith('/owner');
   const isStaffArea = path.startsWith('/staff');
 

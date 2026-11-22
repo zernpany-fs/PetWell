@@ -12,7 +12,10 @@ export const FormInput = forwardRef<HTMLInputElement, Props>(
   ({ label, right, error, style, ...props }, ref) => {
     return (
       <div>
-        <label className="block text-[#2D2A26] mb-1.5" style={{ fontSize: '13px' }}>
+        <label
+          className="block text-[#2D2A26] mb-1.5"
+          style={{ fontSize: '13px' }}
+        >
           {label}
         </label>
         <div className="relative">
@@ -23,7 +26,9 @@ export const FormInput = forwardRef<HTMLInputElement, Props>(
             {...props}
           />
           {right && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2">{right}</div>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+              {right}
+            </div>
           )}
         </div>
         {error && (

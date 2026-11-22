@@ -28,6 +28,20 @@ export const AuthApi = {
     });
   },
 
+  forgotPassword(email: string) {
+    return apiFetch<MessageResponse>('/auth/forgot-password', {
+      method: 'POST',
+      body: { email },
+    });
+  },
+
+  resetPassword(token: string, password: string) {
+    return apiFetch<MessageResponse>('/auth/reset-password', {
+      method: 'POST',
+      body: { token, password },
+    });
+  },
+
   me(token: string) {
     return apiFetch<UserResponse>('/auth/me', { token });
   },
