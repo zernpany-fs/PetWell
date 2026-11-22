@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.3 |
-| **Date** | 2026-11-10 |
+| **Status** | Draft v0.4 |
+| **Date** | 2026-11-22 |
 | **Author** | Nopparuth Panyanithiwat |
-| **Related** | `PetWell_Decision_Log.md` (D1–D27), `PetWell_User_Stories_Access_Control.md` |
+| **Related** | `PetWell_Decision_Log.md` (D1–D54), `PetWell_User_Stories_Access_Control.md` |
 | **Based on** | Backend code at tag `v1.0` (read-only review of `schema.prisma`, pet, health-record and appointment modules) |
 
 ## 1. Summary
@@ -42,7 +42,16 @@ Not affected: owner endpoints for pets and appointments, `GET /clinics/:clinicId
 ## 4. New pieces
 
 - **`AccessService` (shared)** — one place for: checking a clinic's access to a pet, writing the audit log entry (D10), creating a grant from an appointment, and ending grants. Used by the pet, health-record and appointment services.
-- **New endpoints** — owner generates a share code; clinic redeems a share code; owner lists, revokes and extends a clinic's access (D27) (exact routes to be defined in the API doc).
+- **New endpoints** — routes as implemented in `backend/src/access/access.controller.ts`:
+
+  | Endpoint | Role | Purpose | Decisions |
+  |---|---|---|---|
+  | `POST /pets/:petId/share-codes` | Owner | Generate a 6-digit code (`durationDays`: 7, 30, 90 or `null`) | D7, D41, D45 |
+  | `POST /share-codes/redeem` | Clinic staff | Redeem a code → owner-share grant | D25, D40, D42 |
+  | `GET /pets/:petId/access-grants` | Owner | List active grants | D43 |
+  | `DELETE /pets/:petId/clinics/:clinicId/access` | Owner | Revoke all of a clinic's access | D12, D44 |
+  | `PATCH /access-grants/:grantId` | Owner | Extend an active owner-share grant from now | D27, D44 |
+
 - **New tables** (D17) — `PetAccessGrant`, `ShareCode`, `PetAccessLog`, `ShareCodeAttempt`.
 
 ## 5. Technical notes for the ER design

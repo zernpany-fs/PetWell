@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.5 |
-| **Date** | 2026-11-19 |
+| **Status** | Draft v0.6 |
+| **Date** | 2026-11-22 |
 | **Related** | `PetWell_Decision_Log.md` (decision IDs D1–D54) |
 | **Roles** | `OWNER`, `CLINIC_STAFF` (as in the system) |
 
@@ -47,8 +47,8 @@
 
 - **AC1** *Given* I am logged in as `OWNER` and own the pet, *when* I choose a duration (7 / 30 / 90 days or unlimited) and generate a code, *then* the system creates a 6-digit code that is valid for 15 minutes, can be used once, and is bound to that pet. (D3, D7)
 - **AC2** *Given* a clinic's staff enter a valid, unexpired, unused code, *when* they confirm, *then* the clinic gets owner-share access for the duration I chose, and the code can no longer be used. (D3, D5, D7)
-- **AC3** *Given* a code has expired or already been used, *when* staff enter it, *then* the system rejects it with a generic message that does not reveal whether the code ever existed.
-- **AC4** *Given* a staff account has entered 5 wrong codes, *when* it tries again, *then* that account is blocked from entering codes for 15 minutes. *Given* a clinic's staff have entered 10 wrong codes within one hour (across all accounts), *when* any staff of that clinic tries again, *then* code entry for the whole clinic is blocked for 15 minutes. (D14)
+- **AC3** *Given* a code is wrong, has expired, or has already been used, *when* staff enter it, *then* the system rejects it with the same `400 Invalid or expired code` response in every case, so it does not reveal whether the code ever existed. (D42)
+- **AC4** *Given* a staff account has entered 5 wrong codes within 15 minutes, *when* it tries again, *then* that account is blocked from entering codes for 15 minutes. *Given* a clinic's staff have entered 10 wrong codes within one hour (across all accounts), *when* any staff of that clinic tries again, *then* code entry for the whole clinic is blocked for 15 minutes. While blocked, the API returns `429` with the minutes left, and attempts are not counted. Codes that are not 6 digits are rejected by validation and not counted. (D14, D40, D42)
 - **AC5** *(edge case)* *Given* clinic X already has an active owner-share access to my pet, *when* X's staff redeem a new code I generated, *then* a new owner-share access is created with the new duration, and X keeps access while either one is active. (D27)
 
 ---
