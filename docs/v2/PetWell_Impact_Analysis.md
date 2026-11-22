@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.4 |
+| **Status** | Draft v0.5 |
 | **Date** | 2026-11-22 |
 | **Author** | Nopparuth Panyanithiwat |
 | **Related** | `PetWell_Decision_Log.md` (D1–D54), `PetWell_User_Stories_Access_Control.md` |
@@ -65,10 +65,20 @@ Not affected: owner endpoints for pets and appointments, `GET /clinics/:clinicId
 - Decided (D24): `PetAccessLog.grantId` is optional (null = viewed authored records only).
 - The JWT payload already carries `clinicId`, so the access check needs no extra lookup for the clinic.
 
-## 6. Frontend impact (not yet reviewed in detail)
+## 6. Frontend impact (as built)
 
-- `app/staff/pets/page.tsx` (search) and `app/staff/pets/[petId]/page.tsx` (pet detail) call endpoints whose responses change. They need empty-state and "no access" handling.
-- New owner screens: generate share code, list, revoke and extend clinic access (D27). New staff screen: enter share code.
+Changed in V2 (compared with tag `v1.0`):
+
+| Where | Change | Decisions |
+|---|---|---|
+| `app/owner/pets/[petId]/page.tsx` | New **Clinic access** card: `ClinicAccessList` (clinics with access, Change duration, Revoke) and `GenerateShareCodeForm` (choose 7 / 30 / 90 days or unlimited, code shown once with a countdown) | D51, D52 |
+| `app/staff/pets/page.tsx` | `RedeemShareCodeForm` ("Walk-in with a share code?") above the search; results tagged **Own records only** for `AUTHORED_ONLY` pets, with no owner contact; empty state says these pets match by name only | D38, D42, D54 |
+| `app/staff/pets/[petId]/page.tsx` | `AUTHORED_ONLY` view: name and species, a **Limited access** box and the clinic's own records, no owner data and no add-record form. `FULL` view shows owner contact | D9, D20, D53 |
+| `components/features/health-record/AddHealthRecordForm.tsx` | A `403` while adding a record (access ended while the page was open) shows a toast and reloads into the limited view | D35, D53 |
+| `lib/api/access.api.ts`, `lib/actions/access.action.ts`, `lib/schemas/access.schema.ts` | API calls, Server Actions and Zod schemas for the five new endpoints | — |
+| `lib/api/api.type.ts`, `lib/api/pet.api.ts` | `accessLevel` on pet responses, grant and share-code types | D33 |
+
+The browser never calls the API directly: every call above runs in a Server Component or Server Action, as in v1.
 
 ## 7. Out of scope for V2
 
