@@ -48,7 +48,12 @@ export default function AddHealthRecordForm({ petId }: { petId: string }) {
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-[#2D2A26] mb-1.5" style={{ fontSize: '13px' }}>Type</label>
+        <label
+          className="block text-[#2D2A26] mb-1.5"
+          style={{ fontSize: '13px' }}
+        >
+          Type
+        </label>
         <select
           value={recordType}
           onChange={(e) => setRecordType(e.target.value as RecordType)}
@@ -66,18 +71,41 @@ export default function AddHealthRecordForm({ petId }: { petId: string }) {
       />
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-[#2D2A26] mb-1.5" style={{ fontSize: '13px' }}>Record date</label>
+          <label
+            className="block text-[#2D2A26] mb-1.5"
+            style={{ fontSize: '13px' }}
+          >
+            Record date
+          </label>
           <DatePicker mode="date" value={recordDate} onChange={setRecordDate} />
         </div>
         <div>
-          <label className="block text-[#2D2A26] mb-1.5" style={{ fontSize: '13px' }}>Next due (optional)</label>
-          <DatePicker mode="date" value={nextDueDate} onChange={setNextDueDate} />
+          <label
+            className="block text-[#2D2A26] mb-1.5"
+            style={{ fontSize: '13px' }}
+          >
+            Next due (optional)
+          </label>
+          <DatePicker
+            mode="date"
+            value={nextDueDate}
+            onChange={setNextDueDate}
+          />
         </div>
       </div>
 
-      {error && <p className="text-[#C4534E]" style={{ fontSize: '13px' }}>{error}</p>}
+      {error && (
+        <p className="text-[#C4534E]" style={{ fontSize: '13px' }}>
+          {error}
+        </p>
+      )}
 
-      <button disabled={pending} onClick={submit} className="pw-btn-primary rounded-full px-6" style={{ minHeight: '44px' }}>
+      <button
+        disabled={pending}
+        onClick={submit}
+        className="pw-btn-primary rounded-full px-6"
+        style={{ minHeight: '44px' }}
+      >
         {pending ? 'Saving…' : 'Add record'}
       </button>
     </div>

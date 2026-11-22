@@ -26,8 +26,8 @@ export default async function StaffPetLookupPage({
         Patient Lookup
       </h2>
       <p className="text-[#6E675C] mt-1 mb-5">
-        Find pets your clinic has access to, through a confirmed appointment
-        or the owner&rsquo;s share code.
+        Find pets your clinic has access to, through a confirmed appointment or
+        the owner&rsquo;s share code.
       </p>
 
       <RedeemShareCodeForm />
@@ -70,9 +70,9 @@ export default async function StaffPetLookupPage({
             No pets match &ldquo;{term}&rdquo;
           </p>
           <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
-            You only see pets your clinic has access to. For a walk-in, ask
-            the owner for a share code. Pets you only wrote records for can
-            be found by pet name.
+            You only see pets your clinic has access to. For a walk-in, ask the
+            owner for a share code. Pets you only wrote records for can be found
+            by pet name.
           </p>
         </div>
       ) : (
@@ -104,10 +104,16 @@ export default async function StaffPetLookupPage({
                   )}
 
                   <div className="flex-1 min-w-0">
-                    <p className="font-display text-[#2D2A26] truncate" style={{ fontSize: '17px' }}>
+                    <p
+                      className="font-display text-[#2D2A26] truncate"
+                      style={{ fontSize: '17px' }}
+                    >
                       {pet.name}
                     </p>
-                    <p className="text-[#6E675C] truncate" style={{ fontSize: '13px' }}>
+                    <p
+                      className="text-[#6E675C] truncate"
+                      style={{ fontSize: '13px' }}
+                    >
                       {pet.species}
                       {pet.breed ? ` · ${pet.breed}` : ''}
                       {pet.birthDate

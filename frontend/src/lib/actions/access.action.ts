@@ -30,10 +30,7 @@ export async function generateShareCodeAction(
     };
   }
   try {
-    const shareCode = await AccessApi.generate(
-      petId,
-      parsed.data.durationDays,
-    );
+    const shareCode = await AccessApi.generate(petId, parsed.data.durationDays);
     // Nothing on the page changes until a clinic redeems the code,
     // so there is no revalidatePath here.
     return { success: true, shareCode };

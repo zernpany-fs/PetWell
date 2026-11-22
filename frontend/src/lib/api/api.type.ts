@@ -108,7 +108,11 @@ export type HealthRecord = {
 };
 
 export type AppointmentPet = { id: string; name: string; species: string };
-export type AppointmentClinic = { id: string; name: string; clinicType: ClinicType };
+export type AppointmentClinic = {
+  id: string;
+  name: string;
+  clinicType: ClinicType;
+};
 
 export type Appointment = {
   id: string;

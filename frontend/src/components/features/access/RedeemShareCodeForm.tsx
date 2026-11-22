@@ -54,7 +54,9 @@ export default function RedeemShareCodeForm() {
         <input
           aria-label="Share code"
           value={code}
-          onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+          onChange={(e) =>
+            setCode(e.target.value.replace(/\D/g, '').slice(0, 6))
+          }
           inputMode="numeric"
           autoComplete="one-time-code"
           placeholder="000000"
@@ -70,7 +72,11 @@ export default function RedeemShareCodeForm() {
         </button>
       </div>
       {error && (
-        <p role="alert" className="mt-2 text-[#C4534E]" style={{ fontSize: '13px' }}>
+        <p
+          role="alert"
+          className="mt-2 text-[#C4534E]"
+          style={{ fontSize: '13px' }}
+        >
           {error}
         </p>
       )}

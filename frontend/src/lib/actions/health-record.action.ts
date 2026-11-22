@@ -15,7 +15,11 @@ export async function createHealthRecordAction(
 ): Promise<ActionResult> {
   const parsed = createHealthRecordSchema.safeParse(input);
   if (!parsed.success) {
-    return { success: false, message: 'Please complete the record form.', code: 'VALIDATION_ERROR' };
+    return {
+      success: false,
+      message: 'Please complete the record form.',
+      code: 'VALIDATION_ERROR',
+    };
   }
   try {
     await HealthRecordApi.create(petId, parsed.data);
@@ -31,7 +35,8 @@ export async function createHealthRecordAction(
         code: 'NO_ACCESS',
       };
     }
-    if (error instanceof ApiError) return { success: false, message: error.message, code: 'API_ERROR' };
+    if (error instanceof ApiError)
+      return { success: false, message: error.message, code: 'API_ERROR' };
     throw error;
   }
   revalidatePath(`/owner/pets/${petId}`);

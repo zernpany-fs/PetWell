@@ -55,7 +55,9 @@ export default function ClinicAccessList({
   const [pending, startTransition] = useTransition();
   const [confirming, setConfirming] = useState<string | null>(null);
   const [editing, setEditing] = useState<string | null>(null);
-  const [editDuration, setEditDuration] = useState<Duration>(DEFAULT_SHARE_DURATION);
+  const [editDuration, setEditDuration] = useState<Duration>(
+    DEFAULT_SHARE_DURATION,
+  );
   const groups = groupByClinic(grants);
 
   function startEdit(grantId: string) {
@@ -66,7 +68,9 @@ export default function ClinicAccessList({
 
   function extend(grantId: string) {
     startTransition(async () => {
-      const r = await extendGrantAction(petId, grantId, { durationDays: editDuration });
+      const r = await extendGrantAction(petId, grantId, {
+        durationDays: editDuration,
+      });
       setEditing(null);
       if (r.success) toast.success(r.message ?? 'Access updated.');
       else toast.error(r.message);
@@ -125,7 +129,10 @@ export default function ClinicAccessList({
                     )}
                   </p>
                   {editing === g.id && (
-                    <div className="mt-2 flex flex-wrap items-center gap-2" style={{ fontSize: '12px' }}>
+                    <div
+                      className="mt-2 flex flex-wrap items-center gap-2"
+                      style={{ fontSize: '12px' }}
+                    >
                       <span className="text-[#6E675C]">From now:</span>
                       {SHARE_DURATION_OPTIONS.map((o) => (
                         <button

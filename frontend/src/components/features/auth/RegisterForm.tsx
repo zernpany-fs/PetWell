@@ -26,7 +26,9 @@ export default function RegisterForm({ clinics }: { clinics: Clinic[] }) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterInput>({ resolver: standardSchemaResolver(registerSchema) });
+  } = useForm<RegisterInput>({
+    resolver: standardSchemaResolver(registerSchema),
+  });
 
   function onSubmit(values: RegisterInput) {
     setFormError(null);
@@ -63,13 +65,12 @@ export default function RegisterForm({ clinics }: { clinics: Clinic[] }) {
   );
 
   return (
-    <form
-      method="post"
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4"
-    >
+    <form method="post" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <label className="block text-[#2D2A26] mb-1.5" style={{ fontSize: '13px' }}>
+        <label
+          className="block text-[#2D2A26] mb-1.5"
+          style={{ fontSize: '13px' }}
+        >
           I am registering as
         </label>
         <div className="flex gap-2">
@@ -79,8 +80,16 @@ export default function RegisterForm({ clinics }: { clinics: Clinic[] }) {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <FormInput label="First name" error={errors.firstName?.message} {...register('firstName')} />
-        <FormInput label="Last name" error={errors.lastName?.message} {...register('lastName')} />
+        <FormInput
+          label="First name"
+          error={errors.firstName?.message}
+          {...register('firstName')}
+        />
+        <FormInput
+          label="Last name"
+          error={errors.lastName?.message}
+          {...register('lastName')}
+        />
       </div>
 
       <FormInput label="Phone (optional)" {...register('phone')} />
@@ -111,7 +120,10 @@ export default function RegisterForm({ clinics }: { clinics: Clinic[] }) {
 
       {role === 'CLINIC_STAFF' && (
         <div>
-          <label className="block text-[#2D2A26] mb-1.5" style={{ fontSize: '13px' }}>
+          <label
+            className="block text-[#2D2A26] mb-1.5"
+            style={{ fontSize: '13px' }}
+          >
             Clinic
           </label>
           <select
@@ -132,7 +144,12 @@ export default function RegisterForm({ clinics }: { clinics: Clinic[] }) {
       {formError && (
         <div
           className="flex items-start gap-2 rounded-xl px-3 py-2.5 border"
-          style={{ backgroundColor: '#FEF2F2', borderColor: '#FECACA', color: '#C4534E', fontSize: '13px' }}
+          style={{
+            backgroundColor: '#FEF2F2',
+            borderColor: '#FECACA',
+            color: '#C4534E',
+            fontSize: '13px',
+          }}
         >
           <XCircle size={15} className="mt-0.5 shrink-0" />
           <span>{formError}</span>

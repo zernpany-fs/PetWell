@@ -50,7 +50,10 @@ export default async function PetProfilePage({
         </div>
         <div className="p-6">
           <div className="flex items-start justify-between gap-3">
-            <h2 className="font-display text-[#2D2A26]" style={{ fontSize: '26px' }}>
+            <h2
+              className="font-display text-[#2D2A26]"
+              style={{ fontSize: '26px' }}
+            >
               {pet.name}
             </h2>
             <Link href={`/owner/pets/${pet.id}/edit`} className="no-underline">
@@ -67,15 +70,27 @@ export default async function PetProfilePage({
             {pet.breed ? ` · ${pet.breed}` : ''}
             {pet.latestWeight ? ` · ${pet.latestWeight} kg` : ''}
           </p>
-          <div className="mt-3 grid sm:grid-cols-2 gap-x-6 gap-y-1" style={{ fontSize: '14px' }}>
+          <div
+            className="mt-3 grid sm:grid-cols-2 gap-x-6 gap-y-1"
+            style={{ fontSize: '14px' }}
+          >
             {pet.microchipNo && (
-              <p className="text-[#6E675C]">Microchip: <span className="text-[#2D2A26]">{pet.microchipNo}</span></p>
+              <p className="text-[#6E675C]">
+                Microchip:{' '}
+                <span className="text-[#2D2A26]">{pet.microchipNo}</span>
+              </p>
             )}
             {pet.chronicCondition && (
-              <p className="text-[#6E675C]">Condition: <span className="text-[#2D2A26]">{pet.chronicCondition}</span></p>
+              <p className="text-[#6E675C]">
+                Condition:{' '}
+                <span className="text-[#2D2A26]">{pet.chronicCondition}</span>
+              </p>
             )}
             {pet.drugAllergy && (
-              <p className="text-[#6E675C]">Allergy: <span className="text-[#2D2A26]">{pet.drugAllergy}</span></p>
+              <p className="text-[#6E675C]">
+                Allergy:{' '}
+                <span className="text-[#2D2A26]">{pet.drugAllergy}</span>
+              </p>
             )}
           </div>
         </div>
@@ -83,12 +98,15 @@ export default async function PetProfilePage({
 
       {/* V2 (D51, D52): who can see the pet, revoke, and share by code. */}
       <div className="bg-white border border-[#E6DFD3] rounded-2xl p-6 shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
-        <h3 className="font-display text-[#2D2A26] mb-1" style={{ fontSize: '20px' }}>
+        <h3
+          className="font-display text-[#2D2A26] mb-1"
+          style={{ fontSize: '20px' }}
+        >
           Clinic access
         </h3>
         <p className="text-[#6E675C] mb-4" style={{ fontSize: '14px' }}>
-          Clinics can only see {pet.name}&apos;s records after confirming an appointment
-          or when you give them a share code.
+          Clinics can only see {pet.name}&apos;s records after confirming an
+          appointment or when you give them a share code.
         </p>
         <ClinicAccessList petId={pet.id} grants={grants} />
         <div className="border-t border-[#E6DFD3] mt-4 pt-4">
@@ -97,13 +115,19 @@ export default async function PetProfilePage({
       </div>
 
       <div>
-        <h3 className="font-display text-[#2D2A26] mb-3" style={{ fontSize: '20px' }}>
+        <h3
+          className="font-display text-[#2D2A26] mb-3"
+          style={{ fontSize: '20px' }}
+        >
           Health passport
         </h3>
         {records.length === 0 ? (
-          <div className="bg-white border border-[#E6DFD3] rounded-2xl p-6 text-[#6E675C]" style={{ fontSize: '14px' }}>
-            No records yet. A clinic will add records after each visit — they&apos;ll all appear here,
-            from any clinic.
+          <div
+            className="bg-white border border-[#E6DFD3] rounded-2xl p-6 text-[#6E675C]"
+            style={{ fontSize: '14px' }}
+          >
+            No records yet. A clinic will add records after each visit —
+            they&apos;ll all appear here, from any clinic.
           </div>
         ) : (
           <div className="space-y-3">
@@ -114,7 +138,10 @@ export default async function PetProfilePage({
               >
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: r.recordType === 'VACCINE' ? '#E7F2EA' : '#E4EBF2' }}
+                  style={{
+                    backgroundColor:
+                      r.recordType === 'VACCINE' ? '#E7F2EA' : '#E4EBF2',
+                  }}
                 >
                   {r.recordType === 'VACCINE' ? (
                     <Syringe size={17} className="text-[#58996F]" />
@@ -125,15 +152,25 @@ export default async function PetProfilePage({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-[#2D2A26]">{r.description}</p>
-                    <span className="text-[#6E675C] shrink-0" style={{ fontSize: '13px' }}>
+                    <span
+                      className="text-[#6E675C] shrink-0"
+                      style={{ fontSize: '13px' }}
+                    >
                       {format(new Date(r.recordDate), 'd MMM yyyy')}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1.5 mt-1 text-[#6E675C]" style={{ fontSize: '13px' }}>
+                  <div
+                    className="flex items-center gap-1.5 mt-1 text-[#6E675C]"
+                    style={{ fontSize: '13px' }}
+                  >
                     <Building2 size={13} />
                     {r.clinic?.name ?? 'Clinic'}
                     {r.nextDueDate && (
-                      <span className="text-[#96701D]"> · next due {format(new Date(r.nextDueDate), 'd MMM yyyy')}</span>
+                      <span className="text-[#96701D]">
+                        {' '}
+                        · next due{' '}
+                        {format(new Date(r.nextDueDate), 'd MMM yyyy')}
+                      </span>
                     )}
                   </div>
                 </div>

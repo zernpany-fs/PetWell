@@ -61,7 +61,9 @@ export default function GenerateShareCodeForm({ petId }: { petId: string }) {
     setError(null);
     setExpired(false);
     startTransition(async () => {
-      const r = await generateShareCodeAction(petId, { durationDays: duration });
+      const r = await generateShareCodeAction(petId, {
+        durationDays: duration,
+      });
       if (r.success) setShareCode(r.shareCode);
       else setError(r.message);
     });
@@ -80,14 +82,18 @@ export default function GenerateShareCodeForm({ petId }: { petId: string }) {
         >
           {shareCode.code}
         </p>
-        <p className="flex items-center justify-center gap-1.5 text-[#96701D]" style={{ fontSize: '13px' }}>
+        <p
+          className="flex items-center justify-center gap-1.5 text-[#96701D]"
+          style={{ fontSize: '13px' }}
+        >
           <Timer size={13} />
           Expires in {formatCountdown(secondsLeft)} (at{' '}
           {format(new Date(shareCode.expiresAt), 'HH:mm')})
         </p>
         <p className="text-[#6E675C] mt-1" style={{ fontSize: '13px' }}>
-          Works once and gives the clinic {durationLabel(shareCode.durationDays)}.
-          This code will not be shown again.
+          Works once and gives the clinic{' '}
+          {durationLabel(shareCode.durationDays)}. This code will not be shown
+          again.
         </p>
       </div>
     );
@@ -98,7 +104,11 @@ export default function GenerateShareCodeForm({ petId }: { petId: string }) {
       <p className="text-[#2D2A26] mb-2" style={{ fontSize: '14px' }}>
         How long can the clinic see the record?
       </p>
-      <div role="radiogroup" aria-label="Access duration" className="flex flex-wrap gap-2 mb-4">
+      <div
+        role="radiogroup"
+        aria-label="Access duration"
+        className="flex flex-wrap gap-2 mb-4"
+      >
         {SHARE_DURATION_OPTIONS.map((o) => {
           const selected = o.value === duration;
           return (
@@ -128,7 +138,11 @@ export default function GenerateShareCodeForm({ petId }: { petId: string }) {
         style={{ minHeight: '44px' }}
       >
         <KeyRound size={15} />
-        {pending ? 'Creating…' : expired ? 'Generate new code' : 'Generate share code'}
+        {pending
+          ? 'Creating…'
+          : expired
+            ? 'Generate new code'
+            : 'Generate share code'}
       </button>
       {expired && (
         <p className="mt-2 text-[#6E675C]" style={{ fontSize: '13px' }}>
@@ -136,7 +150,11 @@ export default function GenerateShareCodeForm({ petId }: { petId: string }) {
         </p>
       )}
       {error && (
-        <p role="alert" className="mt-2 text-[#C4534E]" style={{ fontSize: '13px' }}>
+        <p
+          role="alert"
+          className="mt-2 text-[#C4534E]"
+          style={{ fontSize: '13px' }}
+        >
           {error}
         </p>
       )}
