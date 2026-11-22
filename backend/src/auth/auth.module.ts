@@ -5,11 +5,13 @@ import { AccessTokenService } from './access-token.service';
 import { UserModule } from '../user/user.module';
 import { JwtModule } from '../infrastructure/jwt/jwt.module';
 import { HashModule } from '../infrastructure/hash/hash.module';
+import { MailModule } from '../infrastructure/mail/mail.module';
+import { PasswordResetService } from './password-reset.service';
 
 @Module({
-  imports: [UserModule, JwtModule, HashModule],
+  imports: [UserModule, JwtModule, HashModule, MailModule],
   controllers: [AuthController],
-  providers: [AuthService, AccessTokenService],
+  providers: [AuthService, AccessTokenService, PasswordResetService],
   exports: [AccessTokenService],
 })
 export class AuthModule {}

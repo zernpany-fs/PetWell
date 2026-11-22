@@ -11,6 +11,9 @@ const envSchema = z.object({
   CLOUDINARY_API_SECRET: z.string().min(1),
   FRONTEND_URL: z.url().optional(),
   SHARE_CODE_SECRET: z.string().min(32),
+  // D61: optional. Without a key, reset links are logged (not in production).
+  RESEND_API_KEY: z.string().min(1).optional(),
+  MAIL_FROM: z.string().min(1).optional(),
 });
 
 export function validate(config: Record<string, unknown>) {

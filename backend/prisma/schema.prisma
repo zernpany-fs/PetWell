@@ -65,11 +65,12 @@ model User {
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz()
 
-  pets              Pet[]
-  createdRecords    HealthRecord[]         @relation("RecordAuthor")
-  statusChanges     AppointmentStatusLog[]
-  accessLogs        PetAccessLog[]
-  shareCodeAttempts ShareCodeAttempt[]
+  pets                Pet[]
+  createdRecords      HealthRecord[]         @relation("RecordAuthor")
+  statusChanges       AppointmentStatusLog[]
+  accessLogs          PetAccessLog[]
+  shareCodeAttempts   ShareCodeAttempt[]
+  passwordResetTokens PasswordResetToken[]
 
   @@map("users")
 }
@@ -245,4 +246,18 @@ model ShareCodeAttempt {
   @@index([userId, attemptedAt])
   @@index([clinicId, attemptedAt])
   @@map("share_code_attempts")
+}
+
+// Password reset (D56): only the SHA-256 hash of the emailed token is stored.
+model PasswordResetToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz()
+  usedAt    DateTime? @map("used_at") @db.Timestamptz()
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@index([userId, createdAt])
+  @@map("password_reset_tokens")
 }

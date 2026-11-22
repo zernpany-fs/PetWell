@@ -15,10 +15,17 @@ import { RegisterDto } from './dto/register.dto';
 import { RegisterClinicStaffDto } from './dto/register-clinic-staff.dto';
 import { LoginDto } from './dto/login.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { PasswordResetService } from './password-reset.service';
+import { FORGOT_PASSWORD_MESSAGE } from './password-reset';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly passwordResetService: PasswordResetService,
+  ) {}
 
   @Public()
   @Post('register')
@@ -41,6 +48,28 @@ export class AuthController {
   @Post('login')
   login(@Body() dto: LoginDto): Promise<LoginResponseDto> {
     return this.authService.login(dto);
+  }
+
+  // US-07 AC1, D57: same answer whether or not the email has an account.
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('forgot-password')
+  async forgotPassword(
+    @Body() dto: ForgotPasswordDto,
+  ): Promise<MessageResponseDto> {
+    await this.passwordResetService.requestReset(dto.email);
+    return { message: FORGOT_PASSWORD_MESSAGE };
+  }
+
+  // US-07 AC3, AC4 (D59)
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('reset-password')
+  async resetPassword(
+    @Body() dto: ResetPasswordDto,
+  ): Promise<MessageResponseDto> {
+    await this.passwordResetService.resetPassword(dto.token, dto.password);
+    return { message: 'Password changed. You can log in now.' };
   }
 
   @Get('me')
