@@ -78,12 +78,13 @@ See [`SETUP.md`](./SETUP.md) for the full dependency breakdown and Prisma 7 note
 
 ## Tests
 
-Two layers, each checking what the other cannot:
+Three layers, each checking what the others cannot:
 
 | Layer | What it checks | Needs |
 |---|---|---|
 | **Vitest** (`backend`, `pnpm test`) | Unit tests of the access rules, plus integration tests that call the real services on a real database: every denied case (404 / 403 / 400 / 429), grants created and ended by appointment status, two status changes at the same moment (409), audit log failure (500) | A separate `petwell_test` database |
 | **Python scripts** (`scripts/`) | The same flows end to end over HTTP — JWT, role guards, status codes — against the running API | Backend running on port 8000, `psql`, seeded staff `vet1`–`vet6` |
+| **Vitest + Testing Library** (`frontend`, `pnpm test`) | The V2 screens on their own: share-code countdown and expiry, duration choices, the 6-digit check, revoke confirmation and per-clinic revoke, Change only on shared access | Nothing — Server Actions and navigation are mocked |
 
 ### Vitest — one-time setup
 
@@ -108,6 +109,15 @@ python3 scripts/v2_api_share_check.py
 ```
 
 They create their own owners, pets and records on every run, in the dev database.
+
+### Frontend component tests
+
+```bash
+cd frontend
+pnpm test                     # 15 tests, about a second
+```
+
+Each test is named after the story or decision it checks (US-03, US-04, D7, D12, D27, D40–D42, D51–D52). To check that they catch real mistakes, four bugs were put into the components one at a time (code not hidden at 0, Change offered on appointment access, revoke sent a grant id instead of the clinic, no 6-digit check); each one made a test fail.
 
 ## Seeded accounts
 
@@ -174,6 +184,7 @@ To try them in Postman, import [`docs/v2/postman/PetWell_V2_Share.postman_collec
 **V2** (merged into `main`):
 - Backend: access rules enforced on every pet, health-record and search endpoint; share code, revoke and extend endpoints; audit log; 88 Vitest tests and two API check scripts, all passing.
 - Frontend: owner generates a share code, sees which clinics have access, changes a share's duration and revokes; staff redeem a code; the staff pet page and search show limited access (own records only) and handle a 403 on new records. Backend and frontend typecheck.
-- Known gaps: frontend has no automated tests (V2 screens were checked by hand in the browser); the owner's access list updates on reload, not live; backend `pnpm lint` does not run (ESLint is not installed). The owner audit-log view (US-06) is in the backlog.
+- Tests and tooling: 15 frontend component tests for the V2 screens (`frontend`, `pnpm test`); full pages are still checked by hand in the browser. `pnpm lint` runs in the backend; Prettier runs in both apps.
+- Known gaps: no end-to-end browser tests; the owner's access list updates on reload, not live. The owner audit-log view (US-06) is in the backlog.
 
 Deliberately out of scope: admin module, password reset, telemedicine, payments, community features.
