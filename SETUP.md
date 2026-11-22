@@ -144,7 +144,7 @@ The live demo runs as **two Vercel projects** built from this one GitHub repo, p
 | Framework preset | Next.js | NestJS |
 | Root directory | `frontend` | `backend` |
 | Build command | default (`next build`) | `pnpm exec prisma generate && pnpm exec prisma migrate deploy && pnpm db:seed` |
-| Environment variables | `API_URL` (the API's URL), `AUTH_SECRET` | `DATABASE_URL`, `ACCESS_TOKEN_SECRET`, `ACCESS_TOKEN_EXPIRES_IN`, `SHARE_CODE_SECRET`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `PORT` |
+| Environment variables | `API_URL` (the API's URL), `AUTH_SECRET` | `DATABASE_URL`, `ACCESS_TOKEN_SECRET`, `ACCESS_TOKEN_EXPIRES_IN`, `SHARE_CODE_SECRET`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `PORT`; for password-reset email also `RESEND_API_KEY`, `FRONTEND_URL` (and optionally `MAIL_FROM`) |
 
 **Database.** `petwell-db` (Prisma Postgres, free tier) is connected to `petwell-api` only. Connecting it added the `DATABASE_*` variables; the app reads `DATABASE_URL`.
 
@@ -155,6 +155,7 @@ The live demo runs as **two Vercel projects** built from this one GitHub repo, p
 
 **Things that bit us:**
 - Vercel compiles NestJS without `nest build`, so the `@/` import alias from `tsconfig.json` was never rewritten and the API crashed with `Cannot find module '@/…'`. All backend imports are relative for this reason (commit `c3b364d`). Do not reintroduce `@/` imports in `backend/`.
-- The frontend calls the API only from the server (Server Components and Server Actions), so the browser never talks to the API directly and `FRONTEND_URL` (CORS) is not needed in production.
+- The frontend calls the API only from the server (Server Components and Server Actions), so the browser never talks to the API directly and CORS does not matter in production. `FRONTEND_URL` is still needed on the API once password-reset email is on: the link in the email is built from it, and without it the link points to `localhost:3000`.
+- Password-reset email (D61) is off until `RESEND_API_KEY` is set on `petwell-api`; until then the forgot-password page answers normally but sends nothing. Without a verified domain in Resend, mail is delivered only to the Resend account's own address.
 
 **To deploy your own copy:** import the repo into Vercel twice (once with root directory `backend`, once with `frontend`), create a Postgres database under Storage and connect it to the API project, set the variables above (secrets of at least 32 characters, see `backend/.env.example`), then set the frontend's `API_URL` to the API project's URL and redeploy the frontend.

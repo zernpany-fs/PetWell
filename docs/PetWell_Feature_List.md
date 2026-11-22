@@ -22,6 +22,7 @@ Legend: **[Core]** = MVP / required for grading · **[Stretch]** = nice-to-have 
 - ✅ **[Core]** Global JWT `AuthGuard` — protected-by-default, `@Public()` to opt out
 - ✅ **[Core]** Role-based access control — 2 roles via `@Roles` + `RolesGuard`
 - ✅ **[Core]** Password hashing (bcrypt, salt 12); unique email enforced
+- ✅ **[Added 2026-11-22]** Forgot / reset password by emailed link — single use, 30 minutes, max 3 per hour (`POST /auth/forgot-password`, `POST /auth/reset-password`; see `PetWell_Password_Reset.md`)
 - ⬜ **[Stretch]** Email verification · refresh token rotation
 
 ---
@@ -110,7 +111,7 @@ Legend: **[Core]** = MVP / required for grading · **[Stretch]** = nice-to-have 
 ## 5. Explicitly Out of Scope
 
 - Admin module / dashboard / user management UI
-- Forgot / reset / change password
+- Change password while logged in (forgot / reset was added 2026-11-22)
 - Telemedicine · payment gateway · community features · specialist-doctor booking
 
 ---

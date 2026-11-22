@@ -45,7 +45,18 @@ There is no way back into an account after a forgotten password. The SRS lists F
 | Backend | `POST /auth/forgot-password`, `POST /auth/reset-password` (both public); `PasswordResetService`; `MailModule` / `MailService`; env `RESEND_API_KEY`, `MAIL_FROM` (optional) |
 | Frontend | Link on the login page; pages `/forgot-password` and `/reset-password`; Server Actions and Zod schemas |
 
-## 5. Out of scope
+## 5. Verification (2026-11-22)
+
+- **Backend (Vitest, `petwell_test`)**: 14 new tests — 3 unit (token format, hash, link) and 11 integration covering AC1–AC6, a replaced link, an account made inactive after the request, and two resets with the same link at once (only one wins). Three deliberate bugs (no hourly limit, older links not ended, no compare-and-set) each made a test fail. Full backend suite 102/102.
+- **Frontend (Vitest + Testing Library)**: 6 new component tests (email check, same message, password rule, confirm match, token sent, bad-link message). Two deliberate bugs (no confirm check, no redirect) each made a test fail. Full frontend suite 21/21.
+- **By hand, in the browser**: login → Forgot password? → message → link from the backend log → mismatched confirm rejected → new password set → redirected to login → old password refused, new one accepted → same link again refused with "Get a new link" → reset page without a token explains what to do → logged-in users are sent to their dashboard → unknown email gets the same message → 4th request in an hour sends nothing.
+
+## 6. Known limits
+
+- The response time of `forgot-password` can differ slightly between known and unknown emails (a known one writes a token and sends email). The message is identical (D57); hiding the timing too would need a background queue.
+- Existing sessions are not ended by a reset (D60).
+
+## 7. Out of scope
 
 - Change password while logged in
 - Ending existing sessions after a reset (D60)
