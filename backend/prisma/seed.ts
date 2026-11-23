@@ -116,15 +116,40 @@ async function main() {
   const password = await bcrypt.hash(STAFF_PASSWORD, SALT_ROUNDS);
   const summary: string[] = [];
 
-  for (const { staff, ...clinicData } of clinics) {
+  for (const { staff, name: baseName, ...rest } of clinics) {
+    // D67: the shown name starts with the login it belongs to, e.g.
+    // "(vet1) โรงพยาบาลสัตว์รักษ์เพื่อน", so demo visitors can tell which
+    // account runs which clinic.
+    const clinicData = {
+      ...rest,
+      name: `(${staff.email.split('@')[0]}) ${baseName}`,
+    };
+
     // Idempotent on both halves: re-running must not duplicate a clinic, and
-    // must not reset a password the user has since changed.
-    let clinic = await prisma.clinic.findFirst({
-      where: { name: clinicData.name },
+    // must not reset a password the user has since changed. Find the clinic
+    // through its staff account first, so a renamed clinic is still found.
+    const existingStaff = await prisma.user.findUnique({
+      where: { email: staff.email },
     });
+    let clinic = existingStaff?.clinicId
+      ? await prisma.clinic.findUnique({
+          where: { id: existingStaff.clinicId },
+        })
+      : await prisma.clinic.findFirst({
+          where: { name: { in: [clinicData.name, baseName] } },
+        });
 
     if (clinic) {
       console.log(`  clinic exists   ${clinicData.name}`);
+      // D67: rename once from the old seed name; a name changed by staff
+      // is left alone.
+      if (clinic.name === baseName) {
+        clinic = await prisma.clinic.update({
+          where: { id: clinic.id },
+          data: { name: clinicData.name },
+        });
+        console.log(`    renamed       ${baseName} -> ${clinicData.name}`);
+      }
       // D66: give an existing clinic its demo photo only if it has none, so
       // a photo uploaded by staff is never overwritten on the next deploy.
       const { count } = await prisma.clinic.updateMany({
@@ -136,10 +161,6 @@ async function main() {
       clinic = await prisma.clinic.create({ data: clinicData });
       console.log(`  clinic created  ${clinicData.name}`);
     }
-
-    const existingStaff = await prisma.user.findUnique({
-      where: { email: staff.email },
-    });
 
     if (existingStaff) {
       console.log(`    staff exists  ${staff.email}`);

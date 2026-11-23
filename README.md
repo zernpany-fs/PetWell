@@ -125,12 +125,12 @@ Each test is named after the story or decision it checks (US-03, US-04, US-07, D
 
 | Email | Clinic |
 |---|---|
-| `vet1@test.com` | โรงพยาบาลสัตว์รักษ์เพื่อน |
-| `vet2@test.com` | คลินิกสัตว์เลี้ยงพิเศษ Exotic Care |
-| `vet3@test.com` | ศูนย์ฉุกเฉินสัตว์ 24 ชม. PetER |
-| `vet4@test.com` | โรงพยาบาลสัตว์เชียงใหม่ |
-| `vet5@test.com` | คลินิกรักษาสัตว์บ้านหมอหมา |
-| `vet6@test.com` | Exotic Vet Studio ภูเก็ต |
+| `vet1@test.com` | (vet1) โรงพยาบาลสัตว์รักษ์เพื่อน |
+| `vet2@test.com` | (vet2) คลินิกสัตว์เลี้ยงพิเศษ Exotic Care |
+| `vet3@test.com` | (vet3) ศูนย์ฉุกเฉินสัตว์ 24 ชม. PetER |
+| `vet4@test.com` | (vet4) โรงพยาบาลสัตว์เชียงใหม่ |
+| `vet5@test.com` | (vet5) คลินิกรักษาสัตว์บ้านหมอหมา |
+| `vet6@test.com` | (vet6) Exotic Vet Studio ภูเก็ต |
 
 Pet owners are not seeded — register one through the UI. The seed is safe to re-run: it skips clinics and accounts that already exist, and never overwrites a password you have changed.
 
@@ -162,7 +162,7 @@ To try them in Postman, import [`docs/v2/postman/PetWell_V2_Share.postman_collec
 
 | File | What's in it |
 |---|---|
-| `docs/PetWell_Clinic_Photo.md` | Clinic photo: user story US-08, acceptance criteria and decisions D64–D66 (D65: file checks on every image upload) |
+| `docs/PetWell_Clinic_Photo.md` | Clinic photo: user story US-08, acceptance criteria and decisions D64–D67 (D65: file checks on every image upload; D67: demo clinic names) |
 | `docs/PetWell_Password_Reset.md` | Forgot / reset password: user story US-07, acceptance criteria and decisions D55–D63 (D63: password rule) |
 | `docs/v2/PetWell_Decision_Log.md` | **V2:** every access rule as a numbered decision (D1–D54), with the reason and findings from implementation |
 | `docs/v2/PetWell_User_Stories_Access_Control.md` | **V2:** user stories US-01–US-04 with acceptance criteria |

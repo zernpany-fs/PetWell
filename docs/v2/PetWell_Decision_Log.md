@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Status** | Draft v1.1 |
-| **Date** | 2026-11-23 (v1.1: index of D55–D66, section 6) |
+| **Date** | 2026-11-23 (v1.1: index of D55–D67, section 6) |
 | **Author** | Nopparuth Panyanithiwat |
 | **Change** | Clinics can no longer read any pet's records by default. Access comes from a confirmed appointment or from the owner's explicit share. |
 
@@ -110,4 +110,4 @@ Decision numbers are shared across PetWell. Decisions for later changes are writ
 | IDs | Change | Topics | Full text |
 |---|---|---|---|
 | D55–D63 | Password reset (US-07, 2026-11-22) and password rule (2026-11-23) | D55 scope · D56 reset token · D57 forgot-password response · D58 request limit · D59 reset rules · D60 sessions after a reset · D61 sending email · D62 screens · D63 password rule | [`../PetWell_Password_Reset.md`](../PetWell_Password_Reset.md), section 3 |
-| D64–D66 | Clinic photo (US-08, 2026-11-23) | D64 who can change a clinic photo · D65 upload checks in the API (all image uploads) · D66 demo photos | [`../PetWell_Clinic_Photo.md`](../PetWell_Clinic_Photo.md), section 3 |
+| D64–D67 | Clinic photo (US-08, 2026-11-23) and demo clinic names | D64 who can change a clinic photo · D65 upload checks in the API (all image uploads) · D66 demo photos · D67 demo clinic names | [`../PetWell_Clinic_Photo.md`](../PetWell_Clinic_Photo.md), section 3 |

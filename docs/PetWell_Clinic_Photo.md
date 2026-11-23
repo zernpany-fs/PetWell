@@ -31,6 +31,7 @@
 | D64 | Who can change a clinic photo | Any `CLINIC_STAFF` of that clinic (`user.clinicId` = `:clinicId`), the same rule as editing the clinic profile. A new upload replaces the old photo. No "remove photo" action. The check runs before the upload, so a refused request stores nothing on Cloudinary. | There is no clinic-admin role; staff already edit the clinic's name and address. Removing a photo adds a case nobody asked for. |
 | D65 | Upload checks in the API | Every image upload — clinic photo, pet photo, avatar, cover — goes through `ImageFilePipe`: a file must be present, have an `image/*` type and be at most **10 MB** (same limit as the form). Otherwise `400` before Cloudinary is called. Stored as on pets: converted to jpg, at most 1600 px. Health-record attachments are not covered (see Known limits). | Before this, only the form checked files; a non-image sent straight to the API reached Cloudinary and came back as a `500`. |
 | D66 | Demo photos | The seed sets `photoUrl` for the 6 demo clinics to photos hot-linked from Unsplash (`images.unsplash.com`, free under the Unsplash License), **only when `photoUrl` is null**. `images.unsplash.com` is allowed in `next.config.ts`. Photos with a real business name, logo or phone number were not used. | Gives the live demo real-looking clinics without the build depending on Cloudinary. "Only when null" keeps staff uploads across redeploys. Real branding on a fictional clinic would look like impersonation. |
+| D67 | Demo clinic names (2026-11-23) | Each seeded clinic's name starts with the login that runs it, e.g. `(vet1) โรงพยาบาลสัตว์รักษ์เพื่อน`. The seed finds an existing clinic through its staff account (then by name), and renames it **once**, only while it still has the old seed name; a name changed by staff is left alone. | Demo visitors can see which login belongs to which clinic. Looking clinics up by name alone would have created 6 duplicate clinics on the next deploy after a rename. |
 
 ## 4. Changes
 
@@ -46,7 +47,7 @@
 - **Frontend (Vitest)**: 5 component tests (photo shown with the clinic name, placeholder without one; upload sends `photo` and refreshes, non-image refused before upload, API error shown). Full suite 40/40.
 - **Deliberate bugs**: no ownership check, a 1 GB size limit, and always showing the placeholder each made tests fail.
 - **Over HTTP (local backend)**: owner → 403; vet2 on vet1's clinic → 403; text file → 400; no file → 400; text file to pet photo, avatar and cover → 400 (was 500).
-- **Seed**: first run added photos to the 6 clinics; second run changed nothing.
+- **Seed**: first run added photos to the 6 clinics; second run changed nothing. D67: on the dev database the first run renamed the 6 clinics and the second changed nothing; on an empty database the first run created 6 clinics and the second created none.
 - **By hand, in the browser (localhost)**: vet1 → Clinic Profile shows the photo and **Change photo** → upload replaces it; owner → clinic list and detail show the photos.
 - API scripts 27/27 and 35/35; `next build` passes.
 
