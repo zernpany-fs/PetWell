@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ShieldCheck, CalendarDays, Bell } from 'lucide-react';
 import { PublicHeader } from '@/components/layout/PublicHeader';
-import { PhotoPlaceholder } from '@/components/shared/PhotoPlaceholder';
+import Image from 'next/image';
 
 export default function LandingPage() {
   return (
@@ -19,10 +19,15 @@ export default function LandingPage() {
               </p>
               <h1
                 className="font-display text-pw-ink mb-5"
-                style={{ fontSize: '52px', lineHeight: 1.1 }}
+                style={{
+                  fontSize: '52px',
+                  lineHeight: 1.1,
+                  fontWeight: 500,
+                  letterSpacing: '-0.015em',
+                }}
               >
                 Your pet&apos;s health,{' '}
-                <span className="italic text-pw-coral">wherever you go.</span>
+                <span className="text-pw-coral">wherever you go.</span>
               </h1>
               <p
                 className="text-pw-muted mb-8 max-w-md"
@@ -52,10 +57,16 @@ export default function LandingPage() {
             </div>
             <div className="order-first lg:order-last relative">
               <div className="hero-wash rounded-[24px] p-3">
-                <PhotoPlaceholder
-                  type="pet"
-                  className="w-full aspect-[4/3] rounded-[20px]"
-                />
+                <div className="relative w-full aspect-[4/3] rounded-[20px] overflow-hidden bg-pw-sand">
+                  <Image
+                    src="https://images.unsplash.com/photo-1623387641168-d9803ddd3f35?w=1200&h=900&fit=crop&auto=format"
+                    alt="A dog and a cat lying together on the grass"
+                    fill
+                    priority
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
               </div>
               <span
                 className="pw-stick"
