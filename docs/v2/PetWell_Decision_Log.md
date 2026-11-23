@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Status** | Draft v1.0 |
-| **Date** | 2026-11-20 |
+| **Status** | Draft v1.1 |
+| **Date** | 2026-11-23 (v1.1: index of D55–D62, section 6) |
 | **Author** | Nopparuth Panyanithiwat |
 | **Change** | Clinics can no longer read any pet's records by default. Access comes from a confirmed appointment or from the owner's explicit share. |
 
@@ -102,3 +102,11 @@ The original design let any clinic search and read the full history of every pet
 - Owner-facing history of ended grants (D43 follow-up)
 - Logging denied attempts to open a pet, e.g. to spot a clinic probing ids (D32 follow-up)
 - Health record edit history: who changed what and when, with previous values kept (today only `createdById` and `updatedAt` are stored)
+
+## 6. Decisions in other documents
+
+Decision numbers are shared across PetWell. Decisions for later changes are written in that change's own document and listed here so every number can be found from this log.
+
+| IDs | Change | Topics | Full text |
+|---|---|---|---|
+| D55–D62 | Password reset (US-07, 2026-11-22) | D55 scope · D56 reset token · D57 forgot-password response · D58 request limit · D59 reset rules · D60 sessions after a reset · D61 sending email · D62 screens | [`../PetWell_Password_Reset.md`](../PetWell_Password_Reset.md), section 3 |
