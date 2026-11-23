@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -7,12 +6,13 @@
 
 /* PetWell design system (from wireframe) */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* D69: Sarabun for text, Prompt for headings; both cover Thai and Latin. */
+  font-family: var(--font-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background-color: var(--color-pw-page);
   color: var(--color-pw-ink);
 }
 .font-display {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display), var(--font-body), sans-serif;
   font-weight: 600;
 }
 
@@ -63,10 +63,10 @@ body {
 /* PetWell colour tokens (D69). Components use these, never raw hex. */
 @theme {
   --color-pw-ink: #2D2A26;
-  --color-pw-muted: #6E675C;
-  --color-pw-faint: #A39B8D;
-  --color-pw-faint-2: #8B8474;
-  --color-pw-subtle: #9A9284;
+  --color-pw-muted: #5F584D;
+  --color-pw-faint: #7A7266;
+  --color-pw-faint-2: #736B5F;
+  --color-pw-subtle: #776F63;
   --color-pw-subtle-2: #B5AEA1;
   --color-pw-line: #E6DFD3;
   --color-pw-sand: #F1ECE3;
@@ -75,23 +75,23 @@ body {
   --color-pw-page-2: #F7F4EE;
   --color-pw-page-3: #F7F5F0;
   --color-pw-white: #FFFFFF;
-  --color-pw-primary: #5E86AD;
-  --color-pw-primary-hover: #4A7196;
-  --color-pw-primary-mid: #46709A;
-  --color-pw-primary-strong: #40638A;
-  --color-pw-primary-strong-2: #3F6489;
-  --color-pw-primary-dark: #3A5F86;
+  --color-pw-primary: #3A6890;
+  --color-pw-primary-hover: #305A80;
+  --color-pw-primary-mid: #335E85;
+  --color-pw-primary-strong: #2F5679;
+  --color-pw-primary-strong-2: #2F5679;
+  --color-pw-primary-dark: #284B6C;
   --color-pw-primary-tint: #E4EBF2;
   --color-pw-primary-tint-2: #EEF3F8;
   --color-pw-primary-tint-3: #F4F7FA;
-  --color-pw-violet: #8B7FD1;
-  --color-pw-violet-strong: #6F63BE;
+  --color-pw-violet: #6B5FB5;
+  --color-pw-violet-strong: #5A4EA8;
   --color-pw-violet-tint: #EFEBF8;
-  --color-pw-coral: #E58A6F;
+  --color-pw-coral: #B4532F;
   --color-pw-coral-tint: #FBEDE7;
-  --color-pw-success: #58996F;
+  --color-pw-success: #3F7A52;
   --color-pw-success-tint: #E7F2EA;
-  --color-pw-warning: #C08A2D;
+  --color-pw-warning: #9A6A12;
   --color-pw-warning-strong: #B45309;
   --color-pw-warning-text: #96701D;
   --color-pw-warning-ink: #6B5414;
@@ -100,7 +100,7 @@ body {
   --color-pw-warning-soft: #F8EEDB;
   --color-pw-warning-line: #EAD9B0;
   --color-pw-warning-line-2: #FDE68A;
-  --color-pw-danger: #C4534E;
+  --color-pw-danger: #B23B36;
   --color-pw-danger-tint: #FEF2F2;
   --color-pw-danger-tint-2: #FEE2E2;
   --color-pw-danger-line: #FECACA;
@@ -110,9 +110,9 @@ body {
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-body);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-display);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);

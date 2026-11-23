@@ -126,7 +126,7 @@ export default async function StaffDashboardPage() {
                     aria-label={`Open health records for ${s.pet?.name ?? 'this pet'}`}
                   >
                     <span
-                      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 bg-white border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors"
+                      className="min-h-11 inline-flex items-center justify-center inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 bg-white border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors"
                       style={{ fontSize: '12px' }}
                     >
                       <FileText size={13} /> Records

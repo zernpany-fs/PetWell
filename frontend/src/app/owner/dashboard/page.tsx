@@ -35,7 +35,7 @@ export default async function OwnerDashboardPage() {
       <div>
         <h2
           className="font-display text-pw-ink"
-          style={{ fontSize: '28px' }}
+          style={{ fontSize: 'clamp(22px, 6vw, 28px)', overflowWrap: 'anywhere' }}
         >
           Welcome back, {user?.firstName}
         </h2>

@@ -93,7 +93,7 @@ export function AppShell({
         </div>
       </aside>
 
-      <div className="flex-1 md:ml-[230px] flex flex-col min-h-screen">
+      <div className="flex-1 min-w-0 md:ml-[230px] flex flex-col min-h-screen">
         <header className="sticky top-0 z-30 bg-white border-b border-pw-line h-14 flex items-center justify-between px-4 sm:px-6 shrink-0">
           <span className="font-display text-lg text-pw-ink">{title}</span>
           <ProfileMenu area={area} userName={userName} initials={initials} />
@@ -108,12 +108,12 @@ export function AppShell({
             <Link
               key={href}
               href={href}
-              className={`flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors no-underline ${
+              className={`flex-1 flex flex-col items-center justify-center min-h-14 py-2 gap-0.5 transition-colors no-underline ${
                 isActive ? 'text-pw-primary' : 'text-pw-muted'
               }`}
             >
               <Icon size={20} />
-              <span style={{ fontSize: '10px' }}>{label}</span>
+              <span style={{ fontSize: '12px' }}>{label}</span>
             </Link>
           );
         })}

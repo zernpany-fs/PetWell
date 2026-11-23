@@ -40,7 +40,7 @@ export default function ClinicPhotoUpload({ clinicId }: { clinicId: string }) {
         type="button"
         disabled={pending}
         onClick={() => ref.current?.click()}
-        className="rounded-full px-4 py-2 bg-white/90 border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors flex items-center gap-2 disabled:opacity-60"
+        className="min-h-11 inline-flex items-center justify-center rounded-full px-4 py-2 bg-white/90 border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors flex items-center gap-2 disabled:opacity-60"
         style={{ fontSize: '13px' }}
       >
         <Camera size={14} /> {pending ? 'Uploading…' : 'Change photo'}

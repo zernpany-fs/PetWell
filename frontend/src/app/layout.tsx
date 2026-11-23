@@ -1,11 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Prompt, Sarabun } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+// D69: Thai + Latin fonts, self-hosted by next/font.
+const sarabun = Sarabun({
+  variable: "--font-body",
+  subsets: ["thai", "latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const prompt = Prompt({
+  variable: "--font-display",
+  subsets: ["thai", "latin"],
+  weight: ["500", "600"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -29,7 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${sarabun.variable} ${prompt.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-muted/30">
         {children}

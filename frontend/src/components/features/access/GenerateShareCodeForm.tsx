@@ -118,7 +118,7 @@ export default function GenerateShareCodeForm({ petId }: { petId: string }) {
               role="radio"
               aria-checked={selected}
               onClick={() => setDuration(o.value)}
-              className={`rounded-full px-4 py-1.5 border-[1.5px] transition-colors ${
+              className={`min-h-11 inline-flex items-center justify-center rounded-full px-4 py-1.5 border-[1.5px] transition-colors ${
                 selected
                   ? 'bg-pw-primary border-pw-primary text-white'
                   : 'bg-white border-pw-line text-pw-ink hover:border-pw-primary'

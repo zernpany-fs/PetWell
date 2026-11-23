@@ -154,7 +154,7 @@ export default function ClinicAccessList({
                         type="button"
                         disabled={pending}
                         onClick={() => extend(g.id)}
-                        className="pw-btn-primary rounded-full px-3 py-1"
+                        className="min-h-11 inline-flex items-center justify-center pw-btn-primary rounded-full px-3 py-1"
                       >
                         {pending ? 'Saving…' : 'Save'}
                       </button>
@@ -162,7 +162,7 @@ export default function ClinicAccessList({
                         type="button"
                         disabled={pending}
                         onClick={() => setEditing(null)}
-                        className="rounded-full px-3 py-1 bg-white border border-pw-line text-pw-ink"
+                        className="min-h-11 inline-flex items-center justify-center rounded-full px-3 py-1 bg-white border border-pw-line text-pw-ink"
                       >
                         Cancel
                       </button>
@@ -179,7 +179,7 @@ export default function ClinicAccessList({
                   setEditing(null);
                   setConfirming(clinic.id);
                 }}
-                className="shrink-0 rounded-full px-3 py-1.5 bg-pw-danger-tint border border-pw-danger-line text-pw-danger hover:bg-pw-danger-tint-2 transition-colors disabled:opacity-60"
+                className="min-h-11 inline-flex items-center justify-center shrink-0 rounded-full px-3 py-1.5 bg-pw-danger-tint border border-pw-danger-line text-pw-danger hover:bg-pw-danger-tint-2 transition-colors disabled:opacity-60"
                 style={{ fontSize: '12px', minHeight: '36px' }}
               >
                 Revoke
@@ -201,7 +201,7 @@ export default function ClinicAccessList({
                   type="button"
                   disabled={pending}
                   onClick={() => revoke(clinic.id)}
-                  className="rounded-full px-4 py-1.5 bg-pw-danger text-white hover:opacity-90 disabled:opacity-60"
+                  className="min-h-11 inline-flex items-center justify-center rounded-full px-4 py-1.5 bg-pw-danger text-white hover:opacity-90 disabled:opacity-60"
                 >
                   {pending ? 'Revoking…' : 'Yes, revoke'}
                 </button>
@@ -209,7 +209,7 @@ export default function ClinicAccessList({
                   type="button"
                   disabled={pending}
                   onClick={() => setConfirming(null)}
-                  className="rounded-full px-4 py-1.5 bg-white border border-pw-line text-pw-ink"
+                  className="min-h-11 inline-flex items-center justify-center rounded-full px-4 py-1.5 bg-white border border-pw-line text-pw-ink"
                 >
                   Keep access
                 </button>

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Status** | Draft v1.1 |
-| **Date** | 2026-11-23 (v1.1: index of D55–D68, sections 6–7) |
+| **Date** | 2026-11-23 (v1.1: index of D55–D69, sections 6–7) |
 | **Author** | Nopparuth Panyanithiwat |
 | **Change** | Clinics can no longer read any pet's records by default. Access comes from a confirmed appointment or from the owner's explicit share. |
 
@@ -111,10 +111,11 @@ Decision numbers are shared across PetWell. Decisions for later changes are writ
 |---|---|---|---|
 | D55–D63 | Password reset (US-07, 2026-11-22) and password rule (2026-11-23) | D55 scope · D56 reset token · D57 forgot-password response · D58 request limit · D59 reset rules · D60 sessions after a reset · D61 sending email · D62 screens · D63 password rule | [`../PetWell_Password_Reset.md`](../PetWell_Password_Reset.md), section 3 |
 | D64–D67 | Clinic photo (US-08, 2026-11-23) and demo clinic names | D64 who can change a clinic photo · D65 upload checks in the API (all image uploads) · D66 demo photos · D67 demo clinic names | [`../PetWell_Clinic_Photo.md`](../PetWell_Clinic_Photo.md), section 3 |
-| D68 | Display time zone fix (2026-11-23) | D68 every time is shown in Thai time | This log, section 7 |
+| D68–D69 | Fixes after release (2026-11-23) | D68 every time is shown in Thai time · D69 colour tokens, palette and fonts | This log, section 7 |
 
 ## 7. Fixes after release
 
 | ID | Topic | Decision | Rationale |
 |---|---|---|---|
 | D68 | Time zone of shown times (2026-11-23) | Every date and time the frontend shows is formatted in **Asia/Bangkok**, through `formatAppTime` / `isTodayInApp` in `frontend/src/lib/datetime.ts` (`@date-fns/tz`), never in the time zone of the machine rendering the page. The date picker, which works with the user's own selection in the browser, is unchanged. | Found on the live demo: pages render on Vercel servers in UTC, so an appointment booked for 10:00 showed as 03:00 (and the staff dashboard's "today" used the UTC day). Local testing never showed it because the dev machine is set to Bangkok. Clinics and opening hours (09:00–18:00) are in Thai time, so one fixed zone matches the business rule; it is set in code so it does not depend on server settings. |
+| D69 | Colours, fonts and touch targets (2026-11-23) | Every colour is a `--color-pw-*` token in `frontend/src/app/globals.css` (Tailwind `text-pw-ink`, or `var(--color-pw-*)` inline); components never use raw hex. Palette "caring blue + warm": primary `#3A6890`, accent `#B4532F`, ink `#2D2A26`, muted `#5F584D`, faint `#7A7266`, danger `#B23B36`, success `#3F7A52`, warning `#9A6A12`; light tints and the cream page `#FAF8F4` unchanged. Fonts: **Prompt** (headings) and **Sarabun** (text), both with Thai and Latin, self-hosted by `next/font`. Buttons and chips are at least 44 px high; no text under 12 px. | A UI/UX audit (UI UX Pro Max checklist) found white on the old primary `#5E86AD` at 3.8:1 and faint text `#A39B8D` at 2.8:1 (WCAG needs 4.5:1); every text pair in the new palette is at least 4.7:1. 554 hex values in 50 files made a palette change a hunt; tokens make it one edit. Inter and Playfair Display have no Thai, so Thai clinic names fell back to the system font. Mobile audit at 390 px also found pages wider than the screen (the content column could not shrink: fixed with `min-w-0`), 32–36 px buttons and 10 px bottom-nav labels. A teal palette was the tool's first suggestion; the blue was kept so the portfolio and LinkedIn screenshots still match. |

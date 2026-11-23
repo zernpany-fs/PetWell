@@ -30,7 +30,7 @@ export function ProfileMenu({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-8 h-8 rounded-full bg-pw-primary flex items-center justify-center text-white text-xs select-none"
+        className="w-11 h-11 rounded-full bg-pw-primary flex items-center justify-center text-white text-sm select-none"
         aria-label="Account menu"
         aria-haspopup="menu"
         aria-expanded={open}

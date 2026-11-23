@@ -98,7 +98,7 @@ export default function ProfileForm({
             type="button"
             disabled={uploading}
             onClick={() => fileRef.current?.click()}
-            className="rounded-full px-4 py-2 bg-white border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors flex items-center gap-2 disabled:opacity-60"
+            className="min-h-11 inline-flex items-center justify-center rounded-full px-4 py-2 bg-white border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors flex items-center gap-2 disabled:opacity-60"
             style={{ fontSize: '14px' }}
           >
             <Camera size={15} /> {uploading ? 'Uploading…' : 'Change photo'}

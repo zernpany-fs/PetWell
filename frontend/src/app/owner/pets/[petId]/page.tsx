@@ -58,7 +58,7 @@ export default async function PetProfilePage({
             </h2>
             <Link href={`/owner/pets/${pet.id}/edit`} className="no-underline">
               <button
-                className="rounded-full px-4 py-1.5 bg-white border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors flex items-center gap-1.5"
+                className="min-h-11 inline-flex items-center justify-center rounded-full px-4 py-1.5 bg-white border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors flex items-center gap-1.5"
                 style={{ fontSize: '13px' }}
               >
                 <Pencil size={13} /> Edit
