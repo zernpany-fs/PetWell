@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { MapPin, Phone, ExternalLink, CalendarPlus } from 'lucide-react';
 import { ClinicApi } from '@/lib/api/clinic.api';
 import { ClinicType } from '@/lib/api/api.type';
-import { PhotoPlaceholder } from '@/components/shared/PhotoPlaceholder';
+import ClinicPhoto from '@/components/features/clinic/ClinicPhoto';
 
 const TYPE_LABEL: Record<ClinicType, string> = {
   GENERAL: 'General',
@@ -23,20 +23,35 @@ export default async function ClinicDetailPage({
   return (
     <div className="pw-fade max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
       <div className="bg-white border border-[#E6DFD3] rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
-        <PhotoPlaceholder type="clinic" className="w-full h-40" />
+        <ClinicPhoto
+          photoUrl={clinic.photoUrl}
+          name={clinic.name}
+          className="w-full h-56"
+          sizes="(max-width: 768px) 100vw, 768px"
+          priority
+        />
         <div className="p-6">
           <div className="flex items-center gap-3 flex-wrap">
-            <h2 className="font-display text-[#2D2A26]" style={{ fontSize: '26px' }}>
+            <h2
+              className="font-display text-[#2D2A26]"
+              style={{ fontSize: '26px' }}
+            >
               {clinic.name}
             </h2>
             <span
               className="rounded-full px-2.5 py-0.5"
-              style={{ backgroundColor: '#E4EBF2', color: '#40638A', fontSize: '12px' }}
+              style={{
+                backgroundColor: '#E4EBF2',
+                color: '#40638A',
+                fontSize: '12px',
+              }}
             >
               {TYPE_LABEL[clinic.clinicType]}
             </span>
           </div>
-          {clinic.description && <p className="text-[#6E675C] mt-2">{clinic.description}</p>}
+          {clinic.description && (
+            <p className="text-[#6E675C] mt-2">{clinic.description}</p>
+          )}
 
           <div className="mt-4 space-y-1.5" style={{ fontSize: '14px' }}>
             {clinic.address && (
@@ -62,7 +77,10 @@ export default async function ClinicDetailPage({
           </div>
 
           <div className="mt-6">
-            <Link href={`/owner/appointments/book?clinicId=${clinic.id}`} className="no-underline">
+            <Link
+              href={`/owner/appointments/book?clinicId=${clinic.id}`}
+              className="no-underline"
+            >
               <button
                 className="pw-btn-primary rounded-full px-6 flex items-center gap-2"
                 style={{ minHeight: '44px' }}

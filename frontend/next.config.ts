@@ -1,11 +1,11 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       // Photo/avatar/cover uploads pass through Server Actions; the default
       // cap is 1 MB, which rejects most phone-camera images. Raise it.
-      bodySizeLimit: "10mb",
+      bodySizeLimit: '10mb',
     },
   },
   images: {
@@ -13,7 +13,9 @@ const nextConfig: NextConfig = {
     // remote host that is not listed here, so leaving this out makes each
     // <Image> throw at runtime rather than fall back to the original URL.
     remotePatterns: [
-      { protocol: "https", hostname: "res.cloudinary.com", pathname: "/**" },
+      { protocol: 'https', hostname: 'res.cloudinary.com', pathname: '/**' },
+      // D66: demo clinic photos in the seed are hot-linked from Unsplash.
+      { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
     ],
   },
 };

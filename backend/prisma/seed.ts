@@ -18,8 +18,9 @@ const prisma = new PrismaClient({ adapter });
 // identical to the login flow.
 const SALT_ROUNDS = 12;
 
-// Shared by every seeded staff account. Alphanumeric and 6+ characters so it
-// also satisfies RegisterDto, and the same value smoke-test.sh already uses.
+// Shared by every seeded staff account; the same value smoke-test.sh uses.
+// Shorter than the D63 rule for new passwords (8+), which is fine: seed
+// writes the hash directly and login only checks that a password was sent.
 const STAFF_PASSWORD = 'pass123';
 
 type SeedClinic = {
@@ -29,8 +30,14 @@ type SeedClinic = {
   description: string;
   clinicType: ClinicType;
   googleMapsLink: string;
+  photoUrl: string;
   staff: { email: string; firstName: string; lastName: string };
 };
+
+// US-08 / D66: demo clinic photos, hot-linked from Unsplash (free to use
+// under the Unsplash License). Staff can replace them from Clinic Profile.
+const unsplash = (photoId: string) =>
+  `https://images.unsplash.com/${photoId}?w=1600&q=80&fm=jpg&fit=crop`;
 
 const clinics: SeedClinic[] = [
   {
@@ -40,6 +47,7 @@ const clinics: SeedClinic[] = [
     description: 'โรงพยาบาลสัตว์ทั่วไป เปิดบริการทุกวัน',
     clinicType: 'GENERAL',
     googleMapsLink: 'https://maps.google.com/?q=13.7367,100.5601',
+    photoUrl: unsplash('photo-1700665537604-412e89a285c3'),
     staff: {
       email: 'vet1@test.com',
       firstName: 'สมชาย',
@@ -53,6 +61,7 @@ const clinics: SeedClinic[] = [
     description: 'เชี่ยวชาญสัตว์เลี้ยงพิเศษ นก กระต่าย สัตว์เลื้อยคลาน',
     clinicType: 'EXOTIC',
     googleMapsLink: 'https://maps.google.com/?q=13.7649,100.5383',
+    photoUrl: unsplash('photo-1692314896200-dad04cbd1dd5'),
     staff: { email: 'vet2@test.com', firstName: 'ปิยะ', lastName: 'เอ็กโซติก' },
   },
   {
@@ -62,6 +71,7 @@ const clinics: SeedClinic[] = [
     description: 'บริการฉุกเฉินตลอด 24 ชั่วโมง',
     clinicType: 'EMERGENCY_24HR',
     googleMapsLink: 'https://maps.google.com/?q=13.7997,100.5726',
+    photoUrl: unsplash('photo-1788044908314-6a11871f9de4'),
     staff: { email: 'vet3@test.com', firstName: 'ธนกร', lastName: 'ฉุกเฉิน' },
   },
   {
@@ -71,6 +81,7 @@ const clinics: SeedClinic[] = [
     description: 'โรงพยาบาลสัตว์ทั่วไป ภาคเหนือ',
     clinicType: 'GENERAL',
     googleMapsLink: 'https://maps.google.com/?q=18.7967,98.9670',
+    photoUrl: unsplash('photo-1551076805-e1869033e561'),
     staff: {
       email: 'vet4@test.com',
       firstName: 'อารีย์',
@@ -84,6 +95,7 @@ const clinics: SeedClinic[] = [
     description: 'คลินิกใกล้บ้าน ราคาเป็นมิตร',
     clinicType: 'GENERAL',
     googleMapsLink: 'https://maps.google.com/?q=13.7108,100.4090',
+    photoUrl: unsplash('photo-1728013274420-ed02b1f58887'),
     staff: { email: 'vet5@test.com', firstName: 'นภา', lastName: 'บ้านหมอหมา' },
   },
   {
@@ -93,6 +105,7 @@ const clinics: SeedClinic[] = [
     description: 'ดูแลสัตว์เลี้ยงพิเศษ ภาคใต้',
     clinicType: 'EXOTIC',
     googleMapsLink: 'https://maps.google.com/?q=7.8804,98.3923',
+    photoUrl: unsplash('photo-1602415724447-52c8e77cb7c1'),
     staff: { email: 'vet6@test.com', firstName: 'กิตติ', lastName: 'ภูเก็ต' },
   },
 ];
@@ -112,6 +125,13 @@ async function main() {
 
     if (clinic) {
       console.log(`  clinic exists   ${clinicData.name}`);
+      // D66: give an existing clinic its demo photo only if it has none, so
+      // a photo uploaded by staff is never overwritten on the next deploy.
+      const { count } = await prisma.clinic.updateMany({
+        where: { id: clinic.id, photoUrl: null },
+        data: { photoUrl: clinicData.photoUrl },
+      });
+      if (count) console.log(`    photo added   ${clinicData.name}`);
     } else {
       clinic = await prisma.clinic.create({ data: clinicData });
       console.log(`  clinic created  ${clinicData.name}`);

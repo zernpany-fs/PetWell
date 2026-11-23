@@ -6,6 +6,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ImageFilePipe } from '../common/pipes/image-file.pipe';
 import { UserService } from './user.service';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UserResponseDto } from './dto/user-response.dto';
@@ -26,7 +27,7 @@ export class UserController {
   @UseInterceptors(FileInterceptor('avatar'))
   @Patch('me/avatar')
   uploadAvatar(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(ImageFilePipe) file: Express.Multer.File,
     @CurrentUser('sub') userId: string,
   ): Promise<string> {
     return this.userService.uploadAvatar(userId, file);
@@ -35,7 +36,7 @@ export class UserController {
   @UseInterceptors(FileInterceptor('cover'))
   @Patch('me/cover')
   uploadCover(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(ImageFilePipe) file: Express.Multer.File,
     @CurrentUser('sub') userId: string,
   ): Promise<string> {
     return this.userService.uploadCover(userId, file);

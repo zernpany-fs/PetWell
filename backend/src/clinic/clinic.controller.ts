@@ -6,8 +6,12 @@ import {
   ParseUUIDPipe,
   Patch,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ImageFilePipe } from '../common/pipes/image-file.pipe';
 import { ClinicService } from './clinic.service';
 import { ClinicResponseDto } from './dto/clinic-response.dto';
 import { ListClinicQueryDto } from './dto/list-clinic-query.dto';
@@ -46,5 +50,18 @@ export class ClinicController {
     @Body() dto: UpdateClinicDto,
   ): Promise<ClinicResponseDto> {
     return this.clinicService.update(clinicId, user, dto);
+  }
+
+  // US-08: clinic photo (D64 who, D65 file rules).
+  @UseGuards(RolesGuard)
+  @Roles(Role.CLINIC_STAFF)
+  @UseInterceptors(FileInterceptor('photo'))
+  @Patch(':clinicId/photo')
+  uploadPhoto(
+    @Param('clinicId', ParseUUIDPipe) clinicId: string,
+    @CurrentUser() user: AccessTokenPayload,
+    @UploadedFile(ImageFilePipe) file: Express.Multer.File,
+  ): Promise<{ url: string }> {
+    return this.clinicService.uploadPhoto(clinicId, user, file);
   }
 }

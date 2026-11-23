@@ -22,4 +22,14 @@ export const ClinicApi = {
       body: data,
     });
   },
+
+  // US-08: staff upload their clinic's photo.
+  uploadPhoto(clinicId: string, file: File) {
+    const formData = new FormData();
+    formData.append('photo', file);
+    return authFetch<{ url: string }>(`/clinics/${clinicId}/photo`, {
+      method: 'PATCH',
+      body: formData,
+    });
+  },
 };

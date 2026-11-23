@@ -1,3 +1,4 @@
+import { ImageFilePipe } from '../common/pipes/image-file.pipe';
 import {
   Body,
   Controller,
@@ -83,7 +84,7 @@ export class PetController {
   uploadPhoto(
     @CurrentUser('sub') ownerId: string,
     @Param('petId', ParseUUIDPipe) petId: string,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(ImageFilePipe) file: Express.Multer.File,
   ): Promise<{ url: string }> {
     return this.petService.uploadPhoto(petId, ownerId, file);
   }
