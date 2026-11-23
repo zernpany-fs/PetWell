@@ -50,7 +50,7 @@ export default function StatusActions({
               ? 'min-h-11 inline-flex items-center justify-center pw-btn-primary rounded-full px-3 py-1.5 disabled:opacity-60'
               : 'min-h-11 inline-flex items-center justify-center rounded-full px-3 py-1.5 bg-pw-danger-tint border border-pw-danger-line text-pw-danger hover:bg-pw-danger-tint-2 transition-colors disabled:opacity-60'
           }
-          style={{ fontSize: '12px', minHeight: '36px' }}
+          style={{ fontSize: '12px' }}
         >
           {a.label}
         </button>
