@@ -24,9 +24,12 @@ export default function LandingPage() {
                 Your pet&apos;s health,{' '}
                 <span className="italic text-[#E58A6F]">wherever you go.</span>
               </h1>
-              <p className="text-[#6E675C] mb-8 max-w-md" style={{ lineHeight: 1.6 }}>
-                One portable, owner-controlled record — vaccines, visits and
-                reminders that travel with your pet to any clinic.
+              <p
+                className="text-[#6E675C] mb-8 max-w-md"
+                style={{ lineHeight: 1.6 }}
+              >
+                Your pet&apos;s vaccines and visits in one record. You choose
+                which clinics can see it.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link href="/register" className="no-underline">
@@ -49,9 +52,18 @@ export default function LandingPage() {
             </div>
             <div className="order-first lg:order-last relative">
               <div className="hero-wash rounded-[24px] p-3">
-                <PhotoPlaceholder type="pet" className="w-full aspect-[4/3] rounded-[20px]" />
+                <PhotoPlaceholder
+                  type="pet"
+                  className="w-full aspect-[4/3] rounded-[20px]"
+                />
               </div>
-              <span className="pw-stick" style={{ top: '-14px', left: '8%' }} aria-hidden>🐕</span>
+              <span
+                className="pw-stick"
+                style={{ top: '-14px', left: '8%' }}
+                aria-hidden
+              >
+                🐕
+              </span>
               <span
                 className="pw-stick"
                 style={{ top: '30%', right: '-10px', animationDelay: '1s' }}
@@ -82,7 +94,7 @@ export default function LandingPage() {
                   iconBg: '#E4EBF2',
                   iconColor: '#5E86AD',
                   title: 'Health Passport',
-                  desc: 'All vaccines, visits, and treatments in one portable record that follows your pet everywhere.',
+                  desc: 'Vaccines, visits and treatments from every clinic, in one record.',
                 },
                 {
                   icon: CalendarDays,
@@ -96,7 +108,7 @@ export default function LandingPage() {
                   iconBg: '#EFEBF8',
                   iconColor: '#8B7FD1',
                   title: 'Vaccine Reminders',
-                  desc: 'Get notified before a vaccine is due so you never miss a scheduled booster.',
+                  desc: 'See which vaccines are due soon on your dashboard.',
                 },
               ].map(({ icon: Icon, iconBg, iconColor, title, desc }) => (
                 <div
@@ -109,7 +121,9 @@ export default function LandingPage() {
                   >
                     <Icon size={22} style={{ color: iconColor }} />
                   </div>
-                  <h3 className="font-display text-lg text-[#2D2A26] mb-2">{title}</h3>
+                  <h3 className="font-display text-lg text-[#2D2A26] mb-2">
+                    {title}
+                  </h3>
                   <p className="text-[#6E675C]" style={{ fontSize: '15px' }}>
                     {desc}
                   </p>
@@ -133,7 +147,10 @@ export default function LandingPage() {
               { n: 3, text: 'Book a visit' },
               { n: 4, text: 'Stay on track' },
             ].map(({ n, text }) => (
-              <div key={n} className="flex flex-col items-center text-center gap-4">
+              <div
+                key={n}
+                className="flex flex-col items-center text-center gap-4"
+              >
                 <div
                   className="w-12 h-12 rounded-full bg-[#2D2A26] text-[#FAF8F4] flex items-center justify-center shrink-0 font-display"
                   style={{ fontSize: '20px' }}
@@ -151,10 +168,13 @@ export default function LandingPage() {
             <div>
               <span className="font-display text-xl block mb-1">PetWell</span>
               <span className="text-[#A39B8D]" style={{ fontSize: '13px' }}>
-                © 2026 PetWell · hello@petwell.app
+                © 2026 PetWell
               </span>
             </div>
-            <nav className="flex items-center gap-6" style={{ fontSize: '14px' }}>
+            <nav
+              className="flex items-center gap-6"
+              style={{ fontSize: '14px' }}
+            >
               {['About', 'Contact', 'Terms'].map((link) => (
                 <a
                   key={link}

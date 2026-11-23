@@ -26,8 +26,8 @@ export default async function StaffPetLookupPage({
         Patient Lookup
       </h2>
       <p className="text-[#6E675C] mt-1 mb-5">
-        Find pets your clinic has access to, through a confirmed appointment or
-        the owner&rsquo;s share code.
+        Shows pets your clinic can access. For a walk-in, ask the owner for a
+        share code.
       </p>
 
       <RedeemShareCodeForm />
@@ -59,10 +59,6 @@ export default async function StaffPetLookupPage({
             <Search size={20} className="text-[#A39B8D]" />
           </div>
           <p className="text-[#2D2A26] mb-1">Start typing to find a patient</p>
-          <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
-            While your clinic has access, you see the pet&rsquo;s full history
-            across every clinic.
-          </p>
         </div>
       ) : results.length === 0 ? (
         <div className="bg-white border border-[#E6DFD3] rounded-2xl p-10 text-center">
@@ -70,9 +66,7 @@ export default async function StaffPetLookupPage({
             No pets match &ldquo;{term}&rdquo;
           </p>
           <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
-            You only see pets your clinic has access to. For a walk-in, ask the
-            owner for a share code. Pets you only wrote records for can be found
-            by pet name.
+            Pets you only wrote records for are found by pet name.
           </p>
         </div>
       ) : (

@@ -34,7 +34,6 @@ export default async function StaffDashboardPage() {
         >
           Welcome, {user?.firstName}
         </h2>
-        <p className="text-[#6E675C] mt-1">Your action queue for today.</p>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">

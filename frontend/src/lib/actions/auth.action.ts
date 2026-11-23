@@ -26,7 +26,7 @@ export async function registerAction(
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Validation failed',
+      message: 'Please check the form fields.',
       errors: z.flattenError(parsed.error),
       code: 'VALIDATION_ERROR',
     };
@@ -53,7 +53,7 @@ export async function registerClinicStaffAction(
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Validation failed',
+      message: 'Please check the form fields.',
       errors: z.flattenError(parsed.error),
       code: 'VALIDATION_ERROR',
     };

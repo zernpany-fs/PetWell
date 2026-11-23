@@ -126,8 +126,8 @@ export default async function PetProfilePage({
             className="bg-white border border-[#E6DFD3] rounded-2xl p-6 text-[#6E675C]"
             style={{ fontSize: '14px' }}
           >
-            No records yet. A clinic will add records after each visit —
-            they&apos;ll all appear here, from any clinic.
+            No records yet. Clinics you give access to add records after each
+            visit.
           </div>
         ) : (
           <div className="space-y-3">

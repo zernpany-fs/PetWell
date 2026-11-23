@@ -39,9 +39,6 @@ export default async function OwnerDashboardPage() {
         >
           Welcome back, {user?.firstName}
         </h2>
-        <p className="text-[#6E675C] mt-1">
-          Here&apos;s what needs your attention today.
-        </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -161,7 +158,7 @@ export default async function OwnerDashboardPage() {
             style={{ fontSize: '13px' }}
           >
             <Sparkles size={14} />
-            No reminders — you&apos;re all caught up!
+            No vaccines due soon.
           </div>
         </div>
       </div>
@@ -173,7 +170,7 @@ export default async function OwnerDashboardPage() {
             style={{ minHeight: '44px' }}
           >
             <Plus size={16} />
-            Book New Appointment
+            Book an appointment
           </button>
         </Link>
       </div>

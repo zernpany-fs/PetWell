@@ -48,7 +48,8 @@ export function AppShell({
     .slice(0, 2)
     .toUpperCase();
   const active = navItems.find((n) => pathname.startsWith(n.href));
-  const title = active?.label === 'Home' ? 'Dashboard' : (active?.label ?? 'PetWell');
+  const title =
+    active?.label === 'Home' ? 'Dashboard' : (active?.label ?? 'PetWell');
 
   return (
     <div className="min-h-screen bg-[#FAF8F4] flex">
@@ -86,7 +87,7 @@ export function AppShell({
               className="flex items-center gap-3 px-3 py-2 w-full rounded-lg text-[#6E675C] hover:bg-[#F1ECE3] text-sm transition-colors text-left"
             >
               <LogOut size={16} />
-              Logout
+              Log out
             </button>
           </form>
         </div>

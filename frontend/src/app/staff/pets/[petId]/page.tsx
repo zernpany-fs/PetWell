@@ -48,10 +48,9 @@ export default async function StaffPetPage({
           >
             <Lock size={15} className="shrink-0 mt-0.5" />
             <p>
-              Limited access. Your clinic no longer has access to this pet, so
-              you only see records your clinic wrote and cannot add new ones. To
-              see the full history again, ask the owner for a share code or
-              confirm a new appointment.
+              Limited access: you only see records your clinic wrote. Ask the
+              owner for a share code, or confirm a new appointment, to see the
+              full history.
             </p>
           </div>
         </div>

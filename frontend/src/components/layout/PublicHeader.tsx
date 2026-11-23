@@ -15,7 +15,7 @@ export function PublicHeader() {
               className="px-4 sm:px-5 py-2 rounded-full border-[1.5px] border-[#5E86AD] text-[#5E86AD] bg-transparent hover:bg-[#E4EBF2] transition-colors"
               style={{ minHeight: '44px' }}
             >
-              Log In
+              Log in
             </button>
           </Link>
           <Link href="/register" className="no-underline">
@@ -23,7 +23,7 @@ export function PublicHeader() {
               className="pw-btn-primary px-4 sm:px-5 py-2 rounded-full"
               style={{ minHeight: '44px' }}
             >
-              Sign Up
+              Sign up
             </button>
           </Link>
         </div>
