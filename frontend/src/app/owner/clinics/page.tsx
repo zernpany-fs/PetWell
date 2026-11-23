@@ -31,7 +31,7 @@ export default async function ClinicSearchPage({
   return (
     <div className="pw-fade max-w-5xl mx-auto px-4 sm:px-6 py-8">
       <h2
-        className="font-display text-[#2D2A26] mb-5"
+        className="font-display text-pw-ink mb-5"
         style={{ fontSize: '26px' }}
       >
         Find a clinic
@@ -41,19 +41,19 @@ export default async function ClinicSearchPage({
         <div className="relative flex-1">
           <Search
             size={16}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A39B8D]"
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-pw-faint"
           />
           <input
             name="search"
             defaultValue={sp.search ?? ''}
             placeholder="Search by name…"
-            className="w-full h-12 pl-10 pr-4 bg-white border border-[#E6DFD3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5E86AD] text-[#2D2A26] placeholder:text-[#A39B8D]"
+            className="w-full h-12 pl-10 pr-4 bg-white border border-pw-line rounded-xl focus:outline-none focus:ring-2 focus:ring-pw-primary text-pw-ink placeholder:text-pw-faint"
           />
         </div>
         <select
           name="type"
           defaultValue={type ?? ''}
-          className="h-12 px-4 bg-white border border-[#E6DFD3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5E86AD] text-[#2D2A26]"
+          className="h-12 px-4 bg-white border border-pw-line rounded-xl focus:outline-none focus:ring-2 focus:ring-pw-primary text-pw-ink"
         >
           <option value="">All types</option>
           <option value="GENERAL">General</option>
@@ -69,7 +69,7 @@ export default async function ClinicSearchPage({
       </form>
 
       {clinics.length === 0 ? (
-        <p className="text-[#6E675C]">No clinics match your search.</p>
+        <p className="text-pw-muted">No clinics match your search.</p>
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           {clinics.map((c) => (
@@ -78,7 +78,7 @@ export default async function ClinicSearchPage({
               href={`/owner/clinics/${c.id}`}
               className="no-underline"
             >
-              <div className="pw-lift bg-white border border-[#E6DFD3] rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
+              <div className="pw-lift bg-white border border-pw-line rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
                 <ClinicPhoto
                   photoUrl={c.photoUrl}
                   name={c.name}
@@ -87,7 +87,7 @@ export default async function ClinicSearchPage({
                 <div className="p-4">
                   <div className="flex items-center justify-between gap-2">
                     <p
-                      className="font-display text-[#2D2A26]"
+                      className="font-display text-pw-ink"
                       style={{ fontSize: '17px' }}
                     >
                       {c.name}
@@ -95,8 +95,8 @@ export default async function ClinicSearchPage({
                     <span
                       className="rounded-full px-2.5 py-0.5 shrink-0"
                       style={{
-                        backgroundColor: '#E4EBF2',
-                        color: '#40638A',
+                        backgroundColor: 'var(--color-pw-primary-tint)',
+                        color: 'var(--color-pw-primary-strong)',
                         fontSize: '12px',
                       }}
                     >
@@ -105,7 +105,7 @@ export default async function ClinicSearchPage({
                   </div>
                   {c.address && (
                     <p
-                      className="flex items-center gap-1.5 mt-1 text-[#6E675C]"
+                      className="flex items-center gap-1.5 mt-1 text-pw-muted"
                       style={{ fontSize: '13px' }}
                     >
                       <MapPin size={13} /> {c.address}

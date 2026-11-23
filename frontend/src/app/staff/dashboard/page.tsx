@@ -10,7 +10,7 @@ import { Appointment } from '@/lib/api/api.type';
 export const metadata: Metadata = { title: 'Dashboard' };
 
 const card =
-  'bg-white border border-[#E6DFD3] rounded-2xl shadow-[0_2px_8px_rgba(45,42,38,0.06)]';
+  'bg-white border border-pw-line rounded-2xl shadow-[0_2px_8px_rgba(45,42,38,0.06)]';
 
 export default async function StaffDashboardPage() {
   const user = await getSessionUser();
@@ -29,7 +29,7 @@ export default async function StaffDashboardPage() {
     <div className="pw-fade max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       <div>
         <h2
-          className="font-display text-[#2D2A26]"
+          className="font-display text-pw-ink"
           style={{ fontSize: '26px' }}
         >
           Welcome, {user?.firstName}
@@ -38,33 +38,33 @@ export default async function StaffDashboardPage() {
 
       <div className="grid sm:grid-cols-2 gap-4">
         <div
-          className="pw-lift rounded-2xl p-5 border border-[#E6DFD3] shadow-[0_2px_8px_rgba(45,42,38,0.06)]"
-          style={{ backgroundColor: '#FFFBEB' }}
+          className="pw-lift rounded-2xl p-5 border border-pw-line shadow-[0_2px_8px_rgba(45,42,38,0.06)]"
+          style={{ backgroundColor: 'var(--color-pw-warning-tint)' }}
         >
           <p
-            className="font-display text-[#2D2A26]"
+            className="font-display text-pw-ink"
             style={{ fontSize: '32px' }}
           >
             {pending.length}
           </p>
-          <p className="text-[#B45309]">Pending requests</p>
+          <p className="text-pw-warning-strong">Pending requests</p>
         </div>
         <div className={`pw-lift ${card} p-5`}>
           <p
-            className="font-display text-[#2D2A26]"
+            className="font-display text-pw-ink"
             style={{ fontSize: '32px' }}
           >
             {todays.length}
           </p>
-          <p className="text-[#6E675C]">Appointments today</p>
+          <p className="text-pw-muted">Appointments today</p>
         </div>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
         <div className={`${card} p-5`}>
-          <h3 className="font-display text-[#2D2A26] mb-4">New requests</h3>
+          <h3 className="font-display text-pw-ink mb-4">New requests</h3>
           {pending.length === 0 ? (
-            <p className="text-[#6E675C] mb-4" style={{ fontSize: '14px' }}>
+            <p className="text-pw-muted mb-4" style={{ fontSize: '14px' }}>
               No pending requests right now.
             </p>
           ) : (
@@ -72,12 +72,12 @@ export default async function StaffDashboardPage() {
               {pending.slice(0, 5).map((r) => (
                 <div
                   key={r.id}
-                  className="py-3 border-b border-[#F1ECE3] last:border-0"
+                  className="py-3 border-b border-pw-sand last:border-0"
                 >
-                  <p className="text-[#2D2A26] text-sm">
+                  <p className="text-pw-ink text-sm">
                     {r.pet?.name ?? 'Pet'} ({r.pet?.species ?? '—'})
                   </p>
-                  <p className="text-[#6E675C]" style={{ fontSize: '13px' }}>
+                  <p className="text-pw-muted" style={{ fontSize: '13px' }}>
                     {formatAppTime(r.appointmentDate, 'EEE d MMM, HH:mm')}
                   </p>
                 </div>
@@ -85,8 +85,8 @@ export default async function StaffDashboardPage() {
             </div>
           )}
           <div
-            className="flex items-start gap-2 rounded-xl px-3 py-2.5 border border-[#FDE68A] bg-[#FFFBEB]"
-            style={{ color: '#B45309', fontSize: '12px' }}
+            className="flex items-start gap-2 rounded-xl px-3 py-2.5 border border-pw-warning-line-2 bg-pw-warning-tint"
+            style={{ color: 'var(--color-pw-warning-strong)', fontSize: '12px' }}
           >
             <AlertCircle size={13} className="mt-0.5 shrink-0" />
             Remember to call the owner to confirm before marking as Confirmed.
@@ -94,11 +94,11 @@ export default async function StaffDashboardPage() {
         </div>
 
         <div className={`${card} p-5`}>
-          <h3 className="font-display text-[#2D2A26] mb-4">
+          <h3 className="font-display text-pw-ink mb-4">
             Today&apos;s schedule
           </h3>
           {todays.length === 0 ? (
-            <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
+            <p className="text-pw-muted" style={{ fontSize: '14px' }}>
               Nothing scheduled for today.
             </p>
           ) : (
@@ -106,16 +106,16 @@ export default async function StaffDashboardPage() {
               {todays.map((s) => (
                 <div
                   key={s.id}
-                  className="flex items-center gap-4 py-2 border-b border-[#F1ECE3] last:border-0"
+                  className="flex items-center gap-4 py-2 border-b border-pw-sand last:border-0"
                 >
                   <span
-                    className="text-[#6E675C] shrink-0 w-12"
+                    className="text-pw-muted shrink-0 w-12"
                     style={{ fontSize: '13px' }}
                   >
                     {formatAppTime(s.appointmentDate, 'HH:mm')}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <span className="text-[#2D2A26] text-sm">
+                    <span className="text-pw-ink text-sm">
                       {s.pet?.name ?? 'Pet'}
                     </span>
                   </div>
@@ -126,7 +126,7 @@ export default async function StaffDashboardPage() {
                     aria-label={`Open health records for ${s.pet?.name ?? 'this pet'}`}
                   >
                     <span
-                      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 bg-white border-[1.5px] border-[#5E86AD] text-[#5E86AD] hover:bg-[#E4EBF2] transition-colors"
+                      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 bg-white border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors"
                       style={{ fontSize: '12px' }}
                     >
                       <FileText size={13} /> Records
@@ -138,7 +138,7 @@ export default async function StaffDashboardPage() {
           )}
           <Link href="/staff/appointments" className="no-underline">
             <p
-              className="text-[#5E86AD] mt-3 hover:text-[#40638A]"
+              className="text-pw-primary mt-3 hover:text-pw-primary-strong"
               style={{ fontSize: '13px' }}
             >
               View all appointments →

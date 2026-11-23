@@ -13,7 +13,7 @@ export const FormInput = forwardRef<HTMLInputElement, Props>(
     return (
       <div>
         <label
-          className="block text-[#2D2A26] mb-1.5"
+          className="block text-pw-ink mb-1.5"
           style={{ fontSize: '13px' }}
         >
           {label}
@@ -21,7 +21,7 @@ export const FormInput = forwardRef<HTMLInputElement, Props>(
         <div className="relative">
           <input
             ref={ref}
-            className="w-full h-12 px-4 bg-white border border-[#E6DFD3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5E86AD] focus:border-[#5E86AD] transition-colors text-[#2D2A26] placeholder:text-[#A39B8D]"
+            className="w-full h-12 px-4 bg-white border border-pw-line rounded-xl focus:outline-none focus:ring-2 focus:ring-pw-primary focus:border-pw-primary transition-colors text-pw-ink placeholder:text-pw-faint"
             style={{ paddingRight: right ? '3.5rem' : undefined, ...style }}
             {...props}
           />
@@ -32,7 +32,7 @@ export const FormInput = forwardRef<HTMLInputElement, Props>(
           )}
         </div>
         {error && (
-          <p className="mt-1 text-[#C4534E]" style={{ fontSize: '12px' }}>
+          <p className="mt-1 text-pw-danger" style={{ fontSize: '12px' }}>
             {error}
           </p>
         )}

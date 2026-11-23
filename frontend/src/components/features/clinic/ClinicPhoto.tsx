@@ -26,7 +26,7 @@ export default function ClinicPhoto({
     );
   }
   return (
-    <div className={`relative overflow-hidden bg-[#F1ECE3] ${className}`}>
+    <div className={`relative overflow-hidden bg-pw-sand ${className}`}>
       <Image
         src={photoUrl}
         alt={name}

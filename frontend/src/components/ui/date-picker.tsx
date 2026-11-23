@@ -50,15 +50,15 @@ function ScrollDropdown({ options = [], value, onChange, ...rest }: RdpDropdownP
         type="button"
         aria-label={rest['aria-label']}
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1 rounded-md px-1.5 py-1 text-sm font-medium text-[#2D2A26] hover:bg-[#F1ECE3]"
+        className="flex items-center gap-1 rounded-md px-1.5 py-1 text-sm font-medium text-pw-ink hover:bg-pw-sand"
       >
         {current?.label ?? ''}
-        <ChevronDown size={14} className="text-[#6E675C]" />
+        <ChevronDown size={14} className="text-pw-muted" />
       </button>
       {open && (
         <div
           ref={listRef}
-          className="absolute left-0 top-full z-50 mt-1 max-h-48 w-24 overflow-y-auto rounded-lg border border-[#E6DFD3] bg-white p-1 shadow-[0_8px_24px_rgba(45,42,38,0.14)]"
+          className="absolute left-0 top-full z-50 mt-1 max-h-48 w-24 overflow-y-auto rounded-lg border border-pw-line bg-white p-1 shadow-[0_8px_24px_rgba(45,42,38,0.14)]"
         >
           {options.map((o) => {
             const isSel = String(o.value) === String(value);
@@ -71,8 +71,8 @@ function ScrollDropdown({ options = [], value, onChange, ...rest }: RdpDropdownP
                 onClick={() => pick(o.value)}
                 className={`block w-full rounded-md px-2 py-1 text-left text-sm disabled:opacity-40 ${
                   isSel
-                    ? 'bg-[#5E86AD] text-white'
-                    : 'text-[#2D2A26] hover:bg-[#F1ECE3]'
+                    ? 'bg-pw-primary text-white'
+                    : 'text-pw-ink hover:bg-pw-sand'
                 }`}
               >
                 {o.label}
@@ -147,22 +147,22 @@ export function DatePicker({
         render={
           <button
             type="button"
-            className="w-full h-12 px-4 flex items-center justify-between gap-2 bg-white border border-[#E6DFD3] rounded-xl text-left focus:outline-none focus:ring-2 focus:ring-[#5E86AD] transition-shadow"
+            className="w-full h-12 px-4 flex items-center justify-between gap-2 bg-white border border-pw-line rounded-xl text-left focus:outline-none focus:ring-2 focus:ring-pw-primary transition-shadow"
           >
-            <span className={display ? 'text-[#2D2A26]' : 'text-[#9A9284]'}>
+            <span className={display ? 'text-pw-ink' : 'text-pw-subtle'}>
               {display || placeholder}
             </span>
-            <CalendarIcon size={16} className="text-[#6E675C] shrink-0" />
+            <CalendarIcon size={16} className="text-pw-muted shrink-0" />
           </button>
         }
       />
       <PopoverContent
         align="start"
-        className="w-auto p-0 rounded-xl border-[#E6DFD3]"
+        className="w-auto p-0 rounded-xl border-pw-line"
         style={
           {
-            ['--primary']: '#5E86AD',
-            ['--primary-foreground']: '#ffffff',
+            ['--primary']: 'var(--color-pw-primary)',
+            ['--primary-foreground']: 'var(--color-pw-white)',
           } as React.CSSProperties
         }
       >
@@ -181,15 +181,15 @@ export function DatePicker({
           }}
         />
         {mode === 'datetime' && (
-          <div className="flex items-center gap-2 border-t border-[#F1ECE3] p-2.5">
-            <label className="text-[#6E675C]" style={{ fontSize: '13px' }}>
+          <div className="flex items-center gap-2 border-t border-pw-sand p-2.5">
+            <label className="text-pw-muted" style={{ fontSize: '13px' }}>
               Time
             </label>
             <input
               type="time"
               value={time}
               onChange={(e) => emit(selected ?? new Date(), e.target.value)}
-              className="flex-1 h-9 px-2 bg-white border border-[#E6DFD3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5E86AD] text-[#2D2A26]"
+              className="flex-1 h-9 px-2 bg-white border border-pw-line rounded-lg focus:outline-none focus:ring-2 focus:ring-pw-primary text-pw-ink"
             />
           </div>
         )}

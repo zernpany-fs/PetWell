@@ -13,11 +13,11 @@ export default async function ResetPasswordPage({
 
   return (
     <div
-      className="w-full bg-white border border-[#E6DFD3] rounded-[20px] shadow-[0_2px_8px_rgba(45,42,38,0.06)] p-8"
+      className="w-full bg-white border border-pw-line rounded-[20px] shadow-[0_2px_8px_rgba(45,42,38,0.06)] p-8"
       style={{ maxWidth: '420px' }}
     >
       <h1
-        className="font-display text-[#2D2A26] mb-2"
+        className="font-display text-pw-ink mb-2"
         style={{ fontSize: '28px' }}
       >
         Choose a new password
@@ -25,17 +25,17 @@ export default async function ResetPasswordPage({
 
       {token ? (
         <>
-          <p className="text-[#6E675C] mb-6" style={{ fontSize: '14px' }}>
+          <p className="text-pw-muted mb-6" style={{ fontSize: '14px' }}>
             After this you can log in with the new password.
           </p>
           <ResetPasswordForm token={token} />
         </>
       ) : (
-        <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
+        <p className="text-pw-muted" style={{ fontSize: '14px' }}>
           This page needs the link from the reset email.{' '}
           <Link
             href="/forgot-password"
-            className="text-[#5E86AD] hover:text-[#40638A]"
+            className="text-pw-primary hover:text-pw-primary-strong"
           >
             Ask for a new link
           </Link>

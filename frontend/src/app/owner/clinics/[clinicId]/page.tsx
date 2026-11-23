@@ -22,7 +22,7 @@ export default async function ClinicDetailPage({
 
   return (
     <div className="pw-fade max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-      <div className="bg-white border border-[#E6DFD3] rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
+      <div className="bg-white border border-pw-line rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
         <ClinicPhoto
           photoUrl={clinic.photoUrl}
           name={clinic.name}
@@ -33,7 +33,7 @@ export default async function ClinicDetailPage({
         <div className="p-6">
           <div className="flex items-center gap-3 flex-wrap">
             <h2
-              className="font-display text-[#2D2A26]"
+              className="font-display text-pw-ink"
               style={{ fontSize: '26px' }}
             >
               {clinic.name}
@@ -41,8 +41,8 @@ export default async function ClinicDetailPage({
             <span
               className="rounded-full px-2.5 py-0.5"
               style={{
-                backgroundColor: '#E4EBF2',
-                color: '#40638A',
+                backgroundColor: 'var(--color-pw-primary-tint)',
+                color: 'var(--color-pw-primary-strong)',
                 fontSize: '12px',
               }}
             >
@@ -50,17 +50,17 @@ export default async function ClinicDetailPage({
             </span>
           </div>
           {clinic.description && (
-            <p className="text-[#6E675C] mt-2">{clinic.description}</p>
+            <p className="text-pw-muted mt-2">{clinic.description}</p>
           )}
 
           <div className="mt-4 space-y-1.5" style={{ fontSize: '14px' }}>
             {clinic.address && (
-              <p className="flex items-center gap-2 text-[#6E675C]">
+              <p className="flex items-center gap-2 text-pw-muted">
                 <MapPin size={15} /> {clinic.address}
               </p>
             )}
             {clinic.phone && (
-              <p className="flex items-center gap-2 text-[#6E675C]">
+              <p className="flex items-center gap-2 text-pw-muted">
                 <Phone size={15} /> {clinic.phone}
               </p>
             )}
@@ -69,7 +69,7 @@ export default async function ClinicDetailPage({
                 href={clinic.googleMapsLink}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 text-[#5E86AD] hover:text-[#40638A] no-underline"
+                className="flex items-center gap-2 text-pw-primary hover:text-pw-primary-strong no-underline"
               >
                 <ExternalLink size={15} /> View on Google Maps
               </a>

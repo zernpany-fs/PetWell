@@ -5,27 +5,27 @@ import { PhotoPlaceholder } from '@/components/shared/PhotoPlaceholder';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#FAF8F4]">
+    <div className="min-h-screen bg-pw-page">
       <PublicHeader />
-      <div className="text-[#2D2A26]">
+      <div className="text-pw-ink">
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <p
-                className="text-[#E58A6F] uppercase tracking-widest mb-4"
+                className="text-pw-coral uppercase tracking-widest mb-4"
                 style={{ fontSize: '13px' }}
               >
                 PET HEALTH PASSPORT
               </p>
               <h1
-                className="font-display text-[#2D2A26] mb-5"
+                className="font-display text-pw-ink mb-5"
                 style={{ fontSize: '52px', lineHeight: 1.1 }}
               >
                 Your pet&apos;s health,{' '}
-                <span className="italic text-[#E58A6F]">wherever you go.</span>
+                <span className="italic text-pw-coral">wherever you go.</span>
               </h1>
               <p
-                className="text-[#6E675C] mb-8 max-w-md"
+                className="text-pw-muted mb-8 max-w-md"
                 style={{ lineHeight: 1.6 }}
               >
                 Your pet&apos;s vaccines and visits in one record. You choose
@@ -42,7 +42,7 @@ export default function LandingPage() {
                 </Link>
                 <a href="#how-it-works" className="no-underline">
                   <button
-                    className="px-7 py-3 rounded-full bg-white border-[1.5px] border-[#5E86AD] text-[#5E86AD] hover:bg-[#E4EBF2] transition-colors"
+                    className="px-7 py-3 rounded-full bg-white border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors"
                     style={{ minHeight: '44px' }}
                   >
                     How it works
@@ -84,36 +84,36 @@ export default function LandingPage() {
 
         <section className="bg-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-display text-3xl text-center text-[#2D2A26] mb-10">
+            <h2 className="font-display text-3xl text-center text-pw-ink mb-10">
               Everything in one place
             </h2>
             <div className="grid sm:grid-cols-3 gap-6">
               {[
                 {
                   icon: ShieldCheck,
-                  iconBg: '#E4EBF2',
-                  iconColor: '#5E86AD',
+                  iconBg: 'var(--color-pw-primary-tint)',
+                  iconColor: 'var(--color-pw-primary)',
                   title: 'Health Passport',
                   desc: 'Vaccines, visits and treatments from every clinic, in one record.',
                 },
                 {
                   icon: CalendarDays,
-                  iconBg: '#FBEDE7',
-                  iconColor: '#E58A6F',
+                  iconBg: 'var(--color-pw-coral-tint)',
+                  iconColor: 'var(--color-pw-coral)',
                   title: 'Easy Booking',
                   desc: 'Request appointments at any partnered clinic with a few taps — they call to confirm.',
                 },
                 {
                   icon: Bell,
-                  iconBg: '#EFEBF8',
-                  iconColor: '#8B7FD1',
+                  iconBg: 'var(--color-pw-violet-tint)',
+                  iconColor: 'var(--color-pw-violet)',
                   title: 'Vaccine Reminders',
                   desc: 'See which vaccines are due soon on your dashboard.',
                 },
               ].map(({ icon: Icon, iconBg, iconColor, title, desc }) => (
                 <div
                   key={title}
-                  className="pw-lift bg-[#FAF8F4] border border-[#E6DFD3] rounded-2xl p-6 shadow-[0_2px_8px_rgba(45,42,38,0.06)]"
+                  className="pw-lift bg-pw-page border border-pw-line rounded-2xl p-6 shadow-[0_2px_8px_rgba(45,42,38,0.06)]"
                 >
                   <div
                     className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
@@ -121,10 +121,10 @@ export default function LandingPage() {
                   >
                     <Icon size={22} style={{ color: iconColor }} />
                   </div>
-                  <h3 className="font-display text-lg text-[#2D2A26] mb-2">
+                  <h3 className="font-display text-lg text-pw-ink mb-2">
                     {title}
                   </h3>
-                  <p className="text-[#6E675C]" style={{ fontSize: '15px' }}>
+                  <p className="text-pw-muted" style={{ fontSize: '15px' }}>
                     {desc}
                   </p>
                 </div>
@@ -137,7 +137,7 @@ export default function LandingPage() {
           id="how-it-works"
           className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
         >
-          <h2 className="font-display text-3xl text-center text-[#2D2A26] mb-12">
+          <h2 className="font-display text-3xl text-center text-pw-ink mb-12">
             How it works
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -152,22 +152,22 @@ export default function LandingPage() {
                 className="flex flex-col items-center text-center gap-4"
               >
                 <div
-                  className="w-12 h-12 rounded-full bg-[#2D2A26] text-[#FAF8F4] flex items-center justify-center shrink-0 font-display"
+                  className="w-12 h-12 rounded-full bg-pw-ink text-pw-page flex items-center justify-center shrink-0 font-display"
                   style={{ fontSize: '20px' }}
                 >
                   {n}
                 </div>
-                <p className="text-[#2D2A26]">{text}</p>
+                <p className="text-pw-ink">{text}</p>
               </div>
             ))}
           </div>
         </section>
 
-        <footer className="bg-[#2D2A26] text-[#FAF8F4] py-10">
+        <footer className="bg-pw-ink text-pw-page py-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <span className="font-display text-xl block mb-1">PetWell</span>
-              <span className="text-[#A39B8D]" style={{ fontSize: '13px' }}>
+              <span className="text-pw-faint" style={{ fontSize: '13px' }}>
                 © 2026 PetWell
               </span>
             </div>
@@ -179,7 +179,7 @@ export default function LandingPage() {
                 <a
                   key={link}
                   href="#"
-                  className="text-[#A39B8D] hover:text-[#FAF8F4] transition-colors no-underline"
+                  className="text-pw-faint hover:text-pw-page transition-colors no-underline"
                 >
                   {link}
                 </a>

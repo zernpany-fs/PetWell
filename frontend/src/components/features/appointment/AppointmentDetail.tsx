@@ -16,7 +16,7 @@ import StatusActions from './StatusActions';
 const CANCELLABLE = ['PENDING', 'CONFIRMED', 'RESCHEDULED'];
 
 const card =
-  'bg-white border border-[#E6DFD3] rounded-2xl shadow-[0_2px_8px_rgba(45,42,38,0.06)]';
+  'bg-white border border-pw-line rounded-2xl shadow-[0_2px_8px_rgba(45,42,38,0.06)]';
 
 export function AppointmentDetail({
   appointment,
@@ -33,7 +33,7 @@ export function AppointmentDetail({
     <div className="pw-fade max-w-2xl mx-auto px-4 sm:px-6 py-8 space-y-6">
       <Link
         href={`/${area}/appointments`}
-        className="inline-flex items-center gap-1.5 text-[#6E675C] hover:text-[#2D2A26] no-underline"
+        className="inline-flex items-center gap-1.5 text-pw-muted hover:text-pw-ink no-underline"
         style={{ fontSize: '14px' }}
       >
         <ArrowLeft size={14} /> Back to appointments
@@ -43,12 +43,12 @@ export function AppointmentDetail({
         <div className="flex items-start justify-between gap-3 mb-4">
           <div>
             <h2
-              className="font-display text-[#2D2A26]"
+              className="font-display text-pw-ink"
               style={{ fontSize: '24px' }}
             >
               {formatAppTime(a.appointmentDate, 'EEEE d MMMM yyyy')}
             </h2>
-            <p className="text-[#6E675C]">
+            <p className="text-pw-muted">
               {formatAppTime(a.appointmentDate, 'HH:mm')}
             </p>
           </div>
@@ -57,42 +57,42 @@ export function AppointmentDetail({
 
         <dl className="space-y-2.5 m-0">
           <div className="flex items-center gap-2.5">
-            <PawPrint size={15} className="text-[#A39B8D] shrink-0" />
+            <PawPrint size={15} className="text-pw-faint shrink-0" />
             <dt className="sr-only">Pet</dt>
-            <dd className="m-0 text-[#2D2A26]" style={{ fontSize: '14px' }}>
+            <dd className="m-0 text-pw-ink" style={{ fontSize: '14px' }}>
               {area === 'staff' ? (
                 <Link
                   href={`/staff/pets/${a.petId}`}
-                  className="text-[#5E86AD] no-underline hover:underline"
+                  className="text-pw-primary no-underline hover:underline"
                 >
                   {a.pet?.name ?? 'Pet'}
                 </Link>
               ) : (
                 <Link
                   href={`/owner/pets/${a.petId}`}
-                  className="text-[#5E86AD] no-underline hover:underline"
+                  className="text-pw-primary no-underline hover:underline"
                 >
                   {a.pet?.name ?? 'Pet'}
                 </Link>
               )}
               {a.pet?.species ? (
-                <span className="text-[#6E675C]"> · {a.pet.species}</span>
+                <span className="text-pw-muted"> · {a.pet.species}</span>
               ) : null}
             </dd>
           </div>
 
           <div className="flex items-center gap-2.5">
-            <Building2 size={15} className="text-[#A39B8D] shrink-0" />
+            <Building2 size={15} className="text-pw-faint shrink-0" />
             <dt className="sr-only">Clinic</dt>
-            <dd className="m-0 text-[#2D2A26]" style={{ fontSize: '14px' }}>
+            <dd className="m-0 text-pw-ink" style={{ fontSize: '14px' }}>
               {a.clinic?.name ?? 'Clinic'}
             </dd>
           </div>
 
           <div className="flex items-center gap-2.5">
-            <CalendarDays size={15} className="text-[#A39B8D] shrink-0" />
+            <CalendarDays size={15} className="text-pw-faint shrink-0" />
             <dt className="sr-only">Requested</dt>
-            <dd className="m-0 text-[#6E675C]" style={{ fontSize: '14px' }}>
+            <dd className="m-0 text-pw-muted" style={{ fontSize: '14px' }}>
               Requested {formatAppTime(a.createdAt, 'd MMM yyyy')}
             </dd>
           </div>
@@ -101,10 +101,10 @@ export function AppointmentDetail({
             <div className="flex items-start gap-2.5">
               <StickyNote
                 size={15}
-                className="text-[#A39B8D] shrink-0 mt-0.5"
+                className="text-pw-faint shrink-0 mt-0.5"
               />
               <dt className="sr-only">Notes</dt>
-              <dd className="m-0 text-[#2D2A26]" style={{ fontSize: '14px' }}>
+              <dd className="m-0 text-pw-ink" style={{ fontSize: '14px' }}>
                 {a.notes}
               </dd>
             </div>
@@ -112,12 +112,12 @@ export function AppointmentDetail({
         </dl>
 
         {area === 'staff' ? (
-          <div className="mt-5 pt-5 border-t border-[#E6DFD3] flex justify-end">
+          <div className="mt-5 pt-5 border-t border-pw-line flex justify-end">
             <StatusActions id={a.id} status={a.status} />
           </div>
         ) : (
           CANCELLABLE.includes(a.status) && (
-            <div className="mt-5 pt-5 border-t border-[#E6DFD3] flex justify-end">
+            <div className="mt-5 pt-5 border-t border-pw-line flex justify-end">
               <CancelButton id={a.id} />
             </div>
           )
@@ -126,7 +126,7 @@ export function AppointmentDetail({
 
       <div className={`${card} p-6`}>
         <h3
-          className="font-display text-[#2D2A26] mb-4"
+          className="font-display text-pw-ink mb-4"
           style={{ fontSize: '18px' }}
         >
           Status history

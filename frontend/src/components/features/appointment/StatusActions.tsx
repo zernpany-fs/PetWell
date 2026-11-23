@@ -48,7 +48,7 @@ export default function StatusActions({
           className={
             a.kind === 'primary'
               ? 'pw-btn-primary rounded-full px-3 py-1.5 disabled:opacity-60'
-              : 'rounded-full px-3 py-1.5 bg-[#FEF2F2] border border-[#FECACA] text-[#C4534E] hover:bg-[#FEE2E2] transition-colors disabled:opacity-60'
+              : 'rounded-full px-3 py-1.5 bg-pw-danger-tint border border-pw-danger-line text-pw-danger hover:bg-pw-danger-tint-2 transition-colors disabled:opacity-60'
           }
           style={{ fontSize: '12px', minHeight: '36px' }}
         >

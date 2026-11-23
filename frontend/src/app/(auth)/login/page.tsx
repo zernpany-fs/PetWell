@@ -7,11 +7,11 @@ export const metadata: Metadata = { title: 'Log in' };
 export default function LoginPage() {
   return (
     <div
-      className="w-full bg-white border border-[#E6DFD3] rounded-[20px] shadow-[0_2px_8px_rgba(45,42,38,0.06)] p-8"
+      className="w-full bg-white border border-pw-line rounded-[20px] shadow-[0_2px_8px_rgba(45,42,38,0.06)] p-8"
       style={{ maxWidth: '420px' }}
     >
       <h1
-        className="font-display text-[#2D2A26] mb-6"
+        className="font-display text-pw-ink mb-6"
         style={{ fontSize: '28px' }}
       >
         Welcome back
@@ -25,15 +25,15 @@ export default function LoginPage() {
       >
         <Link
           href="/forgot-password"
-          className="text-[#5E86AD] hover:text-[#40638A] no-underline"
+          className="text-pw-primary hover:text-pw-primary-strong no-underline"
         >
           Forgot password?
         </Link>
-        <span className="text-[#6E675C]">
+        <span className="text-pw-muted">
           Don&apos;t have an account?{' '}
           <Link
             href="/register"
-            className="text-[#5E86AD] hover:text-[#40638A] no-underline"
+            className="text-pw-primary hover:text-pw-primary-strong no-underline"
           >
             Register
           </Link>

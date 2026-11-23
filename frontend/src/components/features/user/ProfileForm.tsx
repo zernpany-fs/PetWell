@@ -88,7 +88,7 @@ export default function ProfileForm({
               className="w-16 h-16 rounded-full object-cover"
             />
           ) : (
-            <div className="w-16 h-16 rounded-full bg-[#5E86AD] text-white flex items-center justify-center text-lg select-none">
+            <div className="w-16 h-16 rounded-full bg-pw-primary text-white flex items-center justify-center text-lg select-none">
               {initials}
             </div>
           )}
@@ -98,13 +98,13 @@ export default function ProfileForm({
             type="button"
             disabled={uploading}
             onClick={() => fileRef.current?.click()}
-            className="rounded-full px-4 py-2 bg-white border-[1.5px] border-[#5E86AD] text-[#5E86AD] hover:bg-[#E4EBF2] transition-colors flex items-center gap-2 disabled:opacity-60"
+            className="rounded-full px-4 py-2 bg-white border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors flex items-center gap-2 disabled:opacity-60"
             style={{ fontSize: '14px' }}
           >
             <Camera size={15} /> {uploading ? 'Uploading…' : 'Change photo'}
           </button>
           <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickFile} />
-          <p className="text-[#6E675C] mt-1" style={{ fontSize: '12px' }}>{user.email}</p>
+          <p className="text-pw-muted mt-1" style={{ fontSize: '12px' }}>{user.email}</p>
         </div>
       </div>
 
@@ -115,12 +115,12 @@ export default function ProfileForm({
       <FormInput label="Phone" value={f.phone} onChange={set('phone')} />
 
       {showAddress && (
-        <div className="pt-2 border-t border-[#E6DFD3] space-y-4">
+        <div className="pt-2 border-t border-pw-line space-y-4">
           <div>
-            <h3 className="text-[#2D2A26]" style={{ fontSize: '15px' }}>
+            <h3 className="text-pw-ink" style={{ fontSize: '15px' }}>
               Address
             </h3>
-            <p className="text-[#6E675C] mt-0.5" style={{ fontSize: '12px' }}>
+            <p className="text-pw-muted mt-0.5" style={{ fontSize: '12px' }}>
               Optional. Leave any field blank to remove it.
             </p>
           </div>
@@ -150,7 +150,7 @@ export default function ProfileForm({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label
-                className="block text-[#2D2A26] mb-1.5"
+                className="block text-pw-ink mb-1.5"
                 style={{ fontSize: '13px' }}
               >
                 Province
@@ -158,7 +158,7 @@ export default function ProfileForm({
               <select
                 value={f.province}
                 onChange={set('province')}
-                className="w-full h-12 px-4 bg-white border border-[#E6DFD3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5E86AD] focus:border-[#5E86AD] transition-colors text-[#2D2A26]"
+                className="w-full h-12 px-4 bg-white border border-pw-line rounded-xl focus:outline-none focus:ring-2 focus:ring-pw-primary focus:border-pw-primary transition-colors text-pw-ink"
               >
                 <option value="">Select a province</option>
                 {f.province &&

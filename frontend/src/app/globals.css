@@ -8,8 +8,8 @@
 /* PetWell design system (from wireframe) */
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #FAF8F4;
-  color: #2D2A26;
+  background-color: var(--color-pw-page);
+  color: var(--color-pw-ink);
 }
 .font-display {
   font-family: 'Playfair Display', serif;
@@ -18,18 +18,18 @@ body {
 
 /* v2 playful layer */
 .pw-btn-primary {
-  background: linear-gradient(135deg, #5E86AD, #46709A);
+  background: linear-gradient(135deg, var(--color-pw-primary), var(--color-pw-primary-mid));
   color: #fff;
   transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 .pw-btn-primary:hover {
-  background: linear-gradient(135deg, #4A7196, #3A5F86);
+  background: linear-gradient(135deg, var(--color-pw-primary-hover), var(--color-pw-primary-dark));
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(64, 99, 138, 0.32);
 }
 .pw-btn-primary:disabled {
-  background: #F1ECE3;
-  color: #A39B8D;
+  background: var(--color-pw-sand);
+  color: var(--color-pw-faint);
   transform: none;
   box-shadow: none;
 }
@@ -57,7 +57,54 @@ body {
   filter: drop-shadow(0 4px 6px rgba(45, 42, 38, 0.15));
 }
 .hero-wash {
-  background: linear-gradient(145deg, #F1ECE3, #FBEDE7 55%, #EFEBF8);
+  background: linear-gradient(145deg, var(--color-pw-sand), var(--color-pw-coral-tint) 55%, var(--color-pw-violet-tint));
+}
+
+/* PetWell colour tokens (D69). Components use these, never raw hex. */
+@theme {
+  --color-pw-ink: #2D2A26;
+  --color-pw-muted: #6E675C;
+  --color-pw-faint: #A39B8D;
+  --color-pw-faint-2: #8B8474;
+  --color-pw-subtle: #9A9284;
+  --color-pw-subtle-2: #B5AEA1;
+  --color-pw-line: #E6DFD3;
+  --color-pw-sand: #F1ECE3;
+  --color-pw-sand-2: #EFECE4;
+  --color-pw-page: #FAF8F4;
+  --color-pw-page-2: #F7F4EE;
+  --color-pw-page-3: #F7F5F0;
+  --color-pw-white: #FFFFFF;
+  --color-pw-primary: #5E86AD;
+  --color-pw-primary-hover: #4A7196;
+  --color-pw-primary-mid: #46709A;
+  --color-pw-primary-strong: #40638A;
+  --color-pw-primary-strong-2: #3F6489;
+  --color-pw-primary-dark: #3A5F86;
+  --color-pw-primary-tint: #E4EBF2;
+  --color-pw-primary-tint-2: #EEF3F8;
+  --color-pw-primary-tint-3: #F4F7FA;
+  --color-pw-violet: #8B7FD1;
+  --color-pw-violet-strong: #6F63BE;
+  --color-pw-violet-tint: #EFEBF8;
+  --color-pw-coral: #E58A6F;
+  --color-pw-coral-tint: #FBEDE7;
+  --color-pw-success: #58996F;
+  --color-pw-success-tint: #E7F2EA;
+  --color-pw-warning: #C08A2D;
+  --color-pw-warning-strong: #B45309;
+  --color-pw-warning-text: #96701D;
+  --color-pw-warning-ink: #6B5414;
+  --color-pw-warning-tint: #FFFBEB;
+  --color-pw-warning-tint-2: #FBF3E2;
+  --color-pw-warning-soft: #F8EEDB;
+  --color-pw-warning-line: #EAD9B0;
+  --color-pw-warning-line-2: #FDE68A;
+  --color-pw-danger: #C4534E;
+  --color-pw-danger-tint: #FEF2F2;
+  --color-pw-danger-tint-2: #FEE2E2;
+  --color-pw-danger-line: #FECACA;
+  --color-pw-danger-soft: #F8E6E4;
 }
 
 @theme inline {

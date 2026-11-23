@@ -1,12 +1,12 @@
 import { AppointmentStatus } from '@/lib/api/api.type';
 
 const styles: Record<AppointmentStatus, { bg: string; text: string; label: string }> = {
-  PENDING: { bg: '#F8EEDB', text: '#C08A2D', label: 'Pending' },
-  CONFIRMED: { bg: '#E4EBF2', text: '#40638A', label: 'Confirmed' },
-  RESCHEDULED: { bg: '#EFEBF8', text: '#8B7FD1', label: 'Rescheduled' },
-  COMPLETED: { bg: '#E7F2EA', text: '#58996F', label: 'Completed' },
-  REJECTED: { bg: '#F8E6E4', text: '#C4534E', label: 'Rejected' },
-  CANCELLED: { bg: '#EFECE4', text: '#8B8474', label: 'Cancelled' },
+  PENDING: { bg: 'var(--color-pw-warning-soft)', text: 'var(--color-pw-warning)', label: 'Pending' },
+  CONFIRMED: { bg: 'var(--color-pw-primary-tint)', text: 'var(--color-pw-primary-strong)', label: 'Confirmed' },
+  RESCHEDULED: { bg: 'var(--color-pw-violet-tint)', text: 'var(--color-pw-violet)', label: 'Rescheduled' },
+  COMPLETED: { bg: 'var(--color-pw-success-tint)', text: 'var(--color-pw-success)', label: 'Completed' },
+  REJECTED: { bg: 'var(--color-pw-danger-soft)', text: 'var(--color-pw-danger)', label: 'Rejected' },
+  CANCELLED: { bg: 'var(--color-pw-sand-2)', text: 'var(--color-pw-faint-2)', label: 'Cancelled' },
 };
 
 export function StatusBadge({ status }: { status: AppointmentStatus }) {

@@ -40,13 +40,13 @@ export default function ForgotPasswordForm() {
   if (sentMessage !== null) {
     return (
       <div className="text-center" role="status">
-        <div className="mx-auto mb-4 w-12 h-12 rounded-full bg-[#EEF3F8] text-[#5E86AD] flex items-center justify-center">
+        <div className="mx-auto mb-4 w-12 h-12 rounded-full bg-pw-primary-tint-2 text-pw-primary flex items-center justify-center">
           <MailCheck size={22} />
         </div>
-        <h2 className="text-[#2D2A26] mb-2" style={{ fontSize: '18px' }}>
+        <h2 className="text-pw-ink mb-2" style={{ fontSize: '18px' }}>
           Check your inbox
         </h2>
-        <p className="text-[#6E675C] mb-6" style={{ fontSize: '14px' }}>
+        <p className="text-pw-muted mb-6" style={{ fontSize: '14px' }}>
           {sentMessage} The link works once and expires in 30 minutes.
         </p>
         <Link
@@ -70,7 +70,7 @@ export default function ForgotPasswordForm() {
         {...register('email')}
       />
       {formError && (
-        <p role="alert" className="text-[#C4534E]" style={{ fontSize: '13px' }}>
+        <p role="alert" className="text-pw-danger" style={{ fontSize: '13px' }}>
           {formError}
         </p>
       )}
@@ -85,7 +85,7 @@ export default function ForgotPasswordForm() {
       <div className="text-center" style={{ fontSize: '14px' }}>
         <Link
           href="/login"
-          className="text-[#5E86AD] hover:text-[#40638A] no-underline"
+          className="text-pw-primary hover:text-pw-primary-strong no-underline"
         >
           ← Back to log in
         </Link>

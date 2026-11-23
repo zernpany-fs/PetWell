@@ -22,10 +22,10 @@ export default async function StaffPetLookupPage({
 
   return (
     <div className="pw-fade max-w-3xl mx-auto px-4 sm:px-6 py-8">
-      <h2 className="font-display text-[#2D2A26]" style={{ fontSize: '26px' }}>
+      <h2 className="font-display text-pw-ink" style={{ fontSize: '26px' }}>
         Patient Lookup
       </h2>
-      <p className="text-[#6E675C] mt-1 mb-5">
+      <p className="text-pw-muted mt-1 mb-5">
         Shows pets your clinic can access. For a walk-in, ask the owner for a
         share code.
       </p>
@@ -36,13 +36,13 @@ export default async function StaffPetLookupPage({
         <div className="relative flex-1">
           <Search
             size={16}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A39B8D]"
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-pw-faint"
           />
           <input
             name="q"
             defaultValue={term}
             placeholder="Pet name, microchip, owner name, email or phone…"
-            className="w-full h-12 pl-10 pr-4 bg-white border border-[#E6DFD3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5E86AD] text-[#2D2A26] placeholder:text-[#A39B8D]"
+            className="w-full h-12 pl-10 pr-4 bg-white border border-pw-line rounded-xl focus:outline-none focus:ring-2 focus:ring-pw-primary text-pw-ink placeholder:text-pw-faint"
           />
         </div>
         <button
@@ -54,24 +54,24 @@ export default async function StaffPetLookupPage({
       </form>
 
       {!term ? (
-        <div className="bg-white border border-[#E6DFD3] rounded-2xl p-10 text-center">
-          <div className="w-12 h-12 rounded-full bg-[#F1ECE3] flex items-center justify-center mx-auto mb-3">
-            <Search size={20} className="text-[#A39B8D]" />
+        <div className="bg-white border border-pw-line rounded-2xl p-10 text-center">
+          <div className="w-12 h-12 rounded-full bg-pw-sand flex items-center justify-center mx-auto mb-3">
+            <Search size={20} className="text-pw-faint" />
           </div>
-          <p className="text-[#2D2A26] mb-1">Start typing to find a patient</p>
+          <p className="text-pw-ink mb-1">Start typing to find a patient</p>
         </div>
       ) : results.length === 0 ? (
-        <div className="bg-white border border-[#E6DFD3] rounded-2xl p-10 text-center">
-          <p className="text-[#2D2A26] mb-1">
+        <div className="bg-white border border-pw-line rounded-2xl p-10 text-center">
+          <p className="text-pw-ink mb-1">
             No pets match &ldquo;{term}&rdquo;
           </p>
-          <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
+          <p className="text-pw-muted" style={{ fontSize: '14px' }}>
             Pets you only wrote records for are found by pet name.
           </p>
         </div>
       ) : (
         <>
-          <p className="text-[#6E675C] mb-3" style={{ fontSize: '14px' }}>
+          <p className="text-pw-muted mb-3" style={{ fontSize: '14px' }}>
             {results.length} {results.length === 1 ? 'patient' : 'patients'}{' '}
             found
           </p>
@@ -82,7 +82,7 @@ export default async function StaffPetLookupPage({
                 href={`/staff/pets/${pet.id}`}
                 className="no-underline block"
               >
-                <div className="pw-lift bg-white border border-[#E6DFD3] rounded-2xl p-4 shadow-[0_2px_8px_rgba(45,42,38,0.06)] flex items-center gap-4">
+                <div className="pw-lift bg-white border border-pw-line rounded-2xl p-4 shadow-[0_2px_8px_rgba(45,42,38,0.06)] flex items-center gap-4">
                   {pet.photoUrl ? (
                     <Image
                       src={pet.photoUrl}
@@ -92,20 +92,20 @@ export default async function StaffPetLookupPage({
                       className="w-14 h-14 rounded-xl object-cover shrink-0"
                     />
                   ) : (
-                    <div className="w-14 h-14 rounded-xl bg-[#F1ECE3] flex items-center justify-center shrink-0">
-                      <PawPrint size={20} className="text-[#A39B8D]" />
+                    <div className="w-14 h-14 rounded-xl bg-pw-sand flex items-center justify-center shrink-0">
+                      <PawPrint size={20} className="text-pw-faint" />
                     </div>
                   )}
 
                   <div className="flex-1 min-w-0">
                     <p
-                      className="font-display text-[#2D2A26] truncate"
+                      className="font-display text-pw-ink truncate"
                       style={{ fontSize: '17px' }}
                     >
                       {pet.name}
                     </p>
                     <p
-                      className="text-[#6E675C] truncate"
+                      className="text-pw-muted truncate"
                       style={{ fontSize: '13px' }}
                     >
                       {pet.species}
@@ -115,7 +115,7 @@ export default async function StaffPetLookupPage({
                         : ''}
                     </p>
                     <div
-                      className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1 text-[#6E675C]"
+                      className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1 text-pw-muted"
                       style={{ fontSize: '12px' }}
                     >
                       {/* AUTHORED_ONLY results have no owner (D9, D38) */}
@@ -146,8 +146,8 @@ export default async function StaffPetLookupPage({
                       <span
                         className="rounded-full px-2.5 py-0.5 flex items-center gap-1"
                         style={{
-                          backgroundColor: '#FBF3E2',
-                          color: '#6B5414',
+                          backgroundColor: 'var(--color-pw-warning-tint-2)',
+                          color: 'var(--color-pw-warning-ink)',
                           fontSize: '12px',
                         }}
                         title="No access now: you only see records your clinic wrote."
@@ -160,8 +160,8 @@ export default async function StaffPetLookupPage({
                       <span
                         className="rounded-full px-2.5 py-0.5"
                         style={{
-                          backgroundColor: '#F8E6E4',
-                          color: '#C4534E',
+                          backgroundColor: 'var(--color-pw-danger-soft)',
+                          color: 'var(--color-pw-danger)',
                           fontSize: '12px',
                         }}
                       >

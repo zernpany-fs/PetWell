@@ -34,16 +34,16 @@ export default async function StaffPetPage({
   if (pet.accessLevel === 'AUTHORED_ONLY') {
     return (
       <div className="pw-fade max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-        <div className="bg-white border border-[#E6DFD3] rounded-2xl p-6 shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
+        <div className="bg-white border border-pw-line rounded-2xl p-6 shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
           <h2
-            className="font-display text-[#2D2A26]"
+            className="font-display text-pw-ink"
             style={{ fontSize: '24px' }}
           >
             {pet.name}
           </h2>
-          <p className="text-[#6E675C]">{pet.species}</p>
+          <p className="text-pw-muted">{pet.species}</p>
           <div
-            className="mt-4 flex gap-2 bg-[#FBF3E2] border border-[#EAD9B0] rounded-xl p-3 text-[#6B5414]"
+            className="mt-4 flex gap-2 bg-pw-warning-tint-2 border border-pw-warning-line rounded-xl p-3 text-pw-warning-ink"
             style={{ fontSize: '13px' }}
           >
             <Lock size={15} className="shrink-0 mt-0.5" />
@@ -61,7 +61,7 @@ export default async function StaffPetPage({
 
   return (
     <div className="pw-fade max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-      <div className="bg-white border border-[#E6DFD3] rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
+      <div className="bg-white border border-pw-line rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
         {pet.photoUrl ? (
           // The wrapper carries the height; a filled Image is absolutely
           // positioned and would otherwise leave the container at zero.
@@ -80,57 +80,57 @@ export default async function StaffPetPage({
         )}
         <div className="p-6">
           <h2
-            className="font-display text-[#2D2A26]"
+            className="font-display text-pw-ink"
             style={{ fontSize: '24px' }}
           >
             {pet.name}
           </h2>
-          <p className="text-[#6E675C]">
+          <p className="text-pw-muted">
             {pet.species}
             {pet.breed ? ` · ${pet.breed}` : ''}
           </p>
           {(pet.chronicCondition || pet.drugAllergy) && (
             <div className="mt-2" style={{ fontSize: '14px' }}>
               {pet.chronicCondition && (
-                <p className="text-[#6E675C]">
+                <p className="text-pw-muted">
                   Condition:{' '}
-                  <span className="text-[#2D2A26]">{pet.chronicCondition}</span>
+                  <span className="text-pw-ink">{pet.chronicCondition}</span>
                 </p>
               )}
               {pet.drugAllergy && (
-                <p className="text-[#6E675C]">
+                <p className="text-pw-muted">
                   Allergy:{' '}
-                  <span className="text-[#2D2A26]">{pet.drugAllergy}</span>
+                  <span className="text-pw-ink">{pet.drugAllergy}</span>
                 </p>
               )}
             </div>
           )}
           {/* D9: owner contact only while the clinic has access. */}
           <div
-            className="mt-4 pt-4 border-t border-[#E6DFD3] grid sm:grid-cols-3 gap-2 text-[#2D2A26]"
+            className="mt-4 pt-4 border-t border-pw-line grid sm:grid-cols-3 gap-2 text-pw-ink"
             style={{ fontSize: '13px' }}
           >
             <p className="flex items-center gap-1.5">
-              <User size={13} className="text-[#6E675C]" />
+              <User size={13} className="text-pw-muted" />
               {pet.owner.firstName} {pet.owner.lastName}
             </p>
             {pet.owner.phone && (
               <p className="flex items-center gap-1.5">
-                <Phone size={13} className="text-[#6E675C]" />
+                <Phone size={13} className="text-pw-muted" />
                 {pet.owner.phone}
               </p>
             )}
             <p className="flex items-center gap-1.5 min-w-0">
-              <Mail size={13} className="text-[#6E675C] shrink-0" />
+              <Mail size={13} className="text-pw-muted shrink-0" />
               <span className="truncate">{pet.owner.email}</span>
             </p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white border border-[#E6DFD3] rounded-2xl p-6 shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
+      <div className="bg-white border border-pw-line rounded-2xl p-6 shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
         <h3
-          className="font-display text-[#2D2A26] mb-4"
+          className="font-display text-pw-ink mb-4"
           style={{ fontSize: '18px' }}
         >
           Add a health record
@@ -154,13 +154,13 @@ function RecordList({
   return (
     <div>
       <h3
-        className="font-display text-[#2D2A26] mb-3"
+        className="font-display text-pw-ink mb-3"
         style={{ fontSize: '18px' }}
       >
         {title}
       </h3>
       {records.length === 0 ? (
-        <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
+        <p className="text-pw-muted" style={{ fontSize: '14px' }}>
           No records yet.
         </p>
       ) : (
@@ -168,33 +168,33 @@ function RecordList({
           {records.map((r) => (
             <div
               key={r.id}
-              className="bg-white border border-[#E6DFD3] rounded-2xl p-4 flex gap-3"
+              className="bg-white border border-pw-line rounded-2xl p-4 flex gap-3"
             >
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
                 style={{
                   backgroundColor:
-                    r.recordType === 'VACCINE' ? '#E7F2EA' : '#E4EBF2',
+                    r.recordType === 'VACCINE' ? 'var(--color-pw-success-tint)' : 'var(--color-pw-primary-tint)',
                 }}
               >
                 {r.recordType === 'VACCINE' ? (
-                  <Syringe size={17} className="text-[#58996F]" />
+                  <Syringe size={17} className="text-pw-success" />
                 ) : (
-                  <Stethoscope size={17} className="text-[#5E86AD]" />
+                  <Stethoscope size={17} className="text-pw-primary" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-[#2D2A26]">{r.description}</p>
+                  <p className="text-pw-ink">{r.description}</p>
                   <span
-                    className="text-[#6E675C] shrink-0"
+                    className="text-pw-muted shrink-0"
                     style={{ fontSize: '13px' }}
                   >
                     {formatAppTime(r.recordDate, 'd MMM yyyy')}
                   </span>
                 </div>
                 <p
-                  className="flex items-center gap-1.5 mt-1 text-[#6E675C]"
+                  className="flex items-center gap-1.5 mt-1 text-pw-muted"
                   style={{ fontSize: '13px' }}
                 >
                   <Building2 size={13} /> {r.clinic?.name ?? 'Clinic'}

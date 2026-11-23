@@ -28,7 +28,7 @@ export default function BookAppointmentForm({
   const [availabilityKey, setAvailabilityKey] = useState(0);
 
   const field =
-    "w-full h-12 px-4 bg-white border border-[#E6DFD3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5E86AD] text-[#2D2A26]";
+    "w-full h-12 px-4 bg-white border border-pw-line rounded-xl focus:outline-none focus:ring-2 focus:ring-pw-primary text-pw-ink";
 
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
@@ -73,7 +73,7 @@ export default function BookAppointmentForm({
     <div className="space-y-4">
       <div>
         <label
-          className="block text-[#2D2A26] mb-1.5"
+          className="block text-pw-ink mb-1.5"
           style={{ fontSize: "13px" }}
         >
           Pet
@@ -94,7 +94,7 @@ export default function BookAppointmentForm({
 
       <div>
         <label
-          className="block text-[#2D2A26] mb-1.5"
+          className="block text-pw-ink mb-1.5"
           style={{ fontSize: "13px" }}
         >
           Clinic
@@ -115,7 +115,7 @@ export default function BookAppointmentForm({
 
       <div>
         <label
-          className="block text-[#2D2A26] mb-1.5"
+          className="block text-pw-ink mb-1.5"
           style={{ fontSize: "13px" }}
         >
           Preferred date
@@ -131,7 +131,7 @@ export default function BookAppointmentForm({
 
       <div>
         <label
-          className="block text-[#2D2A26] mb-1.5"
+          className="block text-pw-ink mb-1.5"
           style={{ fontSize: "13px" }}
         >
           Time
@@ -147,7 +147,7 @@ export default function BookAppointmentForm({
 
       <div>
         <label
-          className="block text-[#2D2A26] mb-1.5"
+          className="block text-pw-ink mb-1.5"
           style={{ fontSize: "13px" }}
         >
           Notes (optional)
@@ -156,18 +156,18 @@ export default function BookAppointmentForm({
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           rows={3}
-          className="w-full px-4 py-3 bg-white border border-[#E6DFD3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5E86AD] text-[#2D2A26]"
+          className="w-full px-4 py-3 bg-white border border-pw-line rounded-xl focus:outline-none focus:ring-2 focus:ring-pw-primary text-pw-ink"
           placeholder="Reason for visit…"
         />
       </div>
 
       {error && (
-        <p className="text-[#C4534E]" style={{ fontSize: "13px" }}>
+        <p className="text-pw-danger" style={{ fontSize: "13px" }}>
           {error}
         </p>
       )}
 
-      <p className="text-[#6E675C]" style={{ fontSize: "12px" }}>
+      <p className="text-pw-muted" style={{ fontSize: "12px" }}>
         Each hour holds a limited number of visits. The clinic will call to
         confirm your requested time.
       </p>
@@ -184,7 +184,7 @@ export default function BookAppointmentForm({
         <button
           type="button"
           onClick={() => router.push("/owner/appointments")}
-          className="rounded-full px-6 bg-white border-[1.5px] border-[#5E86AD] text-[#5E86AD] hover:bg-[#E4EBF2] transition-colors"
+          className="rounded-full px-6 bg-white border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors"
           style={{ minHeight: "44px" }}
         >
           Cancel

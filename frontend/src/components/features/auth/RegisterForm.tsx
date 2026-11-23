@@ -56,8 +56,8 @@ export default function RegisterForm({ clinics }: { clinics: Clinic[] }) {
       onClick={() => setRole(value)}
       className={`flex-1 rounded-xl border px-3 py-2.5 text-sm transition-colors ${
         role === value
-          ? 'border-[#5E86AD] bg-[#E4EBF2] text-[#40638A]'
-          : 'border-[#E6DFD3] bg-white text-[#6E675C] hover:bg-[#F1ECE3]'
+          ? 'border-pw-primary bg-pw-primary-tint text-pw-primary-strong'
+          : 'border-pw-line bg-white text-pw-muted hover:bg-pw-sand'
       }`}
     >
       {label}
@@ -68,7 +68,7 @@ export default function RegisterForm({ clinics }: { clinics: Clinic[] }) {
     <form method="post" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
         <label
-          className="block text-[#2D2A26] mb-1.5"
+          className="block text-pw-ink mb-1.5"
           style={{ fontSize: '13px' }}
         >
           I am registering as
@@ -109,7 +109,7 @@ export default function RegisterForm({ clinics }: { clinics: Clinic[] }) {
           <button
             type="button"
             onClick={() => setShowPw((p) => !p)}
-            className="text-[#6E675C] hover:text-[#2D2A26]"
+            className="text-pw-muted hover:text-pw-ink"
             aria-label={showPw ? 'Hide password' : 'Show password'}
           >
             {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -121,7 +121,7 @@ export default function RegisterForm({ clinics }: { clinics: Clinic[] }) {
       {role === 'CLINIC_STAFF' && (
         <div>
           <label
-            className="block text-[#2D2A26] mb-1.5"
+            className="block text-pw-ink mb-1.5"
             style={{ fontSize: '13px' }}
           >
             Clinic
@@ -129,7 +129,7 @@ export default function RegisterForm({ clinics }: { clinics: Clinic[] }) {
           <select
             value={clinicId}
             onChange={(e) => setClinicId(e.target.value)}
-            className="w-full h-12 px-4 bg-white border border-[#E6DFD3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5E86AD] focus:border-[#5E86AD] transition-colors text-[#2D2A26]"
+            className="w-full h-12 px-4 bg-white border border-pw-line rounded-xl focus:outline-none focus:ring-2 focus:ring-pw-primary focus:border-pw-primary transition-colors text-pw-ink"
           >
             <option value="">Select your clinic</option>
             {clinics.map((c) => (
@@ -145,9 +145,9 @@ export default function RegisterForm({ clinics }: { clinics: Clinic[] }) {
         <div
           className="flex items-start gap-2 rounded-xl px-3 py-2.5 border"
           style={{
-            backgroundColor: '#FEF2F2',
-            borderColor: '#FECACA',
-            color: '#C4534E',
+            backgroundColor: 'var(--color-pw-danger-tint)',
+            borderColor: 'var(--color-pw-danger-line)',
+            color: 'var(--color-pw-danger)',
             fontSize: '13px',
           }}
         >

@@ -71,26 +71,26 @@ export default function GenerateShareCodeForm({ petId }: { petId: string }) {
 
   if (shareCode) {
     return (
-      <div className="bg-[#F7F4EE] border border-[#E6DFD3] rounded-xl p-4 text-center">
-        <p className="text-[#6E675C]" style={{ fontSize: '13px' }}>
+      <div className="bg-pw-page-2 border border-pw-line rounded-xl p-4 text-center">
+        <p className="text-pw-muted" style={{ fontSize: '13px' }}>
           Read this code to the clinic staff
         </p>
         <p
           aria-label="Share code"
-          className="font-mono text-[#2D2A26] tracking-[0.4em] my-2"
+          className="font-mono text-pw-ink tracking-[0.4em] my-2"
           style={{ fontSize: '34px' }}
         >
           {shareCode.code}
         </p>
         <p
-          className="flex items-center justify-center gap-1.5 text-[#96701D]"
+          className="flex items-center justify-center gap-1.5 text-pw-warning-text"
           style={{ fontSize: '13px' }}
         >
           <Timer size={13} />
           Expires in {formatCountdown(secondsLeft)} (at{' '}
           {formatAppTime(shareCode.expiresAt, 'HH:mm')})
         </p>
-        <p className="text-[#6E675C] mt-1" style={{ fontSize: '13px' }}>
+        <p className="text-pw-muted mt-1" style={{ fontSize: '13px' }}>
           Works once and gives the clinic{' '}
           {durationLabel(shareCode.durationDays)}. This code will not be shown
           again.
@@ -101,7 +101,7 @@ export default function GenerateShareCodeForm({ petId }: { petId: string }) {
 
   return (
     <div>
-      <p className="text-[#2D2A26] mb-2" style={{ fontSize: '14px' }}>
+      <p className="text-pw-ink mb-2" style={{ fontSize: '14px' }}>
         How long can the clinic see the record?
       </p>
       <div
@@ -120,8 +120,8 @@ export default function GenerateShareCodeForm({ petId }: { petId: string }) {
               onClick={() => setDuration(o.value)}
               className={`rounded-full px-4 py-1.5 border-[1.5px] transition-colors ${
                 selected
-                  ? 'bg-[#5E86AD] border-[#5E86AD] text-white'
-                  : 'bg-white border-[#E6DFD3] text-[#2D2A26] hover:border-[#5E86AD]'
+                  ? 'bg-pw-primary border-pw-primary text-white'
+                  : 'bg-white border-pw-line text-pw-ink hover:border-pw-primary'
               }`}
               style={{ fontSize: '13px' }}
             >
@@ -145,14 +145,14 @@ export default function GenerateShareCodeForm({ petId }: { petId: string }) {
             : 'Generate share code'}
       </button>
       {expired && (
-        <p className="mt-2 text-[#6E675C]" style={{ fontSize: '13px' }}>
+        <p className="mt-2 text-pw-muted" style={{ fontSize: '13px' }}>
           The last code expired. Generate a new one when you are at the clinic.
         </p>
       )}
       {error && (
         <p
           role="alert"
-          className="mt-2 text-[#C4534E]"
+          className="mt-2 text-pw-danger"
           style={{ fontSize: '13px' }}
         >
           {error}

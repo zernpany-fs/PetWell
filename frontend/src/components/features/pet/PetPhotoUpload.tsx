@@ -38,7 +38,7 @@ export default function PetPhotoUpload({ petId }: { petId: string }) {
         type="button"
         disabled={pending}
         onClick={() => ref.current?.click()}
-        className="rounded-full px-4 py-2 bg-white/90 border-[1.5px] border-[#5E86AD] text-[#5E86AD] hover:bg-[#E4EBF2] transition-colors flex items-center gap-2 disabled:opacity-60"
+        className="rounded-full px-4 py-2 bg-white/90 border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors flex items-center gap-2 disabled:opacity-60"
         style={{ fontSize: '13px' }}
       >
         <Camera size={14} /> {pending ? 'Uploading…' : 'Photo'}

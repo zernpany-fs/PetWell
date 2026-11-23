@@ -14,7 +14,7 @@ export default async function MyPetsPage() {
   return (
     <div className="pw-fade max-w-5xl mx-auto px-4 sm:px-6 py-8">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="font-display text-[#2D2A26]" style={{ fontSize: '26px' }}>
+        <h2 className="font-display text-pw-ink" style={{ fontSize: '26px' }}>
           My Pets
         </h2>
         <Link href="/owner/pets/new" className="no-underline">
@@ -28,10 +28,10 @@ export default async function MyPetsPage() {
       </div>
 
       {pets.length === 0 ? (
-        <div className="bg-white border border-[#E6DFD3] rounded-2xl p-10 text-center">
+        <div className="bg-white border border-pw-line rounded-2xl p-10 text-center">
           <PhotoPlaceholder type="pet" className="w-16 h-16 rounded-2xl mx-auto mb-4" />
-          <p className="text-[#2D2A26] mb-1">No pets yet</p>
-          <p className="text-[#6E675C] mb-5" style={{ fontSize: '14px' }}>
+          <p className="text-pw-ink mb-1">No pets yet</p>
+          <p className="text-pw-muted mb-5" style={{ fontSize: '14px' }}>
             Add your first pet to start its health passport.
           </p>
           <Link href="/owner/pets/new" className="no-underline">
@@ -44,7 +44,7 @@ export default async function MyPetsPage() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {pets.map((p) => (
             <Link key={p.id} href={`/owner/pets/${p.id}`} className="no-underline">
-              <div className="pw-lift bg-white border border-[#E6DFD3] rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
+              <div className="pw-lift bg-white border border-pw-line rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
                 {p.photoUrl ? (
                   // aspect ratio on the wrapper, since a filled Image cannot
                   // give the container its own height. `sizes` mirrors the grid
@@ -63,10 +63,10 @@ export default async function MyPetsPage() {
                   <PhotoPlaceholder type="pet" className="w-full aspect-[4/3]" />
                 )}
                 <div className="p-4">
-                  <p className="font-display text-[#2D2A26]" style={{ fontSize: '18px' }}>
+                  <p className="font-display text-pw-ink" style={{ fontSize: '18px' }}>
                     {p.name}
                   </p>
-                  <p className="text-[#6E675C]" style={{ fontSize: '13px' }}>
+                  <p className="text-pw-muted" style={{ fontSize: '13px' }}>
                     {p.species}
                     {p.breed ? ` · ${p.breed}` : ''}
                   </p>

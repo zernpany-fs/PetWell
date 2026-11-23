@@ -64,7 +64,7 @@ export default function EditPetForm({ pet }: { pet: Pet }) {
       <div className="grid grid-cols-2 gap-3">
         <FormInput label="Breed" value={f.breed} onChange={set('breed')} />
         <div>
-          <label className="block text-[#2D2A26] mb-1.5" style={{ fontSize: '13px' }}>Birth date</label>
+          <label className="block text-pw-ink mb-1.5" style={{ fontSize: '13px' }}>Birth date</label>
           <DatePicker
             mode="date"
             value={f.birthDate}
@@ -87,7 +87,7 @@ export default function EditPetForm({ pet }: { pet: Pet }) {
           <button
             type="button"
             onClick={() => router.push(`/owner/pets/${pet.id}`)}
-            className="rounded-full px-6 bg-white border-[1.5px] border-[#5E86AD] text-[#5E86AD] hover:bg-[#E4EBF2] transition-colors"
+            className="rounded-full px-6 bg-white border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors"
             style={{ minHeight: '44px' }}
           >
             Cancel
@@ -97,7 +97,7 @@ export default function EditPetForm({ pet }: { pet: Pet }) {
           type="button"
           disabled={archiving}
           onClick={archive}
-          className="rounded-full px-4 bg-[#FEF2F2] border border-[#FECACA] text-[#C4534E] hover:bg-[#FEE2E2] transition-colors disabled:opacity-60"
+          className="rounded-full px-4 bg-pw-danger-tint border border-pw-danger-line text-pw-danger hover:bg-pw-danger-tint-2 transition-colors disabled:opacity-60"
           style={{ minHeight: '44px', fontSize: '14px' }}
         >
           {archiving ? '…' : 'Archive'}

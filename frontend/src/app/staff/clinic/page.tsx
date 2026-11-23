@@ -16,13 +16,13 @@ export default async function ClinicProfilePage() {
   return (
     <div className="pw-fade max-w-xl mx-auto px-4 sm:px-6 py-8">
       <h2
-        className="font-display text-[#2D2A26] mb-6"
+        className="font-display text-pw-ink mb-6"
         style={{ fontSize: '26px' }}
       >
         Clinic Profile
       </h2>
       {clinic && (
-        <div className="relative mb-6 rounded-2xl overflow-hidden border border-[#E6DFD3] shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
+        <div className="relative mb-6 rounded-2xl overflow-hidden border border-pw-line shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
           <ClinicPhoto
             photoUrl={clinic.photoUrl}
             name={clinic.name}
@@ -35,11 +35,11 @@ export default async function ClinicProfilePage() {
           </div>
         </div>
       )}
-      <div className="bg-white border border-[#E6DFD3] rounded-2xl p-6 shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
+      <div className="bg-white border border-pw-line rounded-2xl p-6 shadow-[0_2px_8px_rgba(45,42,38,0.06)]">
         {clinic ? (
           <ClinicProfileForm clinic={clinic} />
         ) : (
-          <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
+          <p className="text-pw-muted" style={{ fontSize: '14px' }}>
             Your account isn&apos;t linked to a clinic.
           </p>
         )}

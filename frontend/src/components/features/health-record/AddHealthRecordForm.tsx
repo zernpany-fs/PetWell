@@ -49,7 +49,7 @@ export default function AddHealthRecordForm({ petId }: { petId: string }) {
     <div className="space-y-4">
       <div>
         <label
-          className="block text-[#2D2A26] mb-1.5"
+          className="block text-pw-ink mb-1.5"
           style={{ fontSize: '13px' }}
         >
           Type
@@ -57,7 +57,7 @@ export default function AddHealthRecordForm({ petId }: { petId: string }) {
         <select
           value={recordType}
           onChange={(e) => setRecordType(e.target.value as RecordType)}
-          className="w-full h-12 px-4 bg-white border border-[#E6DFD3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5E86AD] text-[#2D2A26]"
+          className="w-full h-12 px-4 bg-white border border-pw-line rounded-xl focus:outline-none focus:ring-2 focus:ring-pw-primary text-pw-ink"
         >
           <option value="VACCINE">Vaccine</option>
           <option value="TREATMENT">Treatment</option>
@@ -72,7 +72,7 @@ export default function AddHealthRecordForm({ petId }: { petId: string }) {
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label
-            className="block text-[#2D2A26] mb-1.5"
+            className="block text-pw-ink mb-1.5"
             style={{ fontSize: '13px' }}
           >
             Record date
@@ -81,7 +81,7 @@ export default function AddHealthRecordForm({ petId }: { petId: string }) {
         </div>
         <div>
           <label
-            className="block text-[#2D2A26] mb-1.5"
+            className="block text-pw-ink mb-1.5"
             style={{ fontSize: '13px' }}
           >
             Next due (optional)
@@ -95,7 +95,7 @@ export default function AddHealthRecordForm({ petId }: { petId: string }) {
       </div>
 
       {error && (
-        <p className="text-[#C4534E]" style={{ fontSize: '13px' }}>
+        <p className="text-pw-danger" style={{ fontSize: '13px' }}>
           {error}
         </p>
       )}

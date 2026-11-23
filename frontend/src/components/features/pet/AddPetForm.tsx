@@ -45,7 +45,7 @@ export default function AddPetForm() {
       <div className="grid grid-cols-2 gap-3">
         <FormInput label="Breed (optional)" {...register('breed')} />
         <div>
-          <label className="block text-[#2D2A26] mb-1.5" style={{ fontSize: '13px' }}>Birth date (optional)</label>
+          <label className="block text-pw-ink mb-1.5" style={{ fontSize: '13px' }}>Birth date (optional)</label>
           <DatePicker mode="date" value={birthDate} onChange={(v) => setValue('birthDate', v)} />
         </div>
       </div>
@@ -57,7 +57,7 @@ export default function AddPetForm() {
       <FormInput label="Drug allergy (optional)" {...register('drugAllergy')} />
 
       {error && (
-        <p className="text-[#C4534E]" style={{ fontSize: '13px' }}>{error}</p>
+        <p className="text-pw-danger" style={{ fontSize: '13px' }}>{error}</p>
       )}
 
       <div className="flex gap-3 pt-1">
@@ -72,7 +72,7 @@ export default function AddPetForm() {
         <button
           type="button"
           onClick={() => router.push('/owner/pets')}
-          className="rounded-full px-6 bg-white border-[1.5px] border-[#5E86AD] text-[#5E86AD] hover:bg-[#E4EBF2] transition-colors"
+          className="rounded-full px-6 bg-white border-[1.5px] border-pw-primary text-pw-primary hover:bg-pw-primary-tint transition-colors"
           style={{ minHeight: '44px' }}
         >
           Cancel

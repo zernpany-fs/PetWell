@@ -44,7 +44,7 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => setShowPw((p) => !p)}
-            className="text-[#6E675C] hover:text-[#2D2A26]"
+            className="text-pw-muted hover:text-pw-ink"
             aria-label={showPw ? 'Hide password' : 'Show password'}
           >
             {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -57,9 +57,9 @@ export default function LoginForm() {
         <div
           className="flex items-start gap-2 rounded-xl px-3 py-2.5 border"
           style={{
-            backgroundColor: '#FEF2F2',
-            borderColor: '#FECACA',
-            color: '#C4534E',
+            backgroundColor: 'var(--color-pw-danger-tint)',
+            borderColor: 'var(--color-pw-danger-line)',
+            color: 'var(--color-pw-danger)',
             fontSize: '13px',
           }}
         >

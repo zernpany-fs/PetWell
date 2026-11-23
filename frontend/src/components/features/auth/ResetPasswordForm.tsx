@@ -49,7 +49,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
     <button
       type="button"
       onClick={() => setShowPw((p) => !p)}
-      className="text-[#6E675C] hover:text-[#2D2A26]"
+      className="text-pw-muted hover:text-pw-ink"
       aria-label={showPw ? 'Hide password' : 'Show password'}
     >
       {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -78,7 +78,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
       {linkError && (
         <div
           role="alert"
-          className="rounded-xl px-3 py-2.5 border bg-[#FEF2F2] border-[#FECACA] text-[#C4534E]"
+          className="rounded-xl px-3 py-2.5 border bg-pw-danger-tint border-pw-danger-line text-pw-danger"
           style={{ fontSize: '13px' }}
         >
           {linkError}{' '}

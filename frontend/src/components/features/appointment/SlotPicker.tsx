@@ -43,7 +43,7 @@ export default function SlotPicker({
 
   if (!clinicId || !date) {
     return (
-      <p className="text-[#6E675C]" style={{ fontSize: "13px" }}>
+      <p className="text-pw-muted" style={{ fontSize: "13px" }}>
         Choose a clinic and a date to see available times.
       </p>
     );
@@ -52,7 +52,7 @@ export default function SlotPicker({
   if (!fresh) {
     return (
       <p
-        className="flex items-center gap-2 text-[#6E675C]"
+        className="flex items-center gap-2 text-pw-muted"
         style={{ fontSize: "13px" }}
       >
         <Loader2 size={14} className="animate-spin" /> Loading available times…
@@ -62,7 +62,7 @@ export default function SlotPicker({
 
   if (fresh.slots === null) {
     return (
-      <p className="text-[#C4534E]" style={{ fontSize: "13px" }}>
+      <p className="text-pw-danger" style={{ fontSize: "13px" }}>
         Couldn&rsquo;t load available times. Please pick the date again.
       </p>
     );
@@ -71,7 +71,7 @@ export default function SlotPicker({
   const slots = fresh.slots;
   if (slots.length === 0) {
     return (
-      <p className="text-[#6E675C]" style={{ fontSize: "13px" }}>
+      <p className="text-pw-muted" style={{ fontSize: "13px" }}>
         This clinic has no bookable hours on that day.
       </p>
     );
@@ -106,10 +106,10 @@ export default function SlotPicker({
               }
               className={`rounded-xl border px-2 py-2 transition-colors ${
                 selected
-                  ? "border-[#5E86AD] bg-[#E4EBF2] text-[#40638A]"
+                  ? "border-pw-primary bg-pw-primary-tint text-pw-primary-strong"
                   : disabled
-                    ? "border-[#EFECE4] bg-[#F7F5F0] text-[#B5AEA1] cursor-not-allowed"
-                    : "border-[#E6DFD3] bg-white text-[#2D2A26] hover:border-[#5E86AD] hover:bg-[#F4F7FA]"
+                    ? "border-pw-sand-2 bg-pw-page-3 text-pw-subtle-2 cursor-not-allowed"
+                    : "border-pw-line bg-white text-pw-ink hover:border-pw-primary hover:bg-pw-primary-tint-3"
               }`}
               style={{ minHeight: "52px" }}
             >
@@ -129,7 +129,7 @@ export default function SlotPicker({
       </div>
 
       {openSlots.length === 0 && (
-        <p className="mt-3 text-[#C08A2D]" style={{ fontSize: "13px" }}>
+        <p className="mt-3 text-pw-warning" style={{ fontSize: "13px" }}>
           Every hour on this day is fully booked. Please choose another date.
         </p>
       )}

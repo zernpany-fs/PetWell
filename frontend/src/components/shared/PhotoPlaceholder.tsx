@@ -12,10 +12,10 @@ export function PhotoPlaceholder({
   const Icon = type === 'clinic' ? Building2 : PawPrint;
   return (
     <div
-      className={`bg-[#F1ECE3] flex items-center justify-center ${className}`}
+      className={`bg-pw-sand flex items-center justify-center ${className}`}
       style={style}
     >
-      <Icon className="text-[#A39B8D]" size={32} />
+      <Icon className="text-pw-faint" size={32} />
     </div>
   );
 }

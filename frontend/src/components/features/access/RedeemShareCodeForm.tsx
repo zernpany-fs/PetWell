@@ -38,15 +38,15 @@ export default function RedeemShareCodeForm() {
   return (
     <form
       onSubmit={submit}
-      className="bg-white border border-[#E6DFD3] rounded-2xl p-5 mb-6"
+      className="bg-white border border-pw-line rounded-2xl p-5 mb-6"
     >
       <div className="flex items-center gap-2 mb-1">
-        <KeyRound size={16} className="text-[#5E86AD]" />
-        <p className="text-[#2D2A26]" style={{ fontSize: '15px' }}>
+        <KeyRound size={16} className="text-pw-primary" />
+        <p className="text-pw-ink" style={{ fontSize: '15px' }}>
           Walk-in with a share code?
         </p>
       </div>
-      <p className="text-[#6E675C] mb-3" style={{ fontSize: '13px' }}>
+      <p className="text-pw-muted mb-3" style={{ fontSize: '13px' }}>
         Ask the owner for their 6-digit share code. A code works once and
         expires 15 minutes after the owner creates it.
       </p>
@@ -60,7 +60,7 @@ export default function RedeemShareCodeForm() {
           inputMode="numeric"
           autoComplete="one-time-code"
           placeholder="000000"
-          className="flex-1 h-12 px-4 bg-white border border-[#E6DFD3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5E86AD] text-[#2D2A26] placeholder:text-[#A39B8D] tracking-[0.4em] font-mono"
+          className="flex-1 h-12 px-4 bg-white border border-pw-line rounded-xl focus:outline-none focus:ring-2 focus:ring-pw-primary text-pw-ink placeholder:text-pw-faint tracking-[0.4em] font-mono"
         />
         <button
           type="submit"
@@ -74,7 +74,7 @@ export default function RedeemShareCodeForm() {
       {error && (
         <p
           role="alert"
-          className="mt-2 text-[#C4534E]"
+          className="mt-2 text-pw-danger"
           style={{ fontSize: '13px' }}
         >
           {error}

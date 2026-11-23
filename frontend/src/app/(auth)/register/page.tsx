@@ -16,19 +16,19 @@ export default async function RegisterPage() {
 
   return (
     <div
-      className="w-full bg-white border border-[#E6DFD3] rounded-[20px] shadow-[0_2px_8px_rgba(45,42,38,0.06)] p-8"
+      className="w-full bg-white border border-pw-line rounded-[20px] shadow-[0_2px_8px_rgba(45,42,38,0.06)] p-8"
       style={{ maxWidth: '440px' }}
     >
-      <h1 className="font-display text-[#2D2A26] mb-6" style={{ fontSize: '28px' }}>
+      <h1 className="font-display text-pw-ink mb-6" style={{ fontSize: '28px' }}>
         Create your account
       </h1>
 
       <RegisterForm clinics={clinics} />
 
       <div className="mt-4 text-center" style={{ fontSize: '14px' }}>
-        <span className="text-[#6E675C]">
+        <span className="text-pw-muted">
           Already have an account?{' '}
-          <Link href="/login" className="text-[#5E86AD] hover:text-[#40638A] no-underline">
+          <Link href="/login" className="text-pw-primary hover:text-pw-primary-strong no-underline">
             Log in
           </Link>
         </span>

@@ -36,11 +36,11 @@ export default function ClinicProfileForm({ clinic }: { clinic: Clinic }) {
       <FormInput label="Address" value={f.address} onChange={set('address')} />
       <FormInput label="Phone" value={f.phone} onChange={set('phone')} />
       <div>
-        <label className="block text-[#2D2A26] mb-1.5" style={{ fontSize: '13px' }}>Type</label>
+        <label className="block text-pw-ink mb-1.5" style={{ fontSize: '13px' }}>Type</label>
         <select
           value={f.clinicType}
           onChange={set('clinicType')}
-          className="w-full h-12 px-4 bg-white border border-[#E6DFD3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5E86AD] text-[#2D2A26]"
+          className="w-full h-12 px-4 bg-white border border-pw-line rounded-xl focus:outline-none focus:ring-2 focus:ring-pw-primary text-pw-ink"
         >
           <option value="GENERAL">General</option>
           <option value="EXOTIC">Exotic</option>
@@ -48,12 +48,12 @@ export default function ClinicProfileForm({ clinic }: { clinic: Clinic }) {
         </select>
       </div>
       <div>
-        <label className="block text-[#2D2A26] mb-1.5" style={{ fontSize: '13px' }}>Description</label>
+        <label className="block text-pw-ink mb-1.5" style={{ fontSize: '13px' }}>Description</label>
         <textarea
           value={f.description}
           onChange={set('description')}
           rows={3}
-          className="w-full px-4 py-3 bg-white border border-[#E6DFD3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5E86AD] text-[#2D2A26]"
+          className="w-full px-4 py-3 bg-white border border-pw-line rounded-xl focus:outline-none focus:ring-2 focus:ring-pw-primary text-pw-ink"
         />
       </div>
       <FormInput label="Google Maps link" value={f.googleMapsLink} onChange={set('googleMapsLink')} />

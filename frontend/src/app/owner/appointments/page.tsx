@@ -18,7 +18,7 @@ export default async function MyAppointmentsPage() {
     <div className="pw-fade max-w-3xl mx-auto px-4 sm:px-6 py-8">
       <div className="flex items-center justify-between mb-6">
         <h2
-          className="font-display text-[#2D2A26]"
+          className="font-display text-pw-ink"
           style={{ fontSize: '26px' }}
         >
           My Appointments
@@ -34,9 +34,9 @@ export default async function MyAppointmentsPage() {
       </div>
 
       {appts.length === 0 ? (
-        <div className="bg-white border border-[#E6DFD3] rounded-2xl p-10 text-center">
-          <p className="text-[#2D2A26] mb-1">No appointments yet</p>
-          <p className="text-[#6E675C] mb-5" style={{ fontSize: '14px' }}>
+        <div className="bg-white border border-pw-line rounded-2xl p-10 text-center">
+          <p className="text-pw-ink mb-1">No appointments yet</p>
+          <p className="text-pw-muted mb-5" style={{ fontSize: '14px' }}>
             Book a visit at any partnered clinic.
           </p>
           <Link href="/owner/appointments/book" className="no-underline">
@@ -53,19 +53,19 @@ export default async function MyAppointmentsPage() {
           {appts.map((a) => (
             <div
               key={a.id}
-              className="bg-white border border-[#E6DFD3] rounded-2xl p-4 shadow-[0_2px_8px_rgba(45,42,38,0.06)] flex items-center gap-3"
+              className="bg-white border border-pw-line rounded-2xl p-4 shadow-[0_2px_8px_rgba(45,42,38,0.06)] flex items-center gap-3"
             >
-              <div className="w-10 h-10 rounded-lg bg-[#F1ECE3] flex items-center justify-center shrink-0">
-                <Building2 size={16} className="text-[#A39B8D]" />
+              <div className="w-10 h-10 rounded-lg bg-pw-sand flex items-center justify-center shrink-0">
+                <Building2 size={16} className="text-pw-faint" />
               </div>
               <Link
                 href={`/owner/appointments/${a.id}`}
                 className="flex-1 min-w-0 no-underline"
               >
-                <p className="text-[#2D2A26] truncate hover:text-[#5E86AD]">
+                <p className="text-pw-ink truncate hover:text-pw-primary">
                   {a.clinic?.name ?? 'Clinic'} · {a.pet?.name ?? 'Pet'}
                 </p>
-                <p className="text-[#6E675C]" style={{ fontSize: '13px' }}>
+                <p className="text-pw-muted" style={{ fontSize: '13px' }}>
                   {formatAppTime(a.appointmentDate, 'EEE d MMM yyyy, HH:mm')}
                 </p>
               </Link>
