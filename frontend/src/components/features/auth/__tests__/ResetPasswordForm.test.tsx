@@ -15,7 +15,7 @@ const reset = vi.mocked(resetPasswordAction);
 async function fill(password: string, confirm: string) {
   const user = userEvent.setup();
   await user.type(
-    screen.getByPlaceholderText('At least 6 letters or numbers'),
+    screen.getByPlaceholderText('At least 8 characters'),
     password,
   );
   await user.type(screen.getByPlaceholderText('Type it again'), confirm);
@@ -28,14 +28,12 @@ describe('ResetPasswordForm (US-07 AC3–AC4, D59, D62)', () => {
     push.mockReset();
   });
 
-  it('uses the registration password rule (D59)', async () => {
+  it('uses the registration password rule (D59, D63)', async () => {
     render(<ResetPasswordForm token="tok" />);
     await fill('abc', 'abc');
 
     expect(
-      await screen.findByText(
-        'Password must be at least 6 letters or numbers.',
-      ),
+      await screen.findByText('Password must be at least 8 characters.'),
     ).toBeInTheDocument();
     expect(reset).not.toHaveBeenCalled();
   });

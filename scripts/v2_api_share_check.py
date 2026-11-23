@@ -11,7 +11,7 @@ import threading
 from datetime import timedelta
 
 from v2_api_lib import (
-    RUN, api, check, clinic_of, finish, login, msg, near, new_owner, new_pet,
+    RUN, SEED_PASSWORD, api, check, clinic_of, finish, login, msg, near, new_owner, new_pet,
     new_staff, now, reset_test_lockouts, section, sql,
 )
 
@@ -20,7 +20,7 @@ owner_email, OWN = new_owner("owner")
 _, OTHER_OWNER = new_owner("other")
 PET = new_pet(OWN, "Share")
 OTHER_PET = new_pet(OTHER_OWNER, "Other")
-V1, V2, V4 = (login(f"vet{i}@test.com") for i in (1, 2, 4))
+V1, V2, V4 = (login(f"vet{i}@test.com", SEED_PASSWORD) for i in (1, 2, 4))
 C = {i: clinic_of(f"vet{i}@test.com") for i in (1, 2, 4)}
 W = new_staff("wrong", C[1])  # fresh account for the wrong-code cases
 print(f"run {RUN}: owner={owner_email} pet={PET}")

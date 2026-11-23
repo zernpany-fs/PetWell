@@ -19,7 +19,8 @@ from datetime import datetime, timezone
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENV_FILE = os.path.join(ROOT, "backend", ".env")
 BASE = os.environ.get("PETWELL_API", "http://localhost:8000")
-PASSWORD = "pass123"
+SEED_PASSWORD = "pass123"  # seeded vet1–vet6 accounts (pnpm db:seed)
+PASSWORD = "pass1234"  # accounts this script registers (D63: 8+ characters)
 
 # Unique suffix per run, so test emails and pet names never clash.
 RUN = str(int(time.time()))[-6:]
@@ -87,8 +88,8 @@ def finish() -> None:
     raise SystemExit(0 if passed == len(_results) else 1)
 
 
-def login(email: str) -> str:
-    status, body = api("POST", "/auth/login", body={"email": email, "password": PASSWORD})
+def login(email: str, password: str = PASSWORD) -> str:
+    status, body = api("POST", "/auth/login", body={"email": email, "password": password})
     if status != 200:
         raise SystemExit(f"Login failed for {email}: {status} {msg(body)}")
     return body["access_token"]

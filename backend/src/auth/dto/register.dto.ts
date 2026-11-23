@@ -1,12 +1,6 @@
+import { IsPassword } from '../../common/decorators/is-password.decorator';
 import { Trim } from '../../common/decorators/trim.decorator';
-import {
-  IsAlphanumeric,
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class RegisterDto {
   @IsString()
@@ -29,9 +23,7 @@ export class RegisterDto {
   @Trim()
   email: string;
 
-  @MinLength(6)
-  @IsAlphanumeric()
-  @IsString()
-  @IsNotEmpty()
+  // D63: any characters, 8+ characters, at most 72 bytes.
+  @IsPassword()
   password: string;
 }

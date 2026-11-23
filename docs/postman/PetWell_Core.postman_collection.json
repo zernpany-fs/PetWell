@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Petwell – Core flow",
-    "description": "Register, log in, create a pet, book, confirm and cancel an appointment, and check the clinic's access before and after. Run top to bottom with the backend on http://localhost:8000 and a seeded database. Test accounts only (seed password from the README).",
+    "description": "Register, log in, create a pet, book, confirm and cancel an appointment, and check the clinic's access before and after. Run top to bottom with the backend on http://localhost:8000 and a seeded database. Test accounts only: staffPassword is the seed password from the README; ownerPassword follows D63 (8+ characters).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -31,7 +31,7 @@
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"firstName\": \"Test\",\n  \"lastName\": \"Owner\",\n  \"email\": \"{{ownerEmail}}\",\n  \"password\": \"{{password}}\"\n}",
+          "raw": "{\n  \"firstName\": \"Test\",\n  \"lastName\": \"Owner\",\n  \"email\": \"{{ownerEmail}}\",\n  \"password\": \"{{ownerPassword}}\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -77,7 +77,7 @@
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"email\": \"{{ownerEmail}}\",\n  \"password\": \"{{password}}\"\n}",
+          "raw": "{\n  \"email\": \"{{ownerEmail}}\",\n  \"password\": \"{{ownerPassword}}\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -177,7 +177,7 @@
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"email\": \"{{staffEmail}}\",\n  \"password\": \"{{password}}\"\n}",
+          "raw": "{\n  \"email\": \"{{staffEmail}}\",\n  \"password\": \"{{staffPassword}}\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -448,14 +448,18 @@
     },
     {
       "key": "ownerEmail",
-      "value": "owner1@test.com"
+      "value": "postman.owner@test.com"
     },
     {
       "key": "staffEmail",
       "value": "vet1@test.com"
     },
     {
-      "key": "password",
+      "key": "ownerPassword",
+      "value": "pass1234"
+    },
+    {
+      "key": "staffPassword",
       "value": "pass123"
     },
     {

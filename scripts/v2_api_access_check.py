@@ -10,14 +10,14 @@ Story: vet1 gets FULL access by share code and writes a record; vet2 does the
 same; the owner then revokes vet1, which leaves vet1 with AUTHORED_ONLY.
 """
 from v2_api_lib import (
-    RUN, api, check, clinic_of, finish, login, msg, new_owner, new_pet,
+    RUN, SEED_PASSWORD, api, check, clinic_of, finish, login, msg, new_owner, new_pet,
     reset_test_lockouts, section, share_access, sql,
 )
 
 reset_test_lockouts()
 owner_email, OWN = new_owner("owner")
 PET = new_pet(OWN, "Access")
-V1, V2 = login("vet1@test.com"), login("vet2@test.com")
+V1, V2 = login("vet1@test.com", SEED_PASSWORD), login("vet2@test.com", SEED_PASSWORD)
 C1 = clinic_of("vet1@test.com")
 MISSING = "00000000-0000-4000-8000-000000000000"
 RECORD = {"recordType": "VACCINE", "recordDate": "2026-11-13"}

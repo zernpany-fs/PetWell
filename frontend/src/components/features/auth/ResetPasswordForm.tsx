@@ -61,7 +61,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
       <FormInput
         label="New password"
         type={showPw ? 'text' : 'password'}
-        placeholder="At least 6 letters or numbers"
+        placeholder="At least 8 characters"
         autoComplete="new-password"
         error={errors.password?.message}
         right={eye}

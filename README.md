@@ -95,7 +95,7 @@ cd backend
 createdb petwell_test
 cp .env .env.test             # then change the database name in DATABASE_URL to petwell_test
 (set -a; source .env.test; set +a; pnpm exec prisma migrate deploy)
-pnpm test                     # 102 tests
+pnpm test                     # 120 tests
 ```
 
 `.env.test` is git-ignored. After adding a migration, run the `migrate deploy` line again.
@@ -114,7 +114,7 @@ They create their own owners, pets and records on every run, in the dev database
 
 ```bash
 cd frontend
-pnpm test                     # 21 tests, about a second
+pnpm test                     # 35 tests, about a second
 ```
 
 Each test is named after the story or decision it checks (US-03, US-04, US-07, D7, D12, D27, D40–D42, D51–D52, D57, D59). To check that they catch real mistakes, bugs were put into the code one at a time — for V2: code not hidden at 0, Change offered on appointment access, revoke sent a grant id instead of the clinic, no 6-digit check; for password reset (backend and frontend): no hourly limit, older links not ended, no compare-and-set, no confirm-password check, no redirect after reset. Each one made a test fail.
@@ -156,13 +156,13 @@ Sign in as `vet2@test.com` — a clinic with no appointment — and the same sea
 
 Existing pet, health-record and search endpoints now check access; see the impact analysis for what each one returns.
 
-To try them in Postman, import [`docs/v2/postman/PetWell_V2_Share.postman_collection.json`](docs/v2/postman/PetWell_V2_Share.postman_collection.json) and run it top to bottom (needs a registered owner `owner1@test.com` and the seeded clinic accounts). Each request saves the token or id the next one needs.
+To try them in Postman, import [`docs/v2/postman/PetWell_V2_Share.postman_collection.json`](docs/v2/postman/PetWell_V2_Share.postman_collection.json) and run it top to bottom (needs the owner `postman.owner@test.com`, which the core collection registers, and the seeded clinic accounts). Each request saves the token or id the next one needs.
 
 ## Docs
 
 | File | What's in it |
 |---|---|
-| `docs/PetWell_Password_Reset.md` | Forgot / reset password: user story US-07, acceptance criteria and decisions D55–D62 |
+| `docs/PetWell_Password_Reset.md` | Forgot / reset password: user story US-07, acceptance criteria and decisions D55–D63 (D63: password rule) |
 | `docs/v2/PetWell_Decision_Log.md` | **V2:** every access rule as a numbered decision (D1–D54), with the reason and findings from implementation |
 | `docs/v2/PetWell_User_Stories_Access_Control.md` | **V2:** user stories US-01–US-04 with acceptance criteria |
 | `docs/v2/PetWell_Change_Request.md` | **V2:** one-page change request — problem, scope, impact, risks, rollback |
@@ -183,9 +183,9 @@ To try them in Postman, import [`docs/v2/postman/PetWell_V2_Share.postman_collec
 **v1** (tag `v1.0`): feature-complete; all four grading requirements (auth with JWT + protected routes, two roles, CRUD on two-plus entities, two-plus core features) are covered — see `docs/PetWell_Feature_List.md` for the mapping.
 
 **V2** (merged into `main`):
-- Backend: access rules enforced on every pet, health-record and search endpoint; share code, revoke and extend endpoints; audit log; Vitest (102 tests with password reset) and two API check scripts, all passing.
+- Backend: access rules enforced on every pet, health-record and search endpoint; share code, revoke and extend endpoints; audit log; Vitest (120 tests with password reset and the password rule) and two API check scripts, all passing.
 - Frontend: owner generates a share code, sees which clinics have access, changes a share's duration and revokes; staff redeem a code; the staff pet page and search show limited access (own records only) and handle a 403 on new records. Backend and frontend typecheck.
-- Tests and tooling: 21 frontend component tests (V2 screens and password reset) (`frontend`, `pnpm test`); full pages are still checked by hand in the browser. `pnpm lint` runs in the backend; Prettier runs in both apps.
+- Tests and tooling: 35 frontend tests (V2 screens, password reset and the password rule) (`frontend`, `pnpm test`); full pages are still checked by hand in the browser. `pnpm lint` runs in the backend; Prettier runs in both apps.
 - Known gaps: no end-to-end browser tests; the owner's access list updates on reload, not live. The owner audit-log view (US-06) is in the backlog.
 
 **Password reset** (added 2026-11-22, US-07, D55–D62): **Forgot password?** on the login page emails a single-use link valid for 30 minutes (at most 3 per hour). Locally, without `RESEND_API_KEY`, the link is printed in the backend log. Decisions, story and acceptance criteria: `docs/PetWell_Password_Reset.md`.
