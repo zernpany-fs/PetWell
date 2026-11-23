@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Metadata } from 'next';
-import { format } from 'date-fns';
+import { formatAppTime } from '@/lib/datetime';
 import { Search, PawPrint, User, Phone, ScanLine, Lock } from 'lucide-react';
 import { PetApi } from '@/lib/api/pet.api';
 import { PetSearchResult } from '@/lib/api/api.type';
@@ -117,7 +117,7 @@ export default async function StaffPetLookupPage({
                       {pet.species}
                       {pet.breed ? ` · ${pet.breed}` : ''}
                       {pet.birthDate
-                        ? ` · born ${format(new Date(pet.birthDate), 'MMM yyyy')}`
+                        ? ` · born ${formatAppTime(pet.birthDate, 'MMM yyyy')}`
                         : ''}
                     </p>
                     <div

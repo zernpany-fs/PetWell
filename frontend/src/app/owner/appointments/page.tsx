@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { format } from 'date-fns';
+import { formatAppTime } from '@/lib/datetime';
 import { Building2, Plus } from 'lucide-react';
 import { AppointmentApi } from '@/lib/api/appointment.api';
 import { Appointment } from '@/lib/api/api.type';
@@ -17,11 +17,17 @@ export default async function MyAppointmentsPage() {
   return (
     <div className="pw-fade max-w-3xl mx-auto px-4 sm:px-6 py-8">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="font-display text-[#2D2A26]" style={{ fontSize: '26px' }}>
+        <h2
+          className="font-display text-[#2D2A26]"
+          style={{ fontSize: '26px' }}
+        >
           My Appointments
         </h2>
         <Link href="/owner/appointments/book" className="no-underline">
-          <button className="pw-btn-primary rounded-full px-5 flex items-center gap-2" style={{ minHeight: '44px' }}>
+          <button
+            className="pw-btn-primary rounded-full px-5 flex items-center gap-2"
+            style={{ minHeight: '44px' }}
+          >
             <Plus size={16} /> Book
           </button>
         </Link>
@@ -34,7 +40,10 @@ export default async function MyAppointmentsPage() {
             Book a visit at any partnered clinic.
           </p>
           <Link href="/owner/appointments/book" className="no-underline">
-            <button className="pw-btn-primary rounded-full px-5" style={{ minHeight: '44px' }}>
+            <button
+              className="pw-btn-primary rounded-full px-5"
+              style={{ minHeight: '44px' }}
+            >
               Book an appointment
             </button>
           </Link>
@@ -57,7 +66,7 @@ export default async function MyAppointmentsPage() {
                   {a.clinic?.name ?? 'Clinic'} · {a.pet?.name ?? 'Pet'}
                 </p>
                 <p className="text-[#6E675C]" style={{ fontSize: '13px' }}>
-                  {format(new Date(a.appointmentDate), 'EEE d MMM yyyy, HH:mm')}
+                  {formatAppTime(a.appointmentDate, 'EEE d MMM yyyy, HH:mm')}
                 </p>
               </Link>
               <StatusBadge status={a.status} />

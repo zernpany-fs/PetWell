@@ -1,7 +1,14 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { format } from 'date-fns';
-import { Building2, PawPrint, CalendarDays, Bell, Sparkles, Plus } from 'lucide-react';
+import { formatAppTime } from '@/lib/datetime';
+import {
+  Building2,
+  PawPrint,
+  CalendarDays,
+  Bell,
+  Sparkles,
+  Plus,
+} from 'lucide-react';
 import { getSessionUser } from '@/lib/session';
 import { PetApi } from '@/lib/api/pet.api';
 import { AppointmentApi } from '@/lib/api/appointment.api';
@@ -26,10 +33,15 @@ export default async function OwnerDashboardPage() {
   return (
     <div className="pw-fade max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       <div>
-        <h2 className="font-display text-[#2D2A26]" style={{ fontSize: '28px' }}>
+        <h2
+          className="font-display text-[#2D2A26]"
+          style={{ fontSize: '28px' }}
+        >
           Welcome back, {user?.firstName}
         </h2>
-        <p className="text-[#6E675C] mt-1">Here&apos;s what needs your attention today.</p>
+        <p className="text-[#6E675C] mt-1">
+          Here&apos;s what needs your attention today.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -42,10 +54,15 @@ export default async function OwnerDashboardPage() {
               <PawPrint size={18} className="text-[#5E86AD]" />
             </div>
             <div>
-              <p className="font-display text-[#2D2A26] leading-none" style={{ fontSize: '28px' }}>
+              <p
+                className="font-display text-[#2D2A26] leading-none"
+                style={{ fontSize: '28px' }}
+              >
                 {pets.length}
               </p>
-              <p className="text-[#6E675C]" style={{ fontSize: '13px' }}>Pets</p>
+              <p className="text-[#6E675C]" style={{ fontSize: '13px' }}>
+                Pets
+              </p>
             </div>
           </div>
         </div>
@@ -58,10 +75,15 @@ export default async function OwnerDashboardPage() {
               <CalendarDays size={18} className="text-[#6F63BE]" />
             </div>
             <div>
-              <p className="font-display text-[#2D2A26] leading-none" style={{ fontSize: '28px' }}>
+              <p
+                className="font-display text-[#2D2A26] leading-none"
+                style={{ fontSize: '28px' }}
+              >
                 {upcoming.length}
               </p>
-              <p className="text-[#6E675C]" style={{ fontSize: '13px' }}>Upcoming appointments</p>
+              <p className="text-[#6E675C]" style={{ fontSize: '13px' }}>
+                Upcoming appointments
+              </p>
             </div>
           </div>
         </div>
@@ -74,8 +96,15 @@ export default async function OwnerDashboardPage() {
               <Bell size={18} className="text-[#E58A6F]" />
             </div>
             <div>
-              <p className="font-display text-[#2D2A26] leading-none" style={{ fontSize: '28px' }}>0</p>
-              <p className="text-[#6E675C]" style={{ fontSize: '13px' }}>Vaccine reminders</p>
+              <p
+                className="font-display text-[#2D2A26] leading-none"
+                style={{ fontSize: '28px' }}
+              >
+                0
+              </p>
+              <p className="text-[#6E675C]" style={{ fontSize: '13px' }}>
+                Vaccine reminders
+              </p>
             </div>
           </div>
         </div>
@@ -83,7 +112,9 @@ export default async function OwnerDashboardPage() {
 
       <div className="grid lg:grid-cols-2 gap-6">
         <div className={`${card} p-5`}>
-          <h3 className="font-display text-[#2D2A26] mb-4">Upcoming appointments</h3>
+          <h3 className="font-display text-[#2D2A26] mb-4">
+            Upcoming appointments
+          </h3>
           {upcoming.length === 0 ? (
             <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
               No upcoming appointments yet.
@@ -103,7 +134,7 @@ export default async function OwnerDashboardPage() {
                       {a.clinic?.name ?? 'Clinic'} / {a.pet?.name ?? 'Pet'}
                     </p>
                     <p className="text-[#6E675C]" style={{ fontSize: '13px' }}>
-                      {format(new Date(a.appointmentDate), 'EEE d MMM, HH:mm')}
+                      {formatAppTime(a.appointmentDate, 'EEE d MMM, HH:mm')}
                     </p>
                   </div>
                   <StatusBadge status={a.status} />
@@ -112,15 +143,23 @@ export default async function OwnerDashboardPage() {
             </div>
           )}
           <Link href="/owner/appointments" className="no-underline">
-            <p className="text-[#5E86AD] mt-3 hover:text-[#40638A]" style={{ fontSize: '13px' }}>
+            <p
+              className="text-[#5E86AD] mt-3 hover:text-[#40638A]"
+              style={{ fontSize: '13px' }}
+            >
               View all →
             </p>
           </Link>
         </div>
 
         <div className={`${card} p-5`}>
-          <h3 className="font-display text-[#2D2A26] mb-4">Vaccine reminders</h3>
-          <div className="flex items-center gap-2 text-[#6E675C]" style={{ fontSize: '13px' }}>
+          <h3 className="font-display text-[#2D2A26] mb-4">
+            Vaccine reminders
+          </h3>
+          <div
+            className="flex items-center gap-2 text-[#6E675C]"
+            style={{ fontSize: '13px' }}
+          >
             <Sparkles size={14} />
             No reminders — you&apos;re all caught up!
           </div>

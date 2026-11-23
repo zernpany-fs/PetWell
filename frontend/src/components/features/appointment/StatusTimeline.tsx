@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { formatAppTime } from '@/lib/datetime';
 import { AppointmentStatus, AppointmentStatusLog } from '@/lib/api/api.type';
 
 const DOT: Record<AppointmentStatus, string> = {
@@ -54,7 +54,7 @@ export function StatusTimeline({
             Requested by owner
           </p>
           <p className="text-[#6E675C]" style={{ fontSize: '12px' }}>
-            {format(new Date(requestedAt), 'd MMM yyyy, HH:mm')}
+            {formatAppTime(requestedAt, 'd MMM yyyy, HH:mm')}
           </p>
         </li>
       )}
@@ -76,10 +76,12 @@ export function StatusTimeline({
             </span>
           </p>
           <p className="text-[#6E675C]" style={{ fontSize: '12px' }}>
-            {format(new Date(log.changedAt), 'd MMM yyyy, HH:mm')}
+            {formatAppTime(log.changedAt, 'd MMM yyyy, HH:mm')}
             {log.changedBy
               ? ` · ${log.changedBy.firstName} ${log.changedBy.lastName}` +
-                (log.changedBy.role === 'CLINIC_STAFF' ? ' (clinic)' : ' (owner)')
+                (log.changedBy.role === 'CLINIC_STAFF'
+                  ? ' (clinic)'
+                  : ' (owner)')
               : ''}
           </p>
           {log.reason && (

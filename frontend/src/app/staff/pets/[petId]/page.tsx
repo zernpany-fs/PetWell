@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { format } from 'date-fns';
+import { formatAppTime } from '@/lib/datetime';
 import {
   Syringe,
   Stethoscope,
@@ -191,7 +191,7 @@ function RecordList({
                     className="text-[#6E675C] shrink-0"
                     style={{ fontSize: '13px' }}
                   >
-                    {format(new Date(r.recordDate), 'd MMM yyyy')}
+                    {formatAppTime(r.recordDate, 'd MMM yyyy')}
                   </span>
                 </div>
                 <p

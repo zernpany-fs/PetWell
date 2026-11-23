@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { format } from 'date-fns';
+import { formatAppTime } from '@/lib/datetime';
 import { PawPrint, Phone } from 'lucide-react';
 import { getSessionUser } from '@/lib/session';
 import { AppointmentApi } from '@/lib/api/appointment.api';
@@ -13,7 +13,9 @@ export const metadata: Metadata = { title: 'Appointments' };
 export default async function StaffAppointmentsPage() {
   const user = await getSessionUser();
   const appts = user?.clinicId
-    ? await AppointmentApi.listByClinic(user.clinicId).catch((): Appointment[] => [])
+    ? await AppointmentApi.listByClinic(user.clinicId).catch(
+        (): Appointment[] => [],
+      )
     : [];
 
   const pending = appts.filter((a) => a.status === 'PENDING');
@@ -35,12 +37,15 @@ export default async function StaffAppointmentsPage() {
             className="text-[#6E675C] hover:text-[#5E86AD]"
             style={{ fontSize: '13px' }}
           >
-            {format(new Date(a.appointmentDate), 'EEE d MMM yyyy, HH:mm')} ·
+            {formatAppTime(a.appointmentDate, 'EEE d MMM yyyy, HH:mm')} ·
             History
           </p>
         </Link>
         {a.notes && (
-          <p className="flex items-center gap-1.5 mt-0.5 text-[#6E675C]" style={{ fontSize: '12px' }}>
+          <p
+            className="flex items-center gap-1.5 mt-0.5 text-[#6E675C]"
+            style={{ fontSize: '12px' }}
+          >
             <Phone size={12} /> {a.notes}
           </p>
         )}
@@ -57,24 +62,45 @@ export default async function StaffAppointmentsPage() {
       </h2>
 
       <div>
-        <h3 className="font-display text-[#2D2A26] mb-3" style={{ fontSize: '18px' }}>
-          New requests {pending.length > 0 && <span className="text-[#6E675C]">({pending.length})</span>}
+        <h3
+          className="font-display text-[#2D2A26] mb-3"
+          style={{ fontSize: '18px' }}
+        >
+          New requests{' '}
+          {pending.length > 0 && (
+            <span className="text-[#6E675C]">({pending.length})</span>
+          )}
         </h3>
         {pending.length === 0 ? (
-          <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>No pending requests.</p>
+          <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
+            No pending requests.
+          </p>
         ) : (
-          <div className="space-y-3">{pending.map((a) => <Row key={a.id} a={a} />)}</div>
+          <div className="space-y-3">
+            {pending.map((a) => (
+              <Row key={a.id} a={a} />
+            ))}
+          </div>
         )}
       </div>
 
       <div>
-        <h3 className="font-display text-[#2D2A26] mb-3" style={{ fontSize: '18px' }}>
+        <h3
+          className="font-display text-[#2D2A26] mb-3"
+          style={{ fontSize: '18px' }}
+        >
           All appointments
         </h3>
         {rest.length === 0 ? (
-          <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>Nothing scheduled yet.</p>
+          <p className="text-[#6E675C]" style={{ fontSize: '14px' }}>
+            Nothing scheduled yet.
+          </p>
         ) : (
-          <div className="space-y-3">{rest.map((a) => <Row key={a.id} a={a} />)}</div>
+          <div className="space-y-3">
+            {rest.map((a) => (
+              <Row key={a.id} a={a} />
+            ))}
+          </div>
         )}
       </div>
     </div>

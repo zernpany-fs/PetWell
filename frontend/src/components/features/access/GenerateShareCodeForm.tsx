@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useTransition } from 'react';
-import { format } from 'date-fns';
+import { formatAppTime } from '@/lib/datetime';
 import { KeyRound, Timer } from 'lucide-react';
 import { generateShareCodeAction } from '@/lib/actions/access.action';
 import { ShareCodeResponse } from '@/lib/api/api.type';
@@ -88,7 +88,7 @@ export default function GenerateShareCodeForm({ petId }: { petId: string }) {
         >
           <Timer size={13} />
           Expires in {formatCountdown(secondsLeft)} (at{' '}
-          {format(new Date(shareCode.expiresAt), 'HH:mm')})
+          {formatAppTime(shareCode.expiresAt, 'HH:mm')})
         </p>
         <p className="text-[#6E675C] mt-1" style={{ fontSize: '13px' }}>
           Works once and gives the clinic{' '}

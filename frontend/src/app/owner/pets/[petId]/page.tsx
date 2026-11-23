@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { format } from 'date-fns';
+import { formatAppTime } from '@/lib/datetime';
 import Image from 'next/image';
 import { Syringe, Stethoscope, Building2, Pencil } from 'lucide-react';
 import { PetApi } from '@/lib/api/pet.api';
@@ -156,7 +156,7 @@ export default async function PetProfilePage({
                       className="text-[#6E675C] shrink-0"
                       style={{ fontSize: '13px' }}
                     >
-                      {format(new Date(r.recordDate), 'd MMM yyyy')}
+                      {formatAppTime(r.recordDate, 'd MMM yyyy')}
                     </span>
                   </div>
                   <div
@@ -168,8 +168,7 @@ export default async function PetProfilePage({
                     {r.nextDueDate && (
                       <span className="text-[#96701D]">
                         {' '}
-                        · next due{' '}
-                        {format(new Date(r.nextDueDate), 'd MMM yyyy')}
+                        · next due {formatAppTime(r.nextDueDate, 'd MMM yyyy')}
                       </span>
                     )}
                   </div>

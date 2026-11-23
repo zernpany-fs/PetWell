@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { format } from 'date-fns';
+import { formatAppTime } from '@/lib/datetime';
 import {
   ArrowLeft,
   Building2,
@@ -46,10 +46,10 @@ export function AppointmentDetail({
               className="font-display text-[#2D2A26]"
               style={{ fontSize: '24px' }}
             >
-              {format(new Date(a.appointmentDate), 'EEEE d MMMM yyyy')}
+              {formatAppTime(a.appointmentDate, 'EEEE d MMMM yyyy')}
             </h2>
             <p className="text-[#6E675C]">
-              {format(new Date(a.appointmentDate), 'HH:mm')}
+              {formatAppTime(a.appointmentDate, 'HH:mm')}
             </p>
           </div>
           <StatusBadge status={a.status} />
@@ -93,13 +93,16 @@ export function AppointmentDetail({
             <CalendarDays size={15} className="text-[#A39B8D] shrink-0" />
             <dt className="sr-only">Requested</dt>
             <dd className="m-0 text-[#6E675C]" style={{ fontSize: '14px' }}>
-              Requested {format(new Date(a.createdAt), 'd MMM yyyy')}
+              Requested {formatAppTime(a.createdAt, 'd MMM yyyy')}
             </dd>
           </div>
 
           {a.notes && (
             <div className="flex items-start gap-2.5">
-              <StickyNote size={15} className="text-[#A39B8D] shrink-0 mt-0.5" />
+              <StickyNote
+                size={15}
+                className="text-[#A39B8D] shrink-0 mt-0.5"
+              />
               <dt className="sr-only">Notes</dt>
               <dd className="m-0 text-[#2D2A26]" style={{ fontSize: '14px' }}>
                 {a.notes}

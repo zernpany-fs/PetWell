@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { format } from 'date-fns';
+import { formatAppTime } from '@/lib/datetime';
 import { toast } from 'sonner';
 import { Building2, CalendarCheck, KeyRound } from 'lucide-react';
 import {
@@ -31,7 +31,7 @@ function groupByClinic(grants: AccessGrant[]): ClinicGroup[] {
 /** Why the clinic has access and until when, in plain words. */
 function describeGrant(g: AccessGrant): string {
   const until = g.expiresAt
-    ? `until ${format(new Date(g.expiresAt), 'd MMM yyyy')}`
+    ? `until ${formatAppTime(g.expiresAt, 'd MMM yyyy')}`
     : null;
   if (g.type === 'APPOINTMENT') {
     // null = the visit is not completed yet; access ends 30 days after (D2).
