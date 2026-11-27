@@ -1,7 +1,16 @@
-import NextAuth from 'next-auth';
+import NextAuth, { CredentialsSignin } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { loginSchema } from './schemas/auth.schema';
 import { AuthApi } from './api/auth.api';
+import { LoginErrorCode, staffLoginCode } from './auth-errors';
+
+/** Auth.js passes `code` from authorize() through to the login action. */
+class StaffNotApprovedSignin extends CredentialsSignin {
+  constructor(code: LoginErrorCode) {
+    super();
+    this.code = code;
+  }
+}
 
 export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
   session: { maxAge: 86370 },
@@ -9,13 +18,17 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
   providers: [
     Credentials({
       async authorize(input) {
+        let result;
         try {
           const data = loginSchema.parse(input);
-          const { access_token, user } = await AuthApi.login(data);
-          return { ...user, access_token };
-        } catch {
+          result = await AuthApi.login(data);
+        } catch (error) {
+          // D74: staff awaiting or refused approval get their own message.
+          const code = staffLoginCode(error);
+          if (code) throw new StaffNotApprovedSignin(code);
           return null;
         }
+        return { ...result.user, access_token: result.access_token };
       },
     }),
   ],
@@ -32,8 +45,7 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
       }
       if (trigger === 'update') {
         if (session?.user?.avatarUrl) token.avatarUrl = session.user.avatarUrl;
-        if (session?.user?.firstName)
-          token.firstName = session.user.firstName;
+        if (session?.user?.firstName) token.firstName = session.user.firstName;
         if (session?.user?.lastName) token.lastName = session.user.lastName;
       }
       return token;

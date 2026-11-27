@@ -13,8 +13,8 @@ Reflects the built NestJS backend (fakebuck-style architecture).
 | Status | Feature | Method | Path | Body | Auth | Success |
 |:--:|---|---|---|---|---|---|
 | ✅ | Register (Pet Owner) | POST | `/auth/register` | firstName, lastName, phone?, email, password | Public | `{ message }` |
-| ✅ | Register (Clinic Staff) | POST | `/auth/register/clinic-staff` | …+ clinicId | Public | `{ message }` |
-| ✅ | Login | POST | `/auth/login` | email, password | Public | `{ access_token, user }` |
+| ✅ | Register (Clinic Staff) | POST | `/auth/register/clinic-staff` | …+ clinicId | Public | `{ message }` — account is `PENDING` until the clinic approves it (US-09, D73) |
+| ✅ | Login | POST | `/auth/login` | email, password | Public | `{ access_token, user }` — `403` for staff that are `PENDING` or `REJECTED` (D74) |
 | ✅ | Get authenticated user | GET | `/auth/me` | — | Protected | `user` |
 
 ## User (`user` module · `UserController`)
@@ -55,6 +55,8 @@ Reflects the built NestJS backend (fakebuck-style architecture).
 | ✅ | List / search clinics | GET | `/clinics?search=&type=` | — | Public | `Clinic[]` |
 | ✅ | Get clinic by id | GET | `/clinics/:clinicId` | — | Public | `clinic` |
 | ✅ | Update clinic profile | PATCH | `/clinics/:clinicId` | name?, address?, phone?, description?, clinicType?, googleMapsLink? | Protected (CLINIC_STAFF) | `clinic` |
+| ✅ | Pending staff sign-ups of my clinic | GET | `/clinics/me/staff-requests` | — | Protected (CLINIC_STAFF) | `StaffRequest[]` (US-09, D76) |
+| ✅ | Approve / reject a staff sign-up | PATCH | `/clinics/me/staff-requests/:userId` | decision: `APPROVE` \| `REJECT` | Protected (CLINIC_STAFF) | `{ message }`; `404` other clinic, `409` already decided (D76) |
 
 ## Appointment (`appointment` module · `AppointmentController`)
 

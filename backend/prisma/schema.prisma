@@ -13,6 +13,13 @@ enum Role {
   CLINIC_STAFF
 }
 
+// D73: approval state of a clinic staff account (null for owners).
+enum StaffStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum RecordType {
   VACCINE
   TREATMENT
@@ -62,6 +69,13 @@ model User {
   clinicId    String?  @map("clinic_id") @db.Uuid
   clinic      Clinic?  @relation("ClinicStaff", fields: [clinicId], references: [id])
   isActive    Boolean  @default(true) @map("is_active")
+
+  // D73: staff approval, decided by an approved staff member of the same clinic (D72).
+  staffStatus      StaffStatus? @map("staff_status")
+  staffDecidedById String?      @map("staff_decided_by") @db.Uuid
+  staffDecidedBy   User?        @relation("StaffDecision", fields: [staffDecidedById], references: [id])
+  staffDecidedAt   DateTime?    @map("staff_decided_at") @db.Timestamptz()
+  staffDecisions   User[]       @relation("StaffDecision")
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz()
 

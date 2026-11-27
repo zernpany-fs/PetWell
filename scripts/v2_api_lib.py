@@ -105,13 +105,26 @@ def new_owner(tag: str) -> tuple[str, str]:
     return email, login(email)
 
 
+def seeded_staff_of(clinic_id: str) -> str:
+    """Token of the clinic's seeded, approved staff login (D73)."""
+    email = sql(f"select email from users where clinic_id='{clinic_id}' "
+                f"and staff_status='APPROVED' order by created_at limit 1")
+    return login(email, SEED_PASSWORD)
+
+
 def new_staff(tag: str, clinic_id: str) -> str:
-    """Register a fresh clinic staff account. Returns its token."""
+    """Register a fresh clinic staff account, have the clinic approve it
+    (US-09, D76) and return its token."""
     email = f"v2{tag}{RUN}@test.com"
     api("POST", "/auth/register/clinic-staff", body={
         "firstName": "V2", "lastName": tag.capitalize(), "email": email,
         "password": PASSWORD, "clinicId": clinic_id,
     })
+    user_id = sql(f"select id from users where email='{email}'")
+    status, body = api("PATCH", f"/clinics/me/staff-requests/{user_id}",
+                       seeded_staff_of(clinic_id), {"decision": "APPROVE"})
+    if status != 200:
+        raise SystemExit(f"Could not approve staff {email}: {status} {msg(body)}")
     return login(email)
 
 

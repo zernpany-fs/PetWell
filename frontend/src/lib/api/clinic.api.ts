@@ -1,6 +1,12 @@
 import { apiFetch } from './api-fetch';
 import { authFetch } from './auth-fetch';
-import { Clinic, ClinicType } from './api.type';
+import {
+  Clinic,
+  ClinicType,
+  MessageResponse,
+  StaffDecision,
+  StaffRequest,
+} from './api.type';
 import { UpdateClinicInput } from '../schemas/clinic.schema';
 
 export const ClinicApi = {
@@ -30,6 +36,18 @@ export const ClinicApi = {
     return authFetch<{ url: string }>(`/clinics/${clinicId}/photo`, {
       method: 'PATCH',
       body: formData,
+    });
+  },
+
+  // US-09 (D76): pending staff sign-ups of the signed-in staff's clinic.
+  listStaffRequests() {
+    return authFetch<StaffRequest[]>('/clinics/me/staff-requests');
+  },
+
+  decideStaffRequest(userId: string, decision: StaffDecision) {
+    return authFetch<MessageResponse>(`/clinics/me/staff-requests/${userId}`, {
+      method: 'PATCH',
+      body: { decision },
     });
   },
 };

@@ -9,14 +9,14 @@ Legend: **[Core]** = MVP / required for grading · **[Stretch]** = nice-to-have 
 
 > **Status: feature-complete, front and back.** All four grading requirements are implemented and verified end-to-end (30 endpoints), and every core item now has UI. Both packages typecheck and lint clean.
 >
-> Architecture note: auth is **protected-by-default** (global `AuthGuard`); public routes opt out with `@Public()`. Clinic staff are auto-activated at sign-up (no admin approval); clinics are seeded. User names are `firstName` + `lastName` (+ optional `phone`).
+> Architecture note: auth is **protected-by-default** (global `AuthGuard`); public routes opt out with `@Public()`. Clinic staff sign-ups wait for an approved staff member of the same clinic to approve them (US-09, D72–D76; no admin role); clinics are seeded. User names are `firstName` + `lastName` (+ optional `phone`).
 
 ---
 
 ## 1. Authentication & Authorization
 
 - ✅ **[Core]** Sign up as Pet Owner (`POST /auth/register`)
-- ✅ **[Core]** Sign up as Clinic Staff — select seeded clinic, active immediately (`POST /auth/register/clinic-staff`)
+- ✅ **[Core]** Sign up as Clinic Staff — select seeded clinic; the account is pending until that clinic approves it (`POST /auth/register/clinic-staff`, US-09)
 - ✅ **[Core]** Login → JWT access token (`POST /auth/login`)
 - ✅ **[Core]** Get authenticated user (`GET /auth/me`)
 - ✅ **[Core]** Global JWT `AuthGuard` — protected-by-default, `@Public()` to opt out
@@ -71,7 +71,8 @@ Legend: **[Core]** = MVP / required for grading · **[Stretch]** = nice-to-have 
 ## 3. Clinic Staff Features
 
 ### 3.1 Account & Clinic Profile
-- ✅ **[Core]** Login (active immediately after sign-up)
+- ✅ **[Core]** Login (only after the clinic approved the account, D74)
+- ✅ **[Core]** Approve or reject staff sign-ups of own clinic — Clinic Profile → Staff requests (US-09, D76)
 - ✅ **[Core]** Clinic association — staff linked to a seeded clinic at sign-up
 - ✅ **[Core]** View / edit own clinic profile
 - ✅ **[Core]** Clinic dashboard — pending-request and today counters + action queue

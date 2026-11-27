@@ -36,6 +36,17 @@ export type LoginResponse = {
 
 export type MessageResponse = { message: string };
 
+/** US-09 (D76): a pending staff sign-up, as the clinic sees it. */
+export type StaffRequest = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string | null;
+  createdAt: string;
+};
+export type StaffDecision = 'APPROVE' | 'REJECT';
+
 export type Clinic = {
   id: string;
   name: string;

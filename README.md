@@ -95,7 +95,7 @@ cd backend
 createdb petwell_test
 cp .env .env.test             # then change the database name in DATABASE_URL to petwell_test
 (set -a; source .env.test; set +a; pnpm exec prisma migrate deploy)
-pnpm test                     # 130 tests
+pnpm test                     # 141 tests
 ```
 
 `.env.test` is git-ignored. After adding a migration, run the `migrate deploy` line again.
@@ -106,6 +106,7 @@ pnpm test                     # 130 tests
 cd backend && pnpm start:dev                  # first terminal
 python3 scripts/v2_api_access_check.py        # second terminal, from the repo root
 python3 scripts/v2_api_share_check.py
+python3 scripts/v2_api_staff_check.py
 ```
 
 They create their own owners, pets and records on every run, in the dev database.
@@ -114,14 +115,14 @@ They create their own owners, pets and records on every run, in the dev database
 
 ```bash
 cd frontend
-pnpm test                     # 50 tests, about a second
+pnpm test                     # 58 tests, about a second
 ```
 
 Each test is named after the story or decision it checks (US-03, US-04, US-07, D7, D12, D27, D40–D42, D51–D52, D57, D59, D70–D71). To check that they catch real mistakes, bugs were put into the code one at a time — for V2: code not hidden at 0, Change offered on appointment access, revoke sent a grant id instead of the clinic, no 6-digit check; for password reset (backend and frontend): no hourly limit, older links not ended, no compare-and-set, no confirm-password check, no redirect after reset; for the owner dashboard: a 15-day window, overdue dates shown, treatments shown, past days counted as upcoming. Each one made a test fail.
 
 ## Seeded accounts
 
-`pnpm db:seed` creates six clinics and one clinic-staff login for each. Password for all of them is `pass123`.
+`pnpm db:seed` creates six clinics and one approved clinic-staff login for each. Password for all of them is `pass123`. A new staff sign-up waits until a staff member of that clinic approves it under **Clinic Profile → Staff requests** (US-09).
 
 | Email | Clinic |
 |---|---|
@@ -162,9 +163,10 @@ To try them in Postman, import [`docs/v2/postman/PetWell_V2_Share.postman_collec
 
 | File | What's in it |
 |---|---|
+| `docs/PetWell_Staff_Approval.md` | Staff approval: user story US-09, acceptance criteria and decisions D72–D76 (new staff sign-ups wait for their clinic to approve them) |
 | `docs/PetWell_Clinic_Photo.md` | Clinic photo: user story US-08, acceptance criteria and decisions D64–D67 (D65: file checks on every image upload; D67: demo clinic names) |
 | `docs/PetWell_Password_Reset.md` | Forgot / reset password: user story US-07, acceptance criteria and decisions D55–D63 (D63: password rule) |
-| `docs/v2/PetWell_Decision_Log.md` | **V2:** every access rule as a numbered decision (D1–D54), findings from implementation, an index of D55–D67 and fix D68 (times shown in Thai time) |
+| `docs/v2/PetWell_Decision_Log.md` | **V2:** every access rule as a numbered decision (D1–D54), findings from implementation, an index of D55–D67 and D72–D76, and fixes D68–D71 (Thai time, palette, owner dashboard) |
 | `docs/v2/PetWell_User_Stories_Access_Control.md` | **V2:** user stories US-01–US-04 with acceptance criteria |
 | `docs/v2/PetWell_Change_Request.md` | **V2:** one-page change request — problem, scope, impact, risks, rollback |
 | `docs/v2/PetWell_Impact_Analysis.md` | **V2:** which endpoints, tables and screens the change touches |
@@ -184,9 +186,10 @@ To try them in Postman, import [`docs/v2/postman/PetWell_V2_Share.postman_collec
 **v1** (tag `v1.0`): feature-complete; all four grading requirements (auth with JWT + protected routes, two roles, CRUD on two-plus entities, two-plus core features) are covered — see `docs/PetWell_Feature_List.md` for the mapping.
 
 **V2** (merged into `main`):
-- Backend: access rules enforced on every pet, health-record and search endpoint; share code, revoke and extend endpoints; audit log; Vitest (130 tests with password reset, the password rule and clinic photos) and two API check scripts, all passing.
+- Backend: access rules enforced on every pet, health-record and search endpoint; share code, revoke and extend endpoints; audit log; Vitest (141 tests with password reset, the password rule, clinic photos and staff approval) and three API check scripts, all passing.
 - Frontend: owner generates a share code, sees which clinics have access, changes a share's duration and revokes; staff redeem a code; the staff pet page and search show limited access (own records only) and handle a 403 on new records. Backend and frontend typecheck.
-- Tests and tooling: 50 frontend tests (V2 screens, password reset, the password rule, clinic photos, Thai-time display and the owner dashboard) (`frontend`, `pnpm test`); full pages are still checked by hand in the browser. `pnpm lint` runs in the backend; Prettier runs in both apps.
+- Staff approval (US-09, D72–D76): a staff sign-up is `PENDING` and cannot log in until an approved staff member of the same clinic approves it; rejected accounts stay `REJECTED`. Closes the gap where anyone could sign up as staff of any clinic.
+- Tests and tooling: 58 frontend tests (V2 screens, password reset, the password rule, clinic photos, Thai-time display, the owner dashboard and staff approval) (`frontend`, `pnpm test`); full pages are still checked by hand in the browser. `pnpm lint` runs in the backend; Prettier runs in both apps.
 - Known gaps: no end-to-end browser tests; the owner's access list updates on reload, not live. The owner audit-log view (US-06) is in the backlog.
 
 **Password reset** (added 2026-11-22, US-07, D55–D62): **Forgot password?** on the login page emails a single-use link valid for 30 minutes (at most 3 per hour). Locally, without `RESEND_API_KEY`, the link is printed in the backend log. Decisions, story and acceptance criteria: `docs/PetWell_Password_Reset.md`.
