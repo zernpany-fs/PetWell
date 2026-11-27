@@ -2,7 +2,11 @@ import 'dotenv/config';
 import bcrypt from 'bcrypt';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../src/database/generated/prisma/client';
-import { ClinicType, Role } from '../src/database/generated/prisma/enums';
+import {
+  ClinicType,
+  Role,
+  StaffStatus,
+} from '../src/database/generated/prisma/enums';
 import { PG_SESSION_OPTIONS } from '../src/database/pg-options';
 
 const connectionString = process.env.DATABASE_URL;
@@ -164,6 +168,11 @@ async function main() {
 
     if (existingStaff) {
       console.log(`    staff exists  ${staff.email}`);
+      // D73: the demo staff login of each clinic is always approved.
+      await prisma.user.update({
+        where: { id: existingStaff.id },
+        data: { staffStatus: StaffStatus.APPROVED },
+      });
     } else {
       await prisma.user.create({
         data: {
@@ -173,6 +182,7 @@ async function main() {
           password,
           role: Role.CLINIC_STAFF,
           clinicId: clinic.id,
+          staffStatus: StaffStatus.APPROVED,
         },
       });
       console.log(`    staff created ${staff.email}`);

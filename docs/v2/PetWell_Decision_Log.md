@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Status** | Draft v1.2 |
-| **Date** | 2026-11-27 (v1.2: D70–D71; v1.1: index of D55–D69, sections 6–7) |
+| **Status** | Draft v1.3 |
+| **Date** | 2026-11-27 (v1.3: index of D72–D76; v1.2: D70–D71; v1.1: index of D55–D69, sections 6–7) |
 | **Author** | Nopparuth Panyanithiwat |
 | **Change** | Clinics can no longer read any pet's records by default. Access comes from a confirmed appointment or from the owner's explicit share. |
 
@@ -113,6 +113,7 @@ Decision numbers are shared across PetWell. Decisions for later changes are writ
 |---|---|---|---|
 | D55–D63 | Password reset (US-07, 2026-11-22) and password rule (2026-11-23) | D55 scope · D56 reset token · D57 forgot-password response · D58 request limit · D59 reset rules · D60 sessions after a reset · D61 sending email · D62 screens · D63 password rule | [`../PetWell_Password_Reset.md`](../PetWell_Password_Reset.md), section 3 |
 | D64–D67 | Clinic photo (US-08, 2026-11-23) and demo clinic names | D64 who can change a clinic photo · D65 upload checks in the API (all image uploads) · D66 demo photos · D67 demo clinic names | [`../PetWell_Clinic_Photo.md`](../PetWell_Clinic_Photo.md), section 3 |
+| D72–D76 | Staff approval (US-09, 2026-11-27) | D72 who approves new staff · D73 staff status and migration of existing accounts · D74 login while pending or rejected · D75 rejected accounts · D76 approve and reject API | [`../PetWell_Staff_Approval.md`](../PetWell_Staff_Approval.md), section 3 |
 | D68–D71 | Fixes after release (2026-11-23, 2026-11-27) | D68 every time is shown in Thai time · D69 colour tokens, palette and fonts · D70 dashboard vaccine reminders · D71 upcoming appointments by date | This log, section 7 |
 
 ## 7. Fixes after release

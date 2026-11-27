@@ -6,7 +6,7 @@ import {
 import { PrismaService } from '../database/prisma.service';
 import { BcryptService } from '../infrastructure/hash/bcrypt.service';
 import { CloudinaryService } from '../infrastructure/upload/cloudinary.service';
-import { Role } from '../database/generated/prisma/enums';
+import { Role, StaffStatus } from '../database/generated/prisma/enums';
 import { User } from '../database/generated/prisma/client';
 import { PrismaClientKnownRequestError } from '../database/generated/prisma/internal/prismaNamespace';
 import { UserCreateInput } from './types/user.type';
@@ -46,6 +46,9 @@ export class UserService {
           password,
           role: input.role,
           clinicId: input.role === Role.CLINIC_STAFF ? input.clinicId : null,
+          // D73: a new staff account waits for its clinic to approve it.
+          staffStatus:
+            input.role === Role.CLINIC_STAFF ? StaffStatus.PENDING : null,
         },
       });
     } catch (error) {

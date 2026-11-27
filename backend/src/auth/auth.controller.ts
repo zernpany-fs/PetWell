@@ -40,7 +40,11 @@ export class AuthController {
     @Body() dto: RegisterClinicStaffDto,
   ): Promise<MessageResponseDto> {
     await this.authService.registerClinicStaff(dto);
-    return { message: 'Registered successfully' };
+    // D73: the account is PENDING until the clinic approves it.
+    return {
+      message:
+        'Registered. Your clinic must approve this account before you can log in.',
+    };
   }
 
   @Public()

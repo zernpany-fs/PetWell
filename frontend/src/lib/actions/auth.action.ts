@@ -18,6 +18,7 @@ import {
   registerClinicStaffSchema,
 } from '../schemas/auth.schema';
 import { ActionResult } from './action.type';
+import { LOGIN_MESSAGES } from '../auth-errors';
 
 export async function registerAction(
   input: RegisterInput,
@@ -70,7 +71,12 @@ export async function registerClinicStaffAction(
     }
     throw error;
   }
-  return { success: true, message: 'Registered successfully. Please log in.' };
+  // US-09 AC1 (D73): the account waits for the clinic to approve it.
+  return {
+    success: true,
+    message:
+      'Registered. Your clinic must approve this account before you can log in.',
+  };
 }
 
 export async function loginAction(input: LoginInput): Promise<ActionResult> {
@@ -78,6 +84,14 @@ export async function loginAction(input: LoginInput): Promise<ActionResult> {
     await signIn('credentials', { ...input, redirect: false });
   } catch (error) {
     if (error instanceof CredentialsSignin) {
+      // US-09 (D74): staff waiting for, or refused, their clinic's approval.
+      if (error.code === 'staff_pending' || error.code === 'staff_rejected') {
+        return {
+          success: false,
+          message: LOGIN_MESSAGES[error.code],
+          code: error.code.toUpperCase(),
+        };
+      }
       return {
         success: false,
         message: 'Email or password is invalid.',
