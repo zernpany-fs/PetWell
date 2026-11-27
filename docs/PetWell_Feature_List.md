@@ -30,7 +30,7 @@ Legend: **[Core]** = MVP / required for grading · **[Stretch]** = nice-to-have 
 ## 2. Pet Owner Features
 
 ### 2.0 Dashboard / Home
-- ✅ **[Core]** Pet Owner dashboard — pets + upcoming/recent appointments
+- ✅ **[Core]** Pet Owner dashboard — pets, upcoming appointments (open and today or later, D71) and vaccine reminders
 
 ### 2.1 Profile & Account
 - ✅ **[Core]** View own profile (`GET /auth/me`)
@@ -63,6 +63,7 @@ Legend: **[Core]** = MVP / required for grading · **[Stretch]** = nice-to-have 
 - ⬜ **[Stretch]** Reschedule · email confirmation on status change
 
 ### 2.5 Reminders
+- ✅ **[Core]** Dashboard vaccine reminders — vaccine records due today to 14 days ahead, from `nextDueDate` (D70)
 - ⬜ **[Stretch]** Email vaccine / follow-up reminders (uses `nextDueDate`)
 
 ---

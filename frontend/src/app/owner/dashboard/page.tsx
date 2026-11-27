@@ -12,8 +12,14 @@ import {
 import { getSessionUser } from '@/lib/session';
 import { PetApi } from '@/lib/api/pet.api';
 import { AppointmentApi } from '@/lib/api/appointment.api';
+import { HealthRecordApi } from '@/lib/api/health-record.api';
 import { StatusBadge } from '@/components/shared/StatusBadge';
-import { Appointment, Pet } from '@/lib/api/api.type';
+import { Appointment, HealthRecord, Pet } from '@/lib/api/api.type';
+import {
+  REMINDER_WINDOW_DAYS,
+  getUpcomingAppointments,
+  getVaccineReminders,
+} from '@/lib/dashboard';
 
 export const metadata: Metadata = { title: 'Dashboard' };
 
@@ -26,8 +32,15 @@ export default async function OwnerDashboardPage() {
     PetApi.listMine().catch((): Pet[] => []),
     AppointmentApi.listMine().catch((): Appointment[] => []),
   ]);
-  const upcoming = appts.filter((a) =>
-    ['PENDING', 'CONFIRMED', 'RESCHEDULED'].includes(a.status),
+  const upcoming = getUpcomingAppointments(appts);
+  const recordLists = await Promise.all(
+    pets.map((p) =>
+      HealthRecordApi.listByPet(p.id).catch((): HealthRecord[] => []),
+    ),
+  );
+  const reminders = getVaccineReminders(
+    pets,
+    Object.fromEntries(pets.map((p, i) => [p.id, recordLists[i]])),
   );
 
   return (
@@ -35,7 +48,10 @@ export default async function OwnerDashboardPage() {
       <div>
         <h2
           className="font-display text-pw-ink"
-          style={{ fontSize: 'clamp(22px, 6vw, 28px)', overflowWrap: 'anywhere' }}
+          style={{
+            fontSize: 'clamp(22px, 6vw, 28px)',
+            overflowWrap: 'anywhere',
+          }}
         >
           Welcome back, {user?.firstName}
         </h2>
@@ -97,7 +113,7 @@ export default async function OwnerDashboardPage() {
                 className="font-display text-pw-ink leading-none"
                 style={{ fontSize: '28px' }}
               >
-                0
+                {reminders.length}
               </p>
               <p className="text-pw-muted" style={{ fontSize: '13px' }}>
                 Vaccine reminders
@@ -150,16 +166,47 @@ export default async function OwnerDashboardPage() {
         </div>
 
         <div className={`${card} p-5`}>
-          <h3 className="font-display text-pw-ink mb-4">
-            Vaccine reminders
-          </h3>
-          <div
-            className="flex items-center gap-2 text-pw-muted"
-            style={{ fontSize: '13px' }}
-          >
-            <Sparkles size={14} />
-            No vaccines due soon.
-          </div>
+          <h3 className="font-display text-pw-ink mb-4">Vaccine reminders</h3>
+          {reminders.length === 0 ? (
+            <div
+              className="flex items-center gap-2 text-pw-muted"
+              style={{ fontSize: '13px' }}
+            >
+              <Sparkles size={14} />
+              No vaccines due in the next {REMINDER_WINDOW_DAYS} days.
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {reminders.map((r) => (
+                <Link
+                  key={r.recordId}
+                  href={`/owner/pets/${r.petId}`}
+                  className="no-underline flex items-center gap-3 py-2 border-b border-pw-sand last:border-0"
+                  style={{ minHeight: '44px' }}
+                >
+                  <div className="w-8 h-8 rounded-lg bg-pw-sand flex items-center justify-center shrink-0">
+                    <Bell size={15} className="text-pw-coral" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-pw-ink text-sm truncate">
+                      {r.petName} / {r.description}
+                    </p>
+                    <p className="text-pw-muted" style={{ fontSize: '13px' }}>
+                      Due {formatAppTime(r.nextDueDate, 'EEE d MMM yyyy')}
+                    </p>
+                  </div>
+                  <span
+                    className="text-pw-coral shrink-0"
+                    style={{ fontSize: '13px' }}
+                  >
+                    {r.daysLeft === 0
+                      ? 'Today'
+                      : `In ${r.daysLeft} day${r.daysLeft === 1 ? '' : 's'}`}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

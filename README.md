@@ -114,10 +114,10 @@ They create their own owners, pets and records on every run, in the dev database
 
 ```bash
 cd frontend
-pnpm test                     # 46 tests, about a second
+pnpm test                     # 50 tests, about a second
 ```
 
-Each test is named after the story or decision it checks (US-03, US-04, US-07, D7, D12, D27, D40–D42, D51–D52, D57, D59). To check that they catch real mistakes, bugs were put into the code one at a time — for V2: code not hidden at 0, Change offered on appointment access, revoke sent a grant id instead of the clinic, no 6-digit check; for password reset (backend and frontend): no hourly limit, older links not ended, no compare-and-set, no confirm-password check, no redirect after reset. Each one made a test fail.
+Each test is named after the story or decision it checks (US-03, US-04, US-07, D7, D12, D27, D40–D42, D51–D52, D57, D59, D70–D71). To check that they catch real mistakes, bugs were put into the code one at a time — for V2: code not hidden at 0, Change offered on appointment access, revoke sent a grant id instead of the clinic, no 6-digit check; for password reset (backend and frontend): no hourly limit, older links not ended, no compare-and-set, no confirm-password check, no redirect after reset; for the owner dashboard: a 15-day window, overdue dates shown, treatments shown, past days counted as upcoming. Each one made a test fail.
 
 ## Seeded accounts
 
@@ -186,7 +186,7 @@ To try them in Postman, import [`docs/v2/postman/PetWell_V2_Share.postman_collec
 **V2** (merged into `main`):
 - Backend: access rules enforced on every pet, health-record and search endpoint; share code, revoke and extend endpoints; audit log; Vitest (130 tests with password reset, the password rule and clinic photos) and two API check scripts, all passing.
 - Frontend: owner generates a share code, sees which clinics have access, changes a share's duration and revokes; staff redeem a code; the staff pet page and search show limited access (own records only) and handle a 403 on new records. Backend and frontend typecheck.
-- Tests and tooling: 46 frontend tests (V2 screens, password reset, the password rule, clinic photos and Thai-time display) (`frontend`, `pnpm test`); full pages are still checked by hand in the browser. `pnpm lint` runs in the backend; Prettier runs in both apps.
+- Tests and tooling: 50 frontend tests (V2 screens, password reset, the password rule, clinic photos, Thai-time display and the owner dashboard) (`frontend`, `pnpm test`); full pages are still checked by hand in the browser. `pnpm lint` runs in the backend; Prettier runs in both apps.
 - Known gaps: no end-to-end browser tests; the owner's access list updates on reload, not live. The owner audit-log view (US-06) is in the backlog.
 
 **Password reset** (added 2026-11-22, US-07, D55–D62): **Forgot password?** on the login page emails a single-use link valid for 30 minutes (at most 3 per hour). Locally, without `RESEND_API_KEY`, the link is printed in the backend log. Decisions, story and acceptance criteria: `docs/PetWell_Password_Reset.md`.
