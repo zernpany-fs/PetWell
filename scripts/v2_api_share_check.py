@@ -104,10 +104,15 @@ check("D1 7-day grant -> 30 days from now",
       s == 200 and near(d["expiresAt"], now() + timedelta(days=30)), f"{s} {d}")
 s, _ = api("PATCH", f"/access-grants/{GRANT7}", V2, {"durationDays": 90})
 check("D2 clinic staff cannot extend -> 403", s == 403)
-# A different weekday/hour each run, so earlier runs cannot fill the slot.
-day, hour = 23 + int(RUN) % 5, 9 + int(RUN) // 5 % 8  # 23-27 Nov, 09-16 ICT
+# A future weekday and hour that change each run, so earlier runs cannot fill
+# the slot and the date never falls into the past (a fixed date did).
+appt_day = (now() + timedelta(days=30 + int(RUN) % 60)).date()
+while appt_day.weekday() >= 5:
+    appt_day += timedelta(days=1)
+hour = 9 + int(RUN) // 60 % 8  # 09-16 ICT
 s, appt = api("POST", "/appointments", OWN, {
-    "petId": PET, "clinicId": C[4], "appointmentDate": f"2026-11-{day}T{hour - 7:02d}:00:00.000Z"})
+    "petId": PET, "clinicId": C[4],
+    "appointmentDate": f"{appt_day.isoformat()}T{hour - 7:02d}:00:00.000Z"})
 APPT = appt.get("id") if isinstance(appt, dict) else None
 s2, _ = api("PATCH", f"/appointments/{APPT}/status", V4, {"status": "CONFIRMED"})
 APPT_GRANT = sql(f"select id from pet_access_grants where appointment_id='{APPT}'") if APPT else ""
